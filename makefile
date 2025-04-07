@@ -39,6 +39,6 @@ fclean:	clean
 re: fclean all
 
 val:
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./minishell
+	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes ./minishell
 
 .PHONY: all clean fclean re libft
