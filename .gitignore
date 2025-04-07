@@ -1,0 +1,30 @@
+#DEPOIS VERIFICAR O QUE NECESSITA
+
+# Compilação
+*.o
+*.out
+*.a
+*.so
+*.dSYM/
+*.exe
+
+# Binários
+minishell
+
+# Arquivos temporários
+*~
+*.swp
+*.tmp
+*.log
+
+# Histórico do Valgrind
+vgcore.*
+
+# Arquivos de sistema
+.DS_Store
+
+# Arquivos de backup de editores
+*.bak
+
+# Outros
+.env
