@@ -6,7 +6,7 @@
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/04/08 18:37:28 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:44:33 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef enum e_token_type
 	APPEND,
 	HEREDOC,
 	NONE
-} t_token_type;
+}	t_token_type;
 
 typedef struct s_token
 {
@@ -42,6 +42,7 @@ typedef struct s_token
 typedef struct s_data
 {
 	char	*prompt;
+	int		exit_status;
 	t_token	*token_list;
 }	t_data;
 
