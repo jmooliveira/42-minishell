@@ -1,0 +1,8 @@
+{
+	"files.associations": {
+		"*.gitignore": "c",
+		"minishell.h": "c",
+		"stdbool.h": "c",
+		"libft.h": "c"
+	}
+}
