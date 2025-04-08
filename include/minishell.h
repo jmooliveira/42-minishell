@@ -6,7 +6,7 @@
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/04/08 18:44:33 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/04/08 20:31:13 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdbool.h>
-#include "../lib/include/libft.h"
+# include <stdbool.h>
+# include "../lib/include/libft.h"
 
 # define NO_PRINTABLE "\t\n\v\f\r "
 
@@ -46,6 +46,10 @@ typedef struct s_data
 	t_token	*token_list;
 }	t_data;
 
-bool	tokenizer_list(char *input, t_data *data);
+int		tokenizer_list(t_data *data);
+int		get_token(t_data *data, int start);
+int		give_id(char *token_def);
+t_token	*new_token(char *value, t_token_type type);
+void	add_token_to_list(t_data *data, char *token_def, t_token_type id_token);
 
 #endif
