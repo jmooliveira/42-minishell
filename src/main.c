@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/04/08 20:34:20 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/05/27 15:40:01 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,84 @@
 
 #include "../include/minishell.h"
 
-int	main(int ac, char **av)
+void	delete_token_list(t_token **token_l)
 {
-	t_data	*data;
 	t_token	*tmp;
 
-	if (ac == 2)
+	while(*token_l)
 	{
-		data = ft_calloc(1, sizeof(t_data));
-		data->prompt = ft_strdup(av[1]);
-		if (!data)
-			return (1);
-		tokenizer_list(data);
-		tmp = data->token_list;
-		while (tmp)
-		{
-			ft_printf("Token: [%s] - Tipo: %d\n", tmp->value, tmp->type);
-			tmp = tmp->next;
-		}
+		tmp = (*token_l)->next;
+		free(*token_l);
+		*token_l = tmp;
 	}
+}
+
+void	loop(t_data *data)
+{
+	char	*input;
+
+	while (42)
+	{
+		input = readline(data->prompt);
+		if (!input)
+			break;
+		if (*input) //se nao for um str vazia
+			add_history(input);
+
+		// Aqui você vai futuramente:
+		data->input = ft_strdup(input);
+		tokenizer_list(data);
+		// func que libera a lista de token.!!!!
+		// - verificar sintaxe
+		// - construir árvore
+		// - executar
+		free(data->input);
+		free(input);  // sempre liberar input
+		delete_token_list(&data->token_list);
+	}
+}
+
+int	count_envlen(char **ev)
+{
+	int len;
+
+	len = 0;
+	while (ev[len])
+		len++;
+	return (len);
+}
+
+t_data	*init_data(char **ev)
+{
+	t_data	*data;
+
+	data = malloc(sizeof(t_data));
+	if (!data)
+	{
+		ft_printf("Erro: in malloc\n");
+		return (NULL);
+	}
+	ft_memset(data, 0, sizeof(t_data));
+	data->env = ev;
+	data->env_len = count_envlen(ev);
+	data->prompt = "minishell$ ";
+	return (data);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	t_data	*data;
+
+	(void)argv;
+	if (argc != 1)
+	{
+		ft_printf("Usage: ./minishell\n");
+		return(1);
+	}
+	data = init_data(envp);
+	if (!data)
+		return (1);
+	loop(data);
+	// garbage_collector(&data);
 	return (0);
 }
