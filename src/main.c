@@ -6,13 +6,51 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/27 15:40:01 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:35:14 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*main.c*/
 
 #include "../include/minishell.h"
+
+int	syntax_error(char *msg)
+{
+	ft_putstr_fd(msg, STDERR_FILENO);
+	write(STDERR_FILENO, "\n", 1);
+	return (1);
+}
+
+
+int	validate_pipe(t_token *list)
+{
+	if (list && list->type == PIPE)
+		return(syntax_error("Error: pipe at begning"));
+	while (list)
+	{
+		if (list->type == PIPE && (!list->next || list->next->type == PIPE))
+			return(syntax_error("Error: invalid pipe"));
+		list = list->next;
+	}
+	return (0);
+}
+
+int	validate
+
+
+void	validate_syntax(t_token *token_list)
+{
+	// pipe no inicio e no fim
+	if (validate_pipe(token_list))
+		return (1);
+	// operadores duplicados ?
+	// parenteses desbalanceados
+	// parenteses mal posicionado
+	// aspas nao fechadas
+	// nada entre operadores
+	// redirecionamento incompleto ?
+}
+
 
 void	delete_token_list(t_token **token_l)
 {
