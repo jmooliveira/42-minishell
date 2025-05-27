@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/27 19:35:14 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:57:28 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	syntax_error(char *msg)
 }
 
 
-int	validate_pipe(t_token *list)
+int	check_pipe(t_token *list)
 {
 	if (list && list->type == PIPE)
 		return(syntax_error("Error: pipe at begning"));
@@ -35,13 +35,25 @@ int	validate_pipe(t_token *list)
 	return (0);
 }
 
-int	validate
+int	check_operator_sequence(t_token *list)
+{
+	if (list && (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND))
+		return (syntax_error("Error: invalid operator"));
+	while (list)
+	{
+		if (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND)
+		{
+			if (!list->next || list->next->type)
+		}
+		list = list->next;
+	}
+}
 
 
 void	validate_syntax(t_token *token_list)
 {
 	// pipe no inicio e no fim
-	if (validate_pipe(token_list))
+	if (check_pipe(token_list))
 		return (1);
 	// operadores duplicados ?
 	// parenteses desbalanceados
