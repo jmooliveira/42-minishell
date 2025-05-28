@@ -6,14 +6,13 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/27 18:10:19 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:39:04 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*token.c*/
 
 #include "../include/minishell.h"
-
 
 int	tokenizer_list(t_data *data)
 {

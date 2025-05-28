@@ -46,6 +46,6 @@ fclean: clean
 re: fclean all
 
 val:
-	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes ./$(NAME)
 
 .PHONY: all clean fclean re libft val

@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/27 19:57:28 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:21:32 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,33 @@ int	check_pipe(t_token *list)
 	return (0);
 }
 
-int	check_operator_sequence(t_token *list)
-{
-	if (list && (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND))
-		return (syntax_error("Error: invalid operator"));
-	while (list)
-	{
-		if (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND)
-		{
-			if (!list->next || list->next->type)
-		}
-		list = list->next;
-	}
-}
+// int	check_operator_sequence(t_token *list)
+// {
+// 	if (list && (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND))
+// 		return (syntax_error("Error: invalid operator"));
+// 	while (list)
+// 	{
+// 		if (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND)
+// 		{
+// 			if (!list->next || list->next->type)
+// 		}
+// 		list = list->next;
+// 	}
+// }
 
 
-void	validate_syntax(t_token *token_list)
-{
-	// pipe no inicio e no fim
-	if (check_pipe(token_list))
-		return (1);
-	// operadores duplicados ?
-	// parenteses desbalanceados
-	// parenteses mal posicionado
-	// aspas nao fechadas
-	// nada entre operadores
-	// redirecionamento incompleto ?
-}
+// int	validate_syntax(t_token *token_list)
+// {
+// 	// pipe no inicio e no fim
+// 	if (check_pipe(token_list))
+// 		return (1);
+// 	// operadores duplicados ?
+// 	// parenteses desbalanceados
+// 	// parenteses mal posicionado
+// 	// aspas nao fechadas
+// 	// nada entre operadores
+// 	// redirecionamento incompleto ?
+// }
 
 
 void	delete_token_list(t_token **token_l)
