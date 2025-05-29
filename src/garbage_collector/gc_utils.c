@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:44:01 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/05/28 20:25:37 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:00:13 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,25 @@ void    gc_clear(t_gc *gc)
 
 void    gc_free(t_gc *gc, void *ptr)
 {
-    
+    t_gc_node   *cur;
+    t_gc_node   *prev;
+
+    cur = gc->head;
+    prev = NULL;
+
+    while(cur)
+    {
+        if (cur->ptr == ptr)
+        {
+            if(prev)
+                prev->next = cur->next;
+            else
+                gc->head = cur->next;
+            free(cur->ptr);
+            free(cur);
+            return ;
+        }
+        prev = cur;
+        cur = cur->next;
+    }
 }

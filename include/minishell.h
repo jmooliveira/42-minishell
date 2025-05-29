@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/28 18:43:35 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:06:49 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,6 @@ typedef enum e_type
 	SUBSHELL,					//para utilizar o parenteses
 	NONE
 }	t_type;
-
-// GARBAGE COLLECTOR STRUCTS
-typedef struct s_gc_node
-{
-	void				*ptr;
-	struct s_gc_node	*next;
-}	t_gc_node;
-
-typedef struct s_gc
-{
-	t_gc_node			*head;
-}	t_gc;
-
 
 // MINISHELL STRUCTS
 typedef struct s_token
@@ -91,6 +78,17 @@ typedef struct s_data
 	t_ast		**tree;
 }	t_data;
 
+// GARBAGE COLLECTOR STRUCTS
+typedef struct s_gc_node
+{
+	void				*ptr;
+	struct s_gc_node	*next;
+}	t_gc_node;
+
+typedef struct s_gc
+{
+	t_gc_node			*head;
+}	t_gc;
 
 // FUNCTIONS:
 
