@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 18:20:53 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:37:28 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,16 @@ typedef struct s_data
 
 //MAIN:
 
+// INIT:
+t_data	*init_data(char **ev);
+
 
 //TOKEN:
 int			tokenizer_list(t_data *data);
 int			get_token(t_data *data, int start);
 int			give_id(char *token_def);
 void		add_token_to_list(t_data *data, char *token_def, t_type id_token);
+void		delete_token_list(t_token **token_l, t_gc *gc);
 t_token		*new_token(char *value, t_type type, t_gc *gc);
 
 

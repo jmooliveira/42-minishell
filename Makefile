@@ -19,7 +19,9 @@ LIBS		=	-lreadline -lncurses
 SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/token.c \
 				$(SRC_DIR)/utils_debug.c \
-				$(SRC_DIR)/gc_utils.c
+				$(SRC_DIR)/gc_utils.c \
+				$(SRC_DIR)/validate_syntax.c \
+				$(SRC_DIR)/init.c
 
 OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

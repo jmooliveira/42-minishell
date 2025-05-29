@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 19:16:53 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:36:24 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,3 +146,14 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	}
 }
 
+void	delete_token_list(t_token **token_l, t_gc *gc)
+{
+	t_token	*tmp;
+
+	while(*token_l)
+	{
+		tmp = (*token_l)->next;
+		gc_free(gc, *token_l);
+		*token_l = tmp;
+	}
+}
