@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:44:01 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/05/29 17:00:13 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:03:48 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void    *gc_malloc(t_gc *gc, size_t size)
 
     ptr = malloc(size);
     if (!ptr)
-        return ;
+        return (NULL);
     gc_add(gc, ptr);
     return (ptr);
 }
@@ -58,6 +58,8 @@ void    gc_clear(t_gc *gc)
         free(gc->head);
         gc->head = tmp;
     }
+    if (gc)
+        free(gc);
 }
 
 void    gc_free(t_gc *gc, void *ptr)
@@ -83,4 +85,62 @@ void    gc_free(t_gc *gc, void *ptr)
         prev = cur;
         cur = cur->next;
     }
+}
+
+char *gc_strdup(const char *s, t_gc *gc)
+{
+	size_t	len;
+	char	*dup;
+
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s);
+	dup = gc_malloc(gc, len + 1);
+	if (!dup)
+		return (NULL);
+	ft_memcpy(dup, s, len);
+	dup[len] = '\0';
+	return (dup);
+}
+
+void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc)
+{
+	unsigned char	*temp;
+	size_t			total_size;
+	size_t			i;
+
+	total_size = nmemb * size;
+	if (nmemb != 0 && (total_size / nmemb != size))
+		return (NULL);
+    temp = gc_malloc(gc, (nmemb * size));
+    if (!temp)
+		return (NULL);
+    i = 0;
+	while (i < total_size)
+		temp[i++] = 0;
+	return (temp);
+}
+
+char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc)
+{
+	char		*substr;
+	size_t		i;
+
+	if (!s)
+		return (NULL);
+	else if (start > ft_strlen(s))
+		return (gc_strdup("", gc));
+	else if (len > ft_strlen(s + start))
+		len = ft_strlen(s + start);
+	substr = (char *) gc_calloc((len + 1), sizeof(char), gc);
+	if (!substr)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\0';
+	return (substr);
 }

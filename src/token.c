@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/28 18:39:04 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:16:53 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,13 @@
 
 int	tokenizer_list(t_data *data)
 {
+	printf("Input para tokenização: '%s'\n", data->input);
 	int	i;
 
 	i = 0;
 	while (data->input[i])
 	{
-		while (ft_strchr(NO_PRINTABLE, data->input[i]))
+		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
 			i++;
 		if (data->input[i])
 			i = get_token(data, i);
@@ -79,7 +80,7 @@ int	get_token(t_data *data, int start)
 	t_type			id_token;
 
 	end = find_token_end(data->input, start);					
-	token_def = ft_substr(data->input, start, end - start);
+	token_def = gc_substr(data->input, start, end - start, data->gc);
 	id_token = give_id(token_def);
 	add_token_to_list(data, token_def, id_token);
 	return (end);
@@ -110,11 +111,11 @@ int	give_id(char *token_def)
 	return (ARG);
 }
 
-t_token	*new_token(char *value, t_type type)
+t_token	*new_token(char *value, t_type type, t_gc *gc)
 {
 	t_token	*token;
 
-	token = ft_calloc(1, sizeof(t_token));
+	token = gc_calloc(1, sizeof(t_token), gc);
 	if (!token)
 		return (NULL);
 	token->value = value;
@@ -128,7 +129,7 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	t_token	*new;
 	t_token	*tmp;
 
-	new = new_token(token_def, id_token);
+	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
 	if (!data->token_list)

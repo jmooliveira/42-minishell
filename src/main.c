@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/28 17:21:32 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 19:18:11 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ int	check_pipe(t_token *list)
 // }
 
 
-void	delete_token_list(t_token **token_l)
+void	delete_token_list(t_token **token_l, t_gc *gc)
 {
 	t_token	*tmp;
 
 	while(*token_l)
 	{
 		tmp = (*token_l)->next;
-		free(*token_l);
+		gc_free(gc, *token_l);
 		*token_l = tmp;
 	}
 }
@@ -85,19 +85,18 @@ void	loop(t_data *data)
 		input = readline(data->prompt);
 		if (!input)
 			break;
-		if (*input) //se nao for um str vazia
+		if (*input) //se nao for um str vazia, nao sei se tem que ver white spaces
 			add_history(input);
 
 		// Aqui você vai futuramente:
-		data->input = ft_strdup(input);
+		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
-		// func que libera a lista de token.!!!!
 		// - verificar sintaxe
 		// - construir árvore
 		// - executar
-		free(data->input);
+		gc_free(data->gc, data->input);
 		free(input);  // sempre liberar input
-		delete_token_list(&data->token_list);
+		delete_token_list(&data->token_list, data->gc);
 	}
 }
 
@@ -114,8 +113,10 @@ int	count_envlen(char **ev)
 t_data	*init_data(char **ev)
 {
 	t_data	*data;
-
-	data = malloc(sizeof(t_data));
+	t_gc	*gc;
+	
+	gc = gc_init();
+	data = gc_malloc(gc, sizeof(t_data));
 	if (!data)
 	{
 		ft_printf("Erro: in malloc\n");
@@ -125,6 +126,7 @@ t_data	*init_data(char **ev)
 	data->env = ev;
 	data->env_len = count_envlen(ev);
 	data->prompt = "minishell$ ";
+	data->gc = gc;
 	return (data);
 }
 
@@ -142,6 +144,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!data)
 		return (1);
 	loop(data);
-	// garbage_collector(&data);
+	rl_clear_history();
+	gc_clear(data->gc);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 16:06:49 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:20:53 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,18 @@ typedef enum e_type
 	SUBSHELL,					//para utilizar o parenteses
 	NONE
 }	t_type;
+
+// GARBAGE COLLECTOR STRUCTS
+typedef struct s_gc_node
+{
+	void				*ptr;
+	struct s_gc_node	*next;
+}	t_gc_node;
+
+typedef struct s_gc
+{
+	t_gc_node			*head;
+}	t_gc;
 
 // MINISHELL STRUCTS
 typedef struct s_token
@@ -73,42 +85,36 @@ typedef struct s_data
 	int			env_len;		//comprimento desse arr
 	int			exit_status;	//saida padrao do ultimo comando executado
 	int			fd_bk[2];		//bk dos fds
+	t_gc		*gc;
 	t_env		*envl;
 	t_token		*token_list;	
 	t_ast		**tree;
 }	t_data;
 
-// GARBAGE COLLECTOR STRUCTS
-typedef struct s_gc_node
-{
-	void				*ptr;
-	struct s_gc_node	*next;
-}	t_gc_node;
-
-typedef struct s_gc
-{
-	t_gc_node			*head;
-}	t_gc;
-
 // FUNCTIONS:
+
+//MAIN:
+
 
 //TOKEN:
 int			tokenizer_list(t_data *data);
 int			get_token(t_data *data, int start);
 int			give_id(char *token_def);
 void		add_token_to_list(t_data *data, char *token_def, t_type id_token);
-t_token		*new_token(char *value, t_type type);
+t_token		*new_token(char *value, t_type type, t_gc *gc);
 
-// DEBUG UTILS
-void	print_token(t_token *token_list);
 
 // GARBAGE COLLECTOR
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_add(t_gc *gc, void *ptr);
 void	gc_clear(t_gc *gc);
+void	gc_free(t_gc *gc, void *ptr);
+void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc);
+char	*gc_strdup(const char *s, t_gc *gc);
+char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 t_gc	*gc_init(void);
 
-//MAIN:
-
+// DEBUG UTILS
+void	print_token(t_token *token_list);
 
 #endif
