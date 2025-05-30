@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 19:37:28 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/30 16:45:30 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,13 @@ typedef struct s_data
 
 // FUNCTIONS:
 
-//MAIN:
+// MAIN:
 
 // INIT:
 t_data	*init_data(char **ev);
 
 
-//TOKEN:
+// TOKEN:
 int			tokenizer_list(t_data *data);
 int			get_token(t_data *data, int start);
 int			give_id(char *token_def);
