@@ -6,7 +6,7 @@ SRC_DIR 	=	src
 OBJ_DIR		=	objs
 LIB_DIR		=	lib
 LIBFT_DIR	=	$(LIB_DIR)
-INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes
+INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
 C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
@@ -18,7 +18,7 @@ LIBS		=	-lreadline -lncurses
 # Fontes
 SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/token.c \
-				$(SRC_DIR)/utils_debug.c
+				$(SRC_DIR)/utils_debug.c \
 
 OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
