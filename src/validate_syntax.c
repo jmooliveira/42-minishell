@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/05/30 17:46:12 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:29:00 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,25 +81,39 @@ int	check_invalid_op(t_token *token_l)
 
 int	check_unbalanced_parentheses(t_token *token_list)
 {
+	int		balance;
 	t_token	*cur;
 
 	cur = token_list;
+	balance = 0;
 	while (cur)
 	{
 		if (cur->type == PAR_OPEN)
+			balance++;
+		else if (cur->type == PAR_CLOSE)
+			balance--;
+		if (balance < 0)
+			return (1);
+		cur = cur->next;
+	}
+	return (balance != 0);
+}
+
+int	checke_imcomplete_redir(t_token *token_l)
+{
+	t_token	*cur;
+
+	cur = token_l;
+	while (cur)
+	{
+		if (is_redir(cur->type))
 		{
-			cur = cur->next;
-			while (cur)
-			{
-				if (cur->type == PAR_CLOSE)
-					return (0);
-				cur = cur->next;
-			}
-			
+			if (!cur->next || cur->next->type != WORD)
+				return (1);
 		}
 		cur = cur->next;
 	}
-	return (1);
+	return (0);
 }
 
 
@@ -117,7 +131,7 @@ int	validate_syntax(t_data *data)
 	// parenteses desbalanceados
 	else if (check_unbalanced_parentheses(data->token_list))
 		return (syntax_error("unexpected token", data));
-	// parenteses mal posicionado
-	// aspas nao fechadas
-	// redirecionamento incompleto ?
+	// redirecionamento incompleto (faaltando o comando apos o redirecionamento)
+	else if (checke_imcomplete_redir(data->token_list))
+		return (syntax_error("unexpected redirection", data));
 }

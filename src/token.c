@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/30 17:39:08 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/02 19:57:03 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 int	tokenizer_list(t_data *data)
 {
-	printf("Input para tokenização: '%s'\n", data->input);
 	int	i;
 
 	i = 0;
@@ -40,33 +39,33 @@ int	skip_quotes(char *input, int start)
 	i = start + 1;
 	while (input[i] && input[i] != quote)
 		i++;
-	if (input[i] == quote)
-		i++;
-	return (i);
-	// TODO: Implementar leitura contínua (prompt secundário) para aspas não fechadas,
-	// assim como o comportamento do bash:
-	// Exemplo:
-	// minishell$ echo "oi
-	// > tudo bem"
-	// Isso deve juntar as linhas até encontrar a aspa final.
-	// Por enquanto, a função apenas detecta erro de aspas não fechadas.
+	if (input[i] != quote)
+		return (-1);
+	return (i + 1);
+
 }
 
 int	find_token_end(char *inpt, int start)
 {
 	int end;
+	int	quote_end;
 
 	if (ft_strchr("|&<>()", inpt[start]))
 	{
 		if ((inpt[start] == inpt[start + 1]) && ft_strchr("|&<>", inpt[start]))
 			return (start + 2);
-		return(start + 1);
+		return (start + 1);
 	}
 	end = start;
 	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
 	{
 		if (inpt[end] == '\'' || inpt[end] == '"')
-			end = skip_quotes(inpt, end);
+		{
+			quote_end = skip_quotes(inpt, end);
+			if (quote_end == -1)
+				return (-1); // aspa não fechada
+			end = quote_end;
+		}
 		else
 			end++;
 	}
@@ -79,7 +78,12 @@ int	get_token(t_data *data, int start)
 	char			*token_def;
 	t_type			id_token;
 
-	end = find_token_end(data->input, start);					
+	end = find_token_end(data->input, start);
+	if (end == -1)
+	{
+		syntax_error("unclosed quote", data);
+		return (ft_strlen(data->input)); // força a parada da tokenização
+	}			
 	token_def = gc_substr(data->input, start, end - start, data->gc);
 	id_token = give_id(token_def);
 	add_token_to_list(data, token_def, id_token);
