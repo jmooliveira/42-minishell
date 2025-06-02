@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 19:37:28 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:38:25 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ typedef enum e_type
 	PIPE,
 	AND,
 	OR,
-	PARENT_OPEN,
-	PARENT_CLOSE,
-	REDIRECT_IN,
-	REDIRECT_OUT,
+	PAR_OPEN,
+	PAR_CLOSE,
+	REDIR_IN,
+	REDIR_OUT,
 	APPEND,
 	HEREDOC,
 	ASSIGNMENT,					//para criar variaveis de ambiente
@@ -98,6 +98,8 @@ typedef struct s_data
 // INIT:
 t_data	*init_data(char **ev);
 
+// UTILS LIST
+t_token	*ft_token_last(t_token *lst);
 
 //TOKEN:
 int			tokenizer_list(t_data *data);

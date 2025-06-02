@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 19:36:24 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/05/30 17:39:08 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,21 @@ int	skip_quotes(char *input, int start)
 	// Por enquanto, a função apenas detecta erro de aspas não fechadas.
 }
 
-int	find_token_end(char *input, int start)
+int	find_token_end(char *inpt, int start)
 {
 	int end;
 
-	if (ft_strchr("|&<>()", input[start]))
+	if (ft_strchr("|&<>()", inpt[start]))
 	{
-		if ((input[start] == input[start + 1]) && ft_strchr("|&<>", input[start]))
+		if ((inpt[start] == inpt[start + 1]) && ft_strchr("|&<>", inpt[start]))
 			return (start + 2);
 		return(start + 1);
 	}
 	end = start;
-	while (input[end] && !ft_strchr(" \t\n|&<>()", input[end]))
+	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
 	{
-		if (input[end] == '\'' || input[end] == '"')
-			end = skip_quotes(input, end);
+		if (inpt[end] == '\'' || inpt[end] == '"')
+			end = skip_quotes(inpt, end);
 		else
 			end++;
 	}
@@ -95,13 +95,13 @@ int	give_id(char *token_def)
 	if (!ft_strncmp(token_def, "||", 2)  && token_def[2] == '\0')
 		return (OR);
 	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
-		return (PARENT_OPEN);
+		return (PAR_OPEN);
 	if (!ft_strncmp(token_def, ")", 1) && token_def[1] == '\0')
-		return (PARENT_CLOSE);
+		return (PAR_CLOSE);
 	if (!ft_strncmp(token_def, "<", 1) && token_def[1] == '\0')
-		return (REDIRECT_IN);
+		return (REDIR_IN);
 	if (!ft_strncmp(token_def, ">", 1) && token_def[1] == '\0')
-		return (REDIRECT_OUT);
+		return (REDIR_OUT);
 	if (!ft_strncmp(token_def, ">>", 2) && token_def[2] == '\0')
 		return (APPEND);
 	if (!ft_strncmp(token_def, "<<", 2) && token_def[2] == '\0')
