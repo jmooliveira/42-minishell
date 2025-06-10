@@ -6,7 +6,7 @@
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/02 17:47:48 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:45:43 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,6 @@ int	check_pipe(t_token *list)
 // 	// redirecionamento incompleto ?
 // }
 
-
-void	delete_token_list(t_token **token_l)
-{
-	t_token	*tmp;
-
-	while(*token_l)
-	{
-		tmp = (*token_l)->next;
-		free(*token_l);
-		*token_l = tmp;
-	}
-}
-
 void	loop(t_data *data)
 {
 	char	*input;
@@ -86,8 +73,7 @@ void	loop(t_data *data)
 		if (!input)
 			break;
 		if (*input) //se nao for um str vazia
-			add_history(input);
-
+			add_history(input); //ainda não implementado o histórico
 		// Aqui você vai futuramente:
 		data->input = ft_strdup(input);
 		tokenizer_list(data);
@@ -109,23 +95,6 @@ int	count_envlen(char **ev)
 	while (ev[len])
 		len++;
 	return (len);
-}
-
-t_data	*init_data(char **ev)
-{
-	t_data	*data;
-
-	data = malloc(sizeof(t_data));
-	if (!data)
-	{
-		ft_printf("Erro: in malloc\n");
-		return (NULL);
-	}
-	ft_memset(data, 0, sizeof(t_data));
-	data->env = ev;
-	data->env_len = count_envlen(ev);
-	data->prompt = "minishell$ ";
-	return (data);
 }
 
 int	main(int argc, char **argv, char **envp)

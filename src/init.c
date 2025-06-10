@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_debug.c                                      :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/23 15:43:22 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 15:18:20 by jemorais         ###   ########.fr       */
+/*   Created: 2025/06/10 15:44:25 by jemorais          #+#    #+#             */
+/*   Updated: 2025/06/10 15:45:00 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*utils_debug.c*/
+/*init.c*/
 
 #include "../include/minishell.h"
 
-void	print_token(t_token *token_list)
+t_data	*init_data(char **ev)
 {
-	int i = 0;
-	t_token	*current = token_list;
+	t_data	*data;
 
-	while (current)
+	data = malloc(sizeof(t_data));
+	if (!data)
 	{
-		printf("token%d:, id: %d, value: '%s'\n", i, current->type, current->value);
-		current = current->next;
-		i++;
+		ft_printf("Erro: in malloc\n");
+		return (NULL);
 	}
+	ft_memset(data, 0, sizeof(t_data));
+	data->env = ev;
+	data->env_len = count_envlen(ev);
+	data->prompt = "minishell$ ";
+	return (data);
 }

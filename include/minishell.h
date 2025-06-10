@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/27 15:25:34 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:31:59 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,24 @@
 
 # define NO_PRINTABLE " \t\n\v\f\r "
 
-/* command, |, <, >, >>, <<, undefined */
+/* command, |, <, >, >>, <<, &&, ||, |, (, ), (), Variavel */
 typedef enum e_type
 {
+	// comandos e argumentos
 	ARG,
-	PIPE,
-	AND,
-	OR,
-	PARENT_OPEN,
-	PARENT_CLOSE,
 	REDIRECT_IN,
 	REDIRECT_OUT,
 	APPEND,
 	HEREDOC,
-	ASSIGNMENT,					//para criar variaveis de ambiente
-	SUBSHELL,					//para utilizar o parenteses
+	// operadores lógicos
+	AND,
+	OR,
+	PIPE,
+	// parenteses e subshell
+	PARENT_OPEN,
+	PARENT_CLOSE,
+	SUBSHELL,
+	ASSIGNMENT,
 	NONE
 }	t_type;
 
