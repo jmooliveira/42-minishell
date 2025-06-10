@@ -6,7 +6,7 @@
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:20:56 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:28:31 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	checke_imcomplete_redir(t_token *token_l)
 	{
 		if (is_redir(cur->type))
 		{
-			if (!cur->next || cur->next->type != WORD_S && cur->next->type != WORD_D)
+			if (!cur->next || (cur->next->type != WORD_S && cur->next->type != WORD_D))
 				return (1);
 		}
 		cur = cur->next;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/29 19:34:09 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/05/29 19:35:59 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 int	count_envlen(char **ev)
@@ -26,5 +38,6 @@ t_data	*init_data(char **ev)
 	data->env = ev;
 	data->env_len = count_envlen(ev);
 	data->prompt = "minishell$ ";
+	data->gc = gc;
 	return (data);
 }

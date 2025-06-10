@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
+/*   Updated: 2025/06/10 14:44:00 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 /*main.c*/
 
@@ -12,9 +23,9 @@ void	loop(t_data *data)
 		input = readline(data->prompt);
 		if (!input)
 			break;
-
-		if (*input)
+		if (*input) //se nao for um str vazia, nao sei se tem que ver white spaces
 			add_history(input);
+
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
 		validate_syntax(data);
