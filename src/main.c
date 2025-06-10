@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/29 19:40:47 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:44:00 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ void	loop(t_data *data)
 
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
-		// Aqui você vai futuramente:
-		// - verificar sintaxe
+		validate_syntax(data);
 		// - construir árvore
 		// - executar
 		gc_free(data->gc, data->input);

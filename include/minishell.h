@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 17:07:19 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/02 19:53:22 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:52:43 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@
 typedef enum e_type
 {
 	ARG,
-	WORD,
+	WORD_S,
+	WORD_D,
 	PIPE,
 	AND,
 	OR,
@@ -112,7 +113,7 @@ t_token		*new_token(char *value, t_type type, t_gc *gc);
 
 // SYNTAXE VALIDATE
 int		syntax_error(char *msg, t_data *data);
-
+int		validate_syntax(t_data *data);
 
 // GARBAGE COLLECTOR
 void	*gc_malloc(t_gc *gc, size_t size);

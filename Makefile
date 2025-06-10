@@ -22,7 +22,7 @@ SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/gc_utils.c \
 				$(SRC_DIR)/validate_syntax.c \
 				$(SRC_DIR)/init.c \
-				$(SRC_DIR)/list_utils
+				$(SRC_DIR)/list_utils.c
 
 OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 

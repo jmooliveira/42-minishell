@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/02 19:29:00 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/05 13:28:15 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,4 +134,5 @@ int	validate_syntax(t_data *data)
 	// redirecionamento incompleto (faaltando o comando apos o redirecionamento)
 	else if (checke_imcomplete_redir(data->token_list))
 		return (syntax_error("unexpected redirection", data));
+	return (1);
 }
