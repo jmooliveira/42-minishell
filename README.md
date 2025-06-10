@@ -33,3 +33,15 @@ APAGAR -> COMENTARIOS DIARIOS
 4- Parsing de redirecionamento (>, <, >>, <<).
 
 5- Execução real com fork/execve, depois que o parser montar a      estrutura.
+
+
+// ORDEM DE PRECEDENCIA DOS OPERADORES:
+// 	||				- menor precedencia  - topo da arvore
+// 	&&
+// 	|
+// 	()
+// 	<, >, <<, >>	- maior precedencia
+
+// apartir do no de menor precedencia a arvore e quebrada em dois
+// esquerda e direita do no de topo
+// e assim por diante sempre procurando operadores

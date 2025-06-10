@@ -1,0 +1,5 @@
+{
+   ignore_readline_mem
+   Memcheck:Leak
+   obj:/usr/lib/x86_64-linux-gnu/libreadline.so.*
+}

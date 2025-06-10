@@ -19,6 +19,10 @@ LIBS		=	-lreadline -lncurses
 SRCS		=	$(SRC_DIR)/main.c \
 				$(SRC_DIR)/token.c \
 				$(SRC_DIR)/utils_debug.c \
+				$(SRC_DIR)/gc_utils.c \
+				$(SRC_DIR)/validate_syntax.c \
+				$(SRC_DIR)/init.c \
+				$(SRC_DIR)/list_utils.c
 
 OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
@@ -26,11 +30,11 @@ OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 all: $(NAME)
 
 $(NAME): libft $(OBJS)
-	$(CC) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
+	@$(CC) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(C_FLAGS) -c $< -o $@
+	@$(CC) $(C_FLAGS) -c $< -o $@
 
 libft:
 	@make -C $(LIBFT_DIR)
@@ -46,6 +50,6 @@ fclean: clean
 re: fclean all
 
 val:
-	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes ./$(NAME)
+	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re libft val

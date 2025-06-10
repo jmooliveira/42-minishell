@@ -1,18 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/10 15:42:52 by jemorais         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 /*token.c*/
 
 #include "../include/minishell.h"
+
+int	tokenizer_list(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->input[i])
+	{
+		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
+			i++;
+		if (data->input[i])
+			i = get_token(data, i);
+	}
+	print_token(data->token_list);			//DEBUG
+	return (i);
+}
 
 int	skip_quotes(char *input, int start)
 {
@@ -23,35 +27,87 @@ int	skip_quotes(char *input, int start)
 	i = start + 1;
 	while (input[i] && input[i] != quote)
 		i++;
-	if (input[i] == quote)
-		i++;
-	return (i);
-	// TODO: Implementar leitura contínua (prompt secundário) para aspas não fechadas,
-	// assim como o comportamento do bash:
-	// Exemplo:
-	// minishell$ echo "oi
-	// > tudo bem"
-	// Isso deve juntar as linhas até encontrar a aspa final.
-	// Por enquanto, a função apenas detecta erro de aspas não fechadas.
+	if (input[i] != quote)
+		return (-1);
+	return (i + 1);
+
 }
 
-void	delete_token_list(t_token **token_l)
+int	find_token_end(char *inpt, int start)
 {
-	t_token	*tmp;
+	int end;
+	int	quote_end;
 
-	while(*token_l)
+	if (ft_strchr("|&<>()", inpt[start]))
 	{
-		tmp = (*token_l)->next;
-		free(*token_l);
-		*token_l = tmp;
+		if ((inpt[start] == inpt[start + 1]) && ft_strchr("|&<>", inpt[start]))
+			return (start + 2);
+		return (start + 1);
 	}
+	end = start;
+	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
+	{
+		if (inpt[end] == '\'' || inpt[end] == '"')
+		{
+			quote_end = skip_quotes(inpt, end);
+			if (quote_end == -1)
+				return (-1); // aspa não fechada
+			end = quote_end;
+		}
+		else
+			end++;
+	}
+	return (end);
 }
 
-t_token	*new_token(char *value, t_type type)
+int	get_token(t_data *data, int start)
+{
+	int				end;
+	char			*token_def;
+	t_type			id_token;
+
+	end = find_token_end(data->input, start);
+	if (end == -1)
+	{
+		syntax_error("unclosed quote", data);
+		return (ft_strlen(data->input)); // força a parada da tokenização
+	}			
+	token_def = gc_substr(data->input, start, end - start, data->gc);
+	id_token = give_id(token_def);
+	add_token_to_list(data, token_def, id_token);
+	return (end);
+}
+
+int	give_id(char *token_def)
+{
+	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
+		return (PIPE);
+	if (!ft_strncmp(token_def, "&&", 2) && token_def[2] == '\0')
+		return (AND);
+	if (!ft_strncmp(token_def, "||", 2)  && token_def[2] == '\0')
+		return (OR);
+	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
+		return (PAR_OPEN);
+	if (!ft_strncmp(token_def, ")", 1) && token_def[1] == '\0')
+		return (PAR_CLOSE);
+	if (!ft_strncmp(token_def, "<", 1) && token_def[1] == '\0')
+		return (REDIR_IN);
+	if (!ft_strncmp(token_def, ">", 1) && token_def[1] == '\0')
+		return (REDIR_OUT);
+	if (!ft_strncmp(token_def, ">>", 2) && token_def[2] == '\0')
+		return (APPEND);
+	if (!ft_strncmp(token_def, "<<", 2) && token_def[2] == '\0')
+		return (HEREDOC);
+	if (ft_strchr(token_def, '=') && token_def[0] != '=')
+		return (ASSIGNMENT);
+	return (ARG);
+}
+
+t_token	*new_token(char *value, t_type type, t_gc *gc)
 {
 	t_token	*token;
 
-	token = ft_calloc(1, sizeof(t_token));
+	token = gc_calloc(1, sizeof(t_token), gc);
 	if (!token)
 		return (NULL);
 	token->value = value;
@@ -65,7 +121,7 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	t_token	*new;
 	t_token	*tmp;
 
-	new = new_token(token_def, id_token);
+	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
 	if (!data->token_list)
@@ -82,77 +138,14 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	}
 }
 
-int	give_id(char *token_def)
+void	delete_token_list(t_token **token_l, t_gc *gc)
 {
-	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
-		return (PIPE);
-	if (!ft_strncmp(token_def, "&&", 2) && token_def[2] == '\0')
-		return (AND);
-	if (!ft_strncmp(token_def, "||", 2)  && token_def[2] == '\0')
-		return (OR);
-	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
-		return (PARENT_OPEN);
-	if (!ft_strncmp(token_def, ")", 1) && token_def[1] == '\0')
-		return (PARENT_CLOSE);
-	if (!ft_strncmp(token_def, "<", 1) && token_def[1] == '\0')
-		return (REDIRECT_IN);
-	if (!ft_strncmp(token_def, ">", 1) && token_def[1] == '\0')
-		return (REDIRECT_OUT);
-	if (!ft_strncmp(token_def, ">>", 2) && token_def[2] == '\0')
-		return (APPEND);
-	if (!ft_strncmp(token_def, "<<", 2) && token_def[2] == '\0')
-		return (HEREDOC);
-	if (ft_strchr(token_def, '=') && token_def[0] != '=')
-		return (ASSIGNMENT);
-	return (ARG);
-}
+	t_token	*tmp;
 
-int	find_token_end(char *input, int start)
-{
-	int end;
-
-	if (ft_strchr("|&<>()", input[start]))
+	while(*token_l)
 	{
-		if ((input[start] == input[start + 1]) && ft_strchr("|&<>", input[start]))
-			return (start + 2);
-		return(start + 1);
+		tmp = (*token_l)->next;
+		gc_free(gc, *token_l);
+		*token_l = tmp;
 	}
-	end = start;
-	while (input[end] && !ft_strchr(" \t\n|&<>()", input[end]))
-	{
-		if (input[end] == '\'' || input[end] == '"')
-			end = skip_quotes(input, end);
-		else
-			end++;
-	}
-	return (end);
-}
-
-int	get_token(t_data *data, int start)
-{
-	int				end;
-	char			*token_def;
-	t_type			id_token;
-
-	end = find_token_end(data->input, start);					
-	token_def = ft_substr(data->input, start, end - start);
-	id_token = give_id(token_def);
-	add_token_to_list(data, token_def, id_token);
-	return (end);
-}
-
-int	tokenizer_list(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->input[i])
-	{
-		while (ft_strchr(NO_PRINTABLE, data->input[i]))
-			i++;
-		if (data->input[i])
-			i = get_token(data, i);
-	}
-	print_token(data->token_list);			//DEBUG
-	return (i);
 }

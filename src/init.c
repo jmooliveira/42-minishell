@@ -1,24 +1,22 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/10 15:44:25 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/10 15:45:00 by jemorais         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/*init.c*/
-
 #include "../include/minishell.h"
+
+int	count_envlen(char **ev)
+{
+	int len;
+
+	len = 0;
+	while (ev[len])
+		len++;
+	return (len);
+}
 
 t_data	*init_data(char **ev)
 {
 	t_data	*data;
-
-	data = malloc(sizeof(t_data));
+	t_gc	*gc;
+	
+	gc = gc_init();
+	data = gc_malloc(gc, sizeof(t_data));
 	if (!data)
 	{
 		ft_printf("Erro: in malloc\n");

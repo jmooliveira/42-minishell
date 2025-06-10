@@ -1,67 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 15:39:12 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/10 15:45:43 by jemorais         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 /*main.c*/
 
 #include "../include/minishell.h"
-
-int	syntax_error(char *msg)
-{
-	ft_putstr_fd(msg, STDERR_FILENO);
-	write(STDERR_FILENO, "\n", 1);
-	return (1);
-}
-
-
-int	check_pipe(t_token *list)
-{
-	if (list && list->type == PIPE)
-		return(syntax_error("Error: pipe at begning"));
-	while (list)
-	{
-		if (list->type == PIPE && (!list->next || list->next->type == PIPE))
-			return(syntax_error("Error: invalid pipe"));
-		list = list->next;
-	}
-	return (0);
-}
-
-// int	check_operator_sequence(t_token *list)
-// {
-// 	if (list && (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND))
-// 		return (syntax_error("Error: invalid operator"));
-// 	while (list)
-// 	{
-// 		if (list->type == AND || list->type == OR || list->type == REDIRECT_IN || list->type == REDIRECT_OUT || list->type == HEREDOC || list->type == APPEND)
-// 		{
-// 			if (!list->next || list->next->type)
-// 		}
-// 		list = list->next;
-// 	}
-// }
-
-
-// void	validate_syntax(t_token *token_list)
-// {
-// 	// pipe no inicio e no fim
-// 	if (check_pipe(token_list))
-// 		return (1);
-// 	// operadores duplicados ?
-// 	// parenteses desbalanceados
-// 	// parenteses mal posicionado
-// 	// aspas nao fechadas
-// 	// nada entre operadores
-// 	// redirecionamento incompleto ?
-// }
 
 void	loop(t_data *data)
 {
@@ -72,29 +12,18 @@ void	loop(t_data *data)
 		input = readline(data->prompt);
 		if (!input)
 			break;
-		if (*input) //se nao for um str vazia
-			add_history(input); //ainda não implementado o histórico
-		// Aqui você vai futuramente:
-		data->input = ft_strdup(input);
+
+		if (*input)
+			add_history(input);
+		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
-		// func que libera a lista de token.!!!!
-		// - verificar sintaxe
+		validate_syntax(data);
 		// - construir árvore
 		// - executar
-		free(data->input);
+		gc_free(data->gc, data->input);
 		free(input);  // sempre liberar input
-		delete_token_list(&data->token_list);
+		delete_token_list(&data->token_list, data->gc);
 	}
-}
-
-int	count_envlen(char **ev)
-{
-	int len;
-
-	len = 0;
-	while (ev[len])
-		len++;
-	return (len);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -111,6 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	if (!data)
 		return (1);
 	loop(data);
-	// garbage_collector(&data);
+	rl_clear_history();
+	gc_clear(data->gc);
 	return (0);
 }
