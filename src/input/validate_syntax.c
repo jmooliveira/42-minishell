@@ -6,11 +6,11 @@
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:28:31 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	syntax_error(char *msg, t_data *data)
 {

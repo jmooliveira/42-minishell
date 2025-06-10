@@ -89,6 +89,7 @@ typedef struct s_data
 
 // INIT:
 t_data	*init_data(char **ev);
+void	loop(t_data *data);
 
 // UTILS LIST
 t_token	*ft_token_last(t_token *lst);

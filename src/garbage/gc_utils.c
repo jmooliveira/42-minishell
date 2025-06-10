@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   gc_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 18:44:01 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/05/29 19:03:48 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 t_gc    *gc_init(void)
 {

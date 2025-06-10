@@ -5,6 +5,15 @@ CC			=	cc
 SRC_DIR 	=	src
 OBJ_DIR		=	objs
 LIB_DIR		=	lib
+GC_DIR		=	$(SRC_DIR)/garbage
+INIT_DIR	=	$(SRC_DIR)/init
+INPUT_DIR 	=	$(SRC_DIR)/input
+TOKEN_DIR	=	$(SRC_DIR)/token
+UTILS_DIR	=	$(SRC_DIR)/utils
+EXPAND_DIR	=	$(SRC_DIR)/expand
+EXEC_DIR	=	$(SRC_DIR)/exec
+PARSE_DIR	=	$(SRC_DIR)/parse
+
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
@@ -12,19 +21,21 @@ INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
 
 # Libs
-LIBFT		=	$(LIB_DIR)/libft.a
+LIBFT		=	$(LIBFT_DIR)/libft.a
 LIBS		=	-lreadline -lncurses
 
 # Fontes
-SRCS		=	$(SRC_DIR)/main.c \
-				$(SRC_DIR)/token.c \
-				$(SRC_DIR)/utils_debug.c \
-				$(SRC_DIR)/gc_utils.c \
-				$(SRC_DIR)/validate_syntax.c \
-				$(SRC_DIR)/init.c \
-				$(SRC_DIR)/list_utils.c
+SRCS		=	$(INPUT_DIR)/main.c \
+				$(TOKEN_DIR)/token.c \
+				$(UTILS_DIR)/utils_debug.c \
+				$(GC_DIR)/gc_utils.c \
+				$(INPUT_DIR)/validate_syntax.c \
+				$(INIT_DIR)/init.c \
+				$(UTILS_DIR)/list_utils.c \
+				$(INIT_DIR)/loop.c \
 
-OBJS		=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+
+OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
 # Targets
 all: $(NAME)
@@ -33,7 +44,7 @@ $(NAME): libft $(OBJS)
 	@$(CC) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
+	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -c $< -o $@
 
 libft:
