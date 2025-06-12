@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:13:05 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int is_logical_op(t_type type)
 int is_redir(t_type type)
 {
 	return (type == REDIR_IN || type == REDIR_OUT || type == APPEND || type == HEREDOC);
+}
+
+int	is_word(t_type type)
+{
+	return (type == WORD_D || type == WORD_S || type == WORD);
 }
 
 int		check_first_node(t_token *token_l)
@@ -99,7 +104,21 @@ int	check_unbalanced_parentheses(t_token *token_list)
 	return (balance != 0);
 }
 
-int	checke_imcomplete_redir(t_token *token_l)
+int	check_empty_parentheses(t_token *token_l)
+{
+	t_token	*cur;
+
+	cur = token_l;
+	while (cur && cur->next)
+	{
+		if (cur->type == PAR_OPEN && cur->next->type == PAR_CLOSE)
+			return (1);
+		cur = cur->next;
+	}
+	return (0);
+}
+
+int	check_invalid_redir(t_token *token_l)
 {
 	t_token	*cur;
 
@@ -108,14 +127,15 @@ int	checke_imcomplete_redir(t_token *token_l)
 	{
 		if (is_redir(cur->type))
 		{
-			if (!cur->next || (cur->next->type != WORD_S && cur->next->type != WORD_D))
+			if (!cur->next)
+				return (1);
+			if (!is_word(cur->next->type) && cur->next->type != PAR_OPEN)
 				return (1);
 		}
 		cur = cur->next;
 	}
 	return (0);
 }
-
 
 int	validate_syntax(t_data *data)
 {
@@ -131,8 +151,11 @@ int	validate_syntax(t_data *data)
 	// parenteses desbalanceados
 	else if (check_unbalanced_parentheses(data->token_list))
 		return (syntax_error("unexpected token", data));
+	// parenteses vazio
+	else if (check_empty_parentheses(data->token_list))		//PRECISA validar comando dentro do parenteses
+		return (syntax_error("empty parentheses", data));
 	// redirecionamento incompleto (faaltando o comando apos o redirecionamento)
-	else if (checke_imcomplete_redir(data->token_list))
+	else if (check_invalid_redir(data->token_list))
 		return (syntax_error("unexpected redirection", data));
 	return (1);
 }

@@ -15,7 +15,7 @@
 typedef enum e_type
 {
 	// comandos e argumentos
-	ARG,
+	WORD,
 	WORD_S,
 	WORD_D,
 	PIPE,
@@ -50,6 +50,7 @@ typedef struct s_token
 	t_type				type;
 	char				*value;
 	struct s_token		*next;
+	bool				expandable;
 	// struct s_token	*prev;
 }	t_token;
 

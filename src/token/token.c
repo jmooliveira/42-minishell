@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/12 17:11:35 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,18 @@ int	skip_quotes(char *input, int start)
 		return (-1);
 	return (i + 1);
 
+}
+
+char	*trim_quotes(char *str, t_gc *gc)
+{
+	size_t	len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str);
+	if ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"'))
+		return (gc_substr(str, 1, len - 2, gc));
+	return (gc_strdup(str, gc));
 }
 
 int	find_token_end(char *inpt, int start)
@@ -112,7 +124,11 @@ int	give_id(char *token_def)
 		return (HEREDOC);
 	if (ft_strchr(token_def, '=') && token_def[0] != '=')
 		return (ASSIGNMENT);
-	return (ARG);
+	if (token_def[0] == '\'' && token_def[ft_strlen(token_def) - 1] == '\'')
+		return (WORD_S);
+	if (token_def[0] == '"' && token_def[ft_strlen(token_def) - 1] == '"')
+		return (WORD_D);
+	return (WORD);
 }
 
 t_token	*new_token(char *value, t_type type, t_gc *gc)
@@ -124,6 +140,7 @@ t_token	*new_token(char *value, t_type type, t_gc *gc)
 		return (NULL);
 	token->value = value;
 	token->type = type;
+	token->expandable = false;
 	token->next = NULL;
 	return (token);
 }
@@ -132,22 +149,22 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
 	t_token	*new;
 	t_token	*tmp;
+	char	*clean_value;
 
+	clean_value = trim_quotes(token_def, data->gc);
 	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
+	new->expandable = (id_token == WORD || id_token == WORD_D);		//marca true quando tem que expandir uma variavel
 	if (!data->token_list)
 	{
 		data->token_list = new;
 		return ;
 	}
-	else
-	{
 		tmp = data->token_list;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
-	}
 }
 
 void	delete_token_list(t_token **token_l, t_gc *gc)
