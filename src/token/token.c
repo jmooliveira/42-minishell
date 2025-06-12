@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/12 17:11:35 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:04:57 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,9 +149,9 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
 	t_token	*new;
 	t_token	*tmp;
-	char	*clean_value;
+	// char	*clean_value;
 
-	clean_value = trim_quotes(token_def, data->gc);
+	// clean_value = trim_quotes(token_def, data->gc);
 	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
