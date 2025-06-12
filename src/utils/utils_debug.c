@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_debug.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:43:22 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:55:51 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:31:29 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+/*utils_debug.c*/
 
+#include "../../include/minishell.h"
 
 void	print_token(t_token *token_list)
 {

@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 15:48:47 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:11:23 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*list_utils.c*/
 
 #include "../../include/minishell.h"
 

@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   validate_syntax.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/29 19:32:33 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/12 17:13:05 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/12 19:12:18 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+/*validate_syntax.c*/
 
 #include "../../include/minishell.h"
 
