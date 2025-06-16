@@ -4,7 +4,7 @@
 
 int	count_envlen(char **ev)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (ev[len])
@@ -16,7 +16,7 @@ t_data	*init_data(char **ev)
 {
 	t_data	*data;
 	t_gc	*gc;
-	
+
 	gc = gc_init();
 	data = gc_malloc(gc, sizeof(t_data));
 	if (!data)

@@ -10,7 +10,7 @@ int	main(int argc, char **argv, char **envp)
 	if (argc != 1)
 	{
 		ft_printf("Usage: ./minishell\n");
-		return(1);
+		return (1);
 	}
 	data = init_data(envp);
 	if (!data)

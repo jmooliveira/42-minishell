@@ -11,14 +11,15 @@ int	syntax_error(char *msg, t_data *data)
 	return (1);
 }
 
-int is_logical_op(t_type type)
+int	is_logical_op(t_type type)
 {
 	return (type == PIPE || type == OR || type == AND);
 }
 
-int is_redir(t_type type)
+int	is_redir(t_type type)
 {
-	return (type == REDIR_IN || type == REDIR_OUT || type == APPEND || type == HEREDOC);
+	return (type == REDIR_IN || type == REDIR_OUT
+		|| type == APPEND || type == HEREDOC);
 }
 
 int	is_word(t_type type)
@@ -26,7 +27,7 @@ int	is_word(t_type type)
 	return (type == WORD_D || type == WORD_S || type == WORD);
 }
 
-int		check_first_node(t_token *token_l)
+int	check_first_node(t_token *token_l)
 {
 	if (!token_l)
 		return (1);
@@ -35,14 +36,15 @@ int		check_first_node(t_token *token_l)
 	return (0);
 }
 
-int		check_last_node(t_token *token_l)
+int	check_last_node(t_token *token_l)
 {
 	t_token	*last;
 
 	if (!token_l)
 		return (1);
 	last = ft_token_last(token_l);
-	if (is_logical_op(last->type) || is_redir(last->type) || last->type == PAR_OPEN)
+	if (is_logical_op(last->type) || is_redir(last->type)
+		|| last->type == PAR_OPEN)
 		return (1);
 	return (0);
 }
@@ -60,12 +62,14 @@ int	check_invalid_op(t_token *token_l)
 		{
 			if (is_logical_op(cur->type))
 			{
-				if (is_logical_op(cur->next->type) || is_redir(cur->next->type))
+				if (is_logical_op(cur->next->type)
+					|| is_redir(cur->next->type))
 					return (1);
 			}
 			else if (is_redir(cur->type))
 			{
-				if (is_redir(cur->next->type) || is_logical_op(cur->next->type))
+				if (is_redir(cur->next->type)
+					|| is_logical_op(cur->next->type))
 					return (1);
 			}
 		}
@@ -142,9 +146,9 @@ int	validate_syntax(t_data *data)
 	else if (check_unbalanced_parentheses(data->token_list))
 		return (syntax_error("unexpected token", data));
 	// parenteses vazio
-	else if (check_empty_parentheses(data->token_list))		//PRECISA validar comando dentro do parenteses
+	else if (check_empty_parentheses(data->token_list)) //PRECISA validar comando dentro do parenteses
 		return (syntax_error("empty parentheses", data));
-	// redirecionamento incompleto (faaltando o comando apos o redirecionamento)
+	// redirecionamento incompleto (faltando o comando apos o redirecionamento)
 	else if (check_invalid_redir(data->token_list))
 		return (syntax_error("unexpected redirection", data));
 	return (1);

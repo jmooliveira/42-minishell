@@ -13,7 +13,8 @@ char	*get_env_value(const char *var_name, char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], var_name, var_len) == 0 && env[i][var_len] == '=')
+		if (ft_strncmp(env[i], var_name, var_len)
+			== 0 && env[i][var_len] == '=')
 			return (env[i] + var_len + 1);
 		i++;
 	}
@@ -35,7 +36,8 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1] && (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
+		if (str[i] == '$' && str[i + 1]
+			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
 		{
 			start = ++i;
 			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
@@ -50,7 +52,6 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc)
 			temp = gc_strjoin(result, value, gc);
 			gc_free(gc, result);
 			result = temp;
-			// gc_free(gc, var_name); var_name já foi alocado com gc_malloc, não precisa liberar manualmente
 		}
 		else
 		{
@@ -67,8 +68,8 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc)
 
 void	expand_token_values(t_data *data)
 {
-	t_token *token;
-	char *expanded_value;
+	t_token	*token;
+	char	*expanded_value;
 
 	token = data->token_list;
 	while (token)
@@ -83,10 +84,12 @@ void	expand_token_values(t_data *data)
 	}
 }
 
-// vai para gc_utils.c
+// jogar essa funcao para gc_utils.c
 char	*gc_strjoin(char *s1, char *s2, t_gc *gc)
 {
-	char *joined = ft_strjoin(s1, s2);
+	char	*joined;
+
+	joined = ft_strjoin(s1, s2);
 	if (!joined)
 		return (NULL);
 	gc_add(gc, joined);

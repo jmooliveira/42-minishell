@@ -1,4 +1,3 @@
-
 /*token.c*/
 
 #include "../../include/minishell.h"
@@ -15,7 +14,7 @@ int	tokenizer_list(t_data *data)
 		if (data->input[i])
 			i = get_token(data, i);
 	}
-	print_token(data->token_list);			//DEBUG
+	print_token(data->token_list); //DEBUG
 	return (i);
 }
 
@@ -31,7 +30,6 @@ int	skip_quotes(char *input, int start)
 	if (input[i] != quote)
 		return (-1);
 	return (i + 1);
-
 }
 
 char	*trim_quotes(char *str, t_gc *gc)
@@ -41,14 +39,15 @@ char	*trim_quotes(char *str, t_gc *gc)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	if ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"'))
+	if ((str[0] == '\'' && str[len - 1] == '\'')
+		|| (str[0] == '"' && str[len - 1] == '"'))
 		return (gc_substr(str, 1, len - 2, gc));
 	return (gc_strdup(str, gc));
 }
 
 int	find_token_end(char *inpt, int start)
 {
-	int end;
+	int	end;
 	int	quote_end;
 
 	if (ft_strchr("|&<>()", inpt[start]))
@@ -97,7 +96,7 @@ int	give_id(char *token_def)
 		return (PIPE);
 	if (!ft_strncmp(token_def, "&&", 2) && token_def[2] == '\0')
 		return (AND);
-	if (!ft_strncmp(token_def, "||", 2)  && token_def[2] == '\0')
+	if (!ft_strncmp(token_def, "||", 2) && token_def[2] == '\0')
 		return (OR);
 	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
 		return (PAR_OPEN);
@@ -144,23 +143,23 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
-	new->expandable = (id_token == WORD || id_token == WORD_D);		//marca true quando tem que expandir uma variavel
+	new->expandable = (id_token == WORD || id_token == WORD_D);	// marca true quando tem que expandir uma variavel
 	if (!data->token_list)
 	{
 		data->token_list = new;
 		return ;
 	}
-		tmp = data->token_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
+	tmp = data->token_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
 void	delete_token_list(t_token **token_l, t_gc *gc)
 {
 	t_token	*tmp;
 
-	while(*token_l)
+	while (*token_l)
 	{
 		tmp = (*token_l)->next;
 		gc_free(gc, *token_l);

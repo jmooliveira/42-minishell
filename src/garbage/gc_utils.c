@@ -3,81 +3,81 @@
 #include "../../include/minishell.h"
 
 // vai para garbage_collector.c
-t_gc    *gc_init(void)
+t_gc	*gc_init(void)
 {
-    t_gc    *gc;
+	t_gc	*gc;
 
-    gc = malloc(sizeof(t_gc));
-    if (!gc)
-        return (NULL);
-    gc->head = NULL;
-    return (gc);
+	gc = malloc(sizeof(t_gc));
+	if (!gc)
+		return (NULL);
+	gc->head = NULL;
+	return (gc);
 }
 
-void    gc_add(t_gc *gc, void *ptr)
+void	gc_add(t_gc *gc, void *ptr)
 {
-    t_gc_node   *new_node;
+	t_gc_node	*new_node;
 
-    new_node = malloc(sizeof(t_gc_node));
-    if (!new_node)
-        return ;
-    new_node->ptr = ptr;
-    new_node->next = gc->head;
-    gc->head = new_node;
+	new_node = malloc(sizeof(t_gc_node));
+	if (!new_node)
+		return ;
+	new_node->ptr = ptr;
+	new_node->next = gc->head;
+	gc->head = new_node;
 }
 
-void    *gc_malloc(t_gc *gc, size_t size)
+void	*gc_malloc(t_gc *gc, size_t size)
 {
-    void    *ptr;
+	void	*ptr;
 
-    ptr = malloc(size);
-    if (!ptr)
-        return (NULL);
-    gc_add(gc, ptr);
-    return (ptr);
+	ptr = malloc(size);
+	if (!ptr)
+		return (NULL);
+	gc_add(gc, ptr);
+	return (ptr);
 }
 
-void    gc_clear(t_gc *gc)
+void	gc_clear(t_gc *gc)
 {
-    t_gc_node   *tmp;
+	t_gc_node	*tmp;
 
-    while (gc && gc->head)
-    {
-        tmp = gc->head->next;
-        if (gc->head->ptr)
-            free(gc->head->ptr);
-        free(gc->head);
-        gc->head = tmp;
-    }
-    if (gc)
-        free(gc);
+	while (gc && gc->head)
+	{
+		tmp = gc->head->next;
+		if (gc->head->ptr)
+			free(gc->head->ptr);
+		free(gc->head);
+		gc->head = tmp;
+	}
+	if (gc)
+		free(gc);
 }
 
-void    gc_free(t_gc *gc, void *ptr)
+void	gc_free(t_gc *gc, void *ptr)
 {
-    t_gc_node   *cur;
-    t_gc_node   *prev;
+	t_gc_node	*cur;
+	t_gc_node	*prev;
 
-    cur = gc->head;
-    prev = NULL;
-    while(cur)
-    {
-        if (cur->ptr == ptr)
-        {
-            if(prev)
-                prev->next = cur->next;
-            else
-                gc->head = cur->next;
-            free(cur->ptr);
-            free(cur);
-            return ;
-        }
-        prev = cur;
-        cur = cur->next;
-    }
+	cur = gc->head;
+	prev = NULL;
+	while (cur)
+	{
+		if (cur->ptr == ptr)
+		{
+			if (prev)
+				prev->next = cur->next;
+			else
+				gc->head = cur->next;
+			free(cur->ptr);
+			free(cur);
+			return ;
+		}
+		prev = cur;
+		cur = cur->next;
+	}
 }
 
-char    *gc_strdup(const char *s, t_gc *gc)
+char	*gc_strdup(const char *s, t_gc *gc)
 {
 	size_t	len;
 	char	*dup;
@@ -102,10 +102,10 @@ void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc)
 	total_size = nmemb * size;
 	if (nmemb != 0 && (total_size / nmemb != size))
 		return (NULL);
-    temp = gc_malloc(gc, (nmemb * size));
-    if (!temp)
+	temp = gc_malloc(gc, (nmemb * size));
+	if (!temp)
 		return (NULL);
-    i = 0;
+	i = 0;
 	while (i < total_size)
 		temp[i++] = 0;
 	return (temp);
