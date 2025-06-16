@@ -33,6 +33,7 @@ SRCS		=	$(INPUT_DIR)/main.c \
 				$(INIT_DIR)/init.c \
 				$(UTILS_DIR)/list_utils.c \
 				$(INIT_DIR)/loop.c \
+				$(EXPAND_DIR)/expand.c \
 
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
@@ -64,3 +65,5 @@ val:
 	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
 .PHONY: all clean fclean re libft val
+
+#ls -l /usr/bin | grep "rwxr-xr-x" | awk '{print $1}' | sort | uniq -c | awk '{print $2}' | sed 's/^[0-9]* //' | sed 's/^[0-9]*//' | sed 's/^ /' | while read line; do echo "Executável: $line"; done

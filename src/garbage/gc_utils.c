@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   gc_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 18:44:01 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/12 19:12:45 by jeff             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 /*gc_utils.c*/
 
 #include "../../include/minishell.h"
@@ -89,7 +77,7 @@ void    gc_free(t_gc *gc, void *ptr)
     }
 }
 
-char *gc_strdup(const char *s, t_gc *gc)
+char    *gc_strdup(const char *s, t_gc *gc)
 {
 	size_t	len;
 	char	*dup;

@@ -1,4 +1,3 @@
-
 /*minishell.h*/
 
 #ifndef MINISHELL_H
@@ -14,20 +13,24 @@
 
 typedef enum e_type
 {
-	// comandos e argumentos
+	// basico
 	WORD,
 	WORD_S,
 	WORD_D,
-	PIPE,
-	AND,
-	OR,
-	PAR_OPEN,
-	PAR_CLOSE,
+	// redirecionamento
 	REDIR_IN,
 	REDIR_OUT,
 	APPEND,
 	HEREDOC,
+	// operadores logicos
+	AND,
+	OR,
+	PIPE,
+	// parenteses e subshell
+	PAR_OPEN,
+	PAR_CLOSE,
 	SUBSHELL,
+	// variaveis ambiente e outros
 	ASSIGNMENT,
 	NONE
 }	t_type;
@@ -90,7 +93,11 @@ typedef struct s_data
 
 // INIT:
 t_data	*init_data(char **ev);
+char	**copy_env(char **ev, t_gc *gc);
+
+// LOOP
 void	loop(t_data *data);
+size_t	ft_strspn(const char *s, const char *accept);
 
 // UTILS LIST
 t_token	*ft_token_last(t_token *lst);
@@ -102,6 +109,13 @@ int			give_id(char *token_def);
 void		add_token_to_list(t_data *data, char *token_def, t_type id_token);
 void		delete_token_list(t_token **token_l, t_gc *gc);
 t_token		*new_token(char *value, t_type type, t_gc *gc);
+
+// EXPANSION
+char	*expand_all_vars(const char *str, char **env, t_gc *gc);
+void	expand_token_values(t_data *data);
+char	*get_env_value(const char *var_name, char **env);
+
+char *gc_strjoin(char *s1, char *s2, t_gc *gc);
 
 // SYNTAXE VALIDATE
 int		syntax_error(char *msg, t_data *data);
