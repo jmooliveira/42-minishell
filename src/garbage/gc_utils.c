@@ -2,6 +2,7 @@
 
 #include "../../include/minishell.h"
 
+// vai para garbage_collector.c
 t_gc    *gc_init(void)
 {
     t_gc    *gc;
@@ -59,7 +60,6 @@ void    gc_free(t_gc *gc, void *ptr)
 
     cur = gc->head;
     prev = NULL;
-
     while(cur)
     {
         if (cur->ptr == ptr)

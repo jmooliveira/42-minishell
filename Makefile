@@ -13,6 +13,7 @@ UTILS_DIR	=	$(SRC_DIR)/utils
 EXPAND_DIR	=	$(SRC_DIR)/expand
 EXEC_DIR	=	$(SRC_DIR)/exec
 PARSE_DIR	=	$(SRC_DIR)/parse
+TEST_DIR	=	$(SRC_DIR)/test
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -24,27 +25,47 @@ C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
 LIBFT		=	$(LIBFT_DIR)/libft.a
 LIBS		=	-lreadline -lncurses
 
-# Fontes
-SRCS		=	$(INPUT_DIR)/main.c \
-				$(TOKEN_DIR)/token.c \
-				$(UTILS_DIR)/utils_debug.c \
-				$(GC_DIR)/gc_utils.c \
-				$(INPUT_DIR)/validate_syntax.c \
-				$(INIT_DIR)/init.c \
-				$(UTILS_DIR)/list_utils.c \
-				$(INIT_DIR)/loop.c \
-				$(EXPAND_DIR)/expand.c \
-
+# Fontes principais (minishell)
+SRCS		= \
+	$(INPUT_DIR)/main.c \
+	$(TOKEN_DIR)/token.c \
+	$(UTILS_DIR)/utils_debug.c \
+	$(GC_DIR)/gc_utils.c \
+	$(INPUT_DIR)/validate_syntax.c \
+	$(INIT_DIR)/init.c \
+	$(UTILS_DIR)/list_utils.c \
+	$(INIT_DIR)/loop.c \
+	$(EXPAND_DIR)/expand.c \
+	# $(TEST_DIR)/test_expand.c \
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
-# Targets
 all: $(NAME)
 
 $(NAME): libft $(OBJS)
 	@$(CC) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(C_FLAGS) -c $< -o $@
+
+# ==========================
+# Target específico só para teste do expand
+# ==========================
+# TEST_OBJS = \
+# 	$(OBJ_DIR)/token/token.o \
+# 	$(OBJ_DIR)/utils/utils_debug.o \
+# 	$(OBJ_DIR)/utils/list_utils.o \
+# 	$(OBJ_DIR)/input/validate_syntax.o \
+# 	$(OBJ_DIR)/garbage/gc_utils.o \
+# 	$(OBJ_DIR)/expand/expand.o \
+# 	$(OBJ_DIR)/test/test_expand.o
+
+# test_expand: libft $(TEST_OBJS)
+# 	@$(CC) $(TEST_OBJS) $(LIBFT) -o test_expand
+
+# Compilar objetos dos arquivos de teste
+$(OBJ_DIR)/test/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -c $< -o $@
 
@@ -56,7 +77,7 @@ clean:
 	@make -C $(LIBFT_DIR) clean
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) test_expand
 	@make -C $(LIBFT_DIR) fclean
 
 re: fclean all
@@ -64,6 +85,7 @@ re: fclean all
 val:
 	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
 
-.PHONY: all clean fclean re libft val
+.PHONY: all clean fclean re libft val test_expand
+
 
 #ls -l /usr/bin | grep "rwxr-xr-x" | awk '{print $1}' | sort | uniq -c | awk '{print $2}' | sed 's/^[0-9]* //' | sed 's/^[0-9]*//' | sed 's/^ /' | while read line; do echo "Executável: $line"; done
