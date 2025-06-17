@@ -1,12 +1,12 @@
 #DEPOIS VERIFICAR O QUE NECESSITA
 
+#pastas
+.vscode/
+
 # Compilação
 *.o
 *.out
 *.a
-*.so
-*.dSYM/
-*.exe
 
 # Binários
 minishell
@@ -22,9 +22,6 @@ vgcore.*
 
 # Arquivos de sistema
 .DS_Store
-
-# Arquivos de backup de editores
-*.bak
 
 # Outros
 .env

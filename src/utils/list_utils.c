@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 13:37:16 by jemorais          #+#    #+#             */
-/*   Updated: 2025/05/30 15:48:30 by ancarol9         ###   ########.fr       */
+/*   Created: 2025/05/30 15:48:47 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/libft.h"
+#include "../../include/minishell.h"
 
-t_list	*ft_lstlast(t_list *lst)
+t_token	*ft_token_last(t_token *lst)
 {
-	t_list	*last;
+	t_token	*last;
 
 	if (!lst)
 		return (NULL);
