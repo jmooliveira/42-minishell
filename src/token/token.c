@@ -137,10 +137,10 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
 	t_token	*new;
 	t_token	*tmp;
-	// char	*clean_value;
+	char	*clean_value;
 
-	// clean_value = trim_quotes(token_def, data->gc);
-	new = new_token(token_def, id_token, data->gc);
+	clean_value = trim_quotes(token_def, data->gc);
+	new = new_token(clean_value, id_token, data->gc);
 	if (!new)
 		return ;
 	new->expandable = (id_token == WORD || id_token == WORD_D);	// marca true quando tem que expandir uma variavel
