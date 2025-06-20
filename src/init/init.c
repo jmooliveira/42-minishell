@@ -45,7 +45,8 @@ t_data	*init_data(char **ev)
 		return (NULL);
 	}
 	ft_memset(data, 0, sizeof(t_data));
-	data->env = copy_env(ev, gc); // copia o env para o data->env, adicionado para pegar envp
+	data->env = copy_env(ev, gc);
+	// copia o env para o data->env, adicionado para pegar envp
 	data->env_len = count_envlen(ev);
 	data->prompt = "minishell$ ";
 	data->gc = gc;

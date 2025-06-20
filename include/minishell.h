@@ -89,49 +89,69 @@ typedef struct s_data
 
 // FUNCTIONS:
 
-//MAIN:
+//MAIN
 
-// INIT:
+// INIT
 t_data	*init_data(char **ev);
 char	**copy_env(char **ev, t_gc *gc);
+int		count_envlen(char **ev);
 
 // LOOP
 void	loop(t_data *data);
-size_t	ft_strspn(const char *s, const char *accept);
+size_t	ft_strspn(const char *s, const char *accept); // pode ir para repo utils
 
-// UTILS LIST
-t_token	*ft_token_last(t_token *lst);
-
-//TOKEN:
+// TOKEN:
 int		tokenizer_list(t_data *data);
 int		get_token(t_data *data, int start);
+int		find_token_end(char *inpt, int start);
 int		give_id(char *token_def);
 void	add_token_to_list(t_data *data, char *token_def, t_type id_token);
-void	delete_token_list(t_token **token_l, t_gc *gc);
-t_token	*new_token(char *value, t_type type, t_gc *gc);
 
-// EXPANSION
-char	*expand_all_vars(const char *str, char **env, t_gc *gc);
+// TOKEN_UTILS
+t_token	*new_token(char *value, t_type type, t_gc *gc);
+void	delete_token_list(t_token **token_l, t_gc *gc);
+char	*trim_quotes(char *str, t_gc *gc);
+int		skip_quotes(char *input, int start);
+t_token	*ft_token_last(t_token *lst);
+
+// EXPAND
 void	expand_token_values(t_data *data);
+char	*expand_all_vars(const char *str, char **env, t_gc *gc);
+// static char	*normal_char(const char *str, int *i, t_gc *gc, char *result);
+// static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc);
 char	*get_env_value(const char *var_name, char **env);
 
-char	*gc_strjoin(char *s1, char *s2, t_gc *gc);
-
-// SYNTAXE VALIDATE
-int		syntax_error(char *msg, t_data *data);
+// VALIDATE_SINTAX
 int		validate_syntax(t_data *data);
+int		check_first_node(t_token *token_l);
+int		check_last_node(t_token *token_l);
+int		check_invalid_op(t_token *token_l);
+int		check_unbalanced_parentheses(t_token *token_list);
+
+int		check_empty_parentheses(t_token *token_l);
+int		check_invalid_redir(t_token *token_l);
+int		is_word(t_type type);
+int		is_redir(t_type type);
+int		is_logical_op(t_type type);
+
+int		syntax_error(char *msg, t_data *data);
+t_token	*ft_token_last(t_token *lst);
 
 // GARBAGE COLLECTOR
-void	*gc_malloc(t_gc *gc, size_t size);
-void	gc_add(t_gc *gc, void *ptr);
-void	gc_clear(t_gc *gc);
-void	gc_free(t_gc *gc, void *ptr);
-void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc);
-char	*gc_strdup(const char *s, t_gc *gc);
-char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 t_gc	*gc_init(void);
+void	*gc_malloc(t_gc *gc, size_t size);
+void	*gc_calloc(size_t nmemb, size_t size, t_gc *gc);
+void	gc_add(t_gc *gc, void *ptr);
+
+char	*gc_strjoin(char *s1, char *s2, t_gc *gc);
+char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
+char	*gc_strdup(const char *s, t_gc *gc);
+void	gc_free(t_gc *gc, void *ptr);
+void	gc_clear(t_gc *gc);
 
 // DEBUG UTILS
 void	print_token(t_token *token_list);
+
+// UTILS LIST
 
 #endif

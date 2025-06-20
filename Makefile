@@ -5,15 +5,17 @@ CC			=	cc
 SRC_DIR 	=	src
 OBJ_DIR		=	objs
 LIB_DIR		=	lib
-GC_DIR		=	$(SRC_DIR)/garbage
-INIT_DIR	=	$(SRC_DIR)/init
 INPUT_DIR 	=	$(SRC_DIR)/input
+INIT_DIR	=	$(SRC_DIR)/init
+GC_DIR		=	$(SRC_DIR)/garbage
 TOKEN_DIR	=	$(SRC_DIR)/token
-UTILS_DIR	=	$(SRC_DIR)/utils
+VALID_DIR	=	$(SRC_DIR)/validate
 EXPAND_DIR	=	$(SRC_DIR)/expand
+UTILS_DIR	=	$(SRC_DIR)/utils
+TEST_DIR	=	$(SRC_DIR)/test
+
 EXEC_DIR	=	$(SRC_DIR)/exec
 PARSE_DIR	=	$(SRC_DIR)/parse
-TEST_DIR	=	$(SRC_DIR)/test
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -29,14 +31,17 @@ LIBS		=	-lreadline -lncurses
 # Para testes de mesa, colocar main para fora
 SRCS		= \
 	$(INPUT_DIR)/main.c \
-	$(TOKEN_DIR)/token.c \
-	$(UTILS_DIR)/utils_debug.c \
-	$(GC_DIR)/gc_utils.c \
-	$(INPUT_DIR)/validate_syntax.c \
 	$(INIT_DIR)/init.c \
-	$(UTILS_DIR)/list_utils.c \
 	$(INIT_DIR)/loop.c \
+	$(GC_DIR)/garbage_collector.c \
+	$(GC_DIR)/gc_utils.c \
+	$(TOKEN_DIR)/token.c \
+	$(TOKEN_DIR)/token_utils.c \
+	$(VALID_DIR)/validate_syntax.c \
+	$(VALID_DIR)/validate_utils_1.c \
+	$(VALID_DIR)/validate_utils_2.c \
 	$(EXPAND_DIR)/expand.c \
+	$(UTILS_DIR)/utils_debug.c \
 	# $(TEST_DIR)/test_expand.c \
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)

@@ -81,24 +81,6 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc)
 	return (result);
 }
 
-// char	*expand_all_vars(const char *str, char **env, t_gc *gc)
-// {
-// 	char	*result;
-// 	int		i;
-
-// 	result = gc_strdup("", gc);
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '$' && str[i + 1]
-// 			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
-// 			result = expanded_var(str, &i, env, gc, result);
-// 		else
-// 			result = normal_char(str, &i, gc, result);
-// 	}
-// 	return (result);
-// }
-
 void	expand_token_values(t_data *data)
 {
 	t_token	*token;
@@ -115,16 +97,4 @@ void	expand_token_values(t_data *data)
 		}
 		token = token->next;
 	}
-}
-
-// jogar essa funcao para gc_utils.c
-char	*gc_strjoin(char *s1, char *s2, t_gc *gc)
-{
-	char	*joined;
-
-	joined = ft_strjoin(s1, s2);
-	if (!joined)
-		return (NULL);
-	gc_add(gc, joined);
-	return (joined);
 }
