@@ -26,6 +26,7 @@ LIBFT		=	$(LIBFT_DIR)/libft.a
 LIBS		=	-lreadline -lncurses
 
 # Fontes principais (minishell)
+# Para testes de mesa, colocar main para fora
 SRCS		= \
 	$(INPUT_DIR)/main.c \
 	$(TOKEN_DIR)/token.c \
@@ -52,17 +53,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 # ==========================
 # Target específico só para teste do expand
 # ==========================
-# TEST_OBJS = \
-# 	$(OBJ_DIR)/token/token.o \
-# 	$(OBJ_DIR)/utils/utils_debug.o \
-# 	$(OBJ_DIR)/utils/list_utils.o \
-# 	$(OBJ_DIR)/input/validate_syntax.o \
-# 	$(OBJ_DIR)/garbage/gc_utils.o \
-# 	$(OBJ_DIR)/expand/expand.o \
-# 	$(OBJ_DIR)/test/test_expand.o
+TEST_OBJS = \
+	$(OBJ_DIR)/token/token.o \
+	$(OBJ_DIR)/utils/utils_debug.o \
+	$(OBJ_DIR)/utils/list_utils.o \
+	$(OBJ_DIR)/input/validate_syntax.o \
+	$(OBJ_DIR)/garbage/gc_utils.o \
+	$(OBJ_DIR)/expand/expand.o \
+	$(OBJ_DIR)/test/test_expand.o
 
-# test_expand: libft $(TEST_OBJS)
-# 	@$(CC) $(TEST_OBJS) $(LIBFT) -o test_expand
+test_expand: libft $(TEST_OBJS)
+	@$(CC) $(TEST_OBJS) $(LIBFT) -o test_expand
 
 # Compilar objetos dos arquivos de teste
 $(OBJ_DIR)/test/%.o: $(TEST_DIR)/%.c

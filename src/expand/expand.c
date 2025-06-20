@@ -21,16 +21,44 @@ char	*get_env_value(const char *var_name, char **env)
 	return (NULL);
 }
 
-char	*expand_all_vars(const char *str, char **env, t_gc *gc)
+static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
 {
-	char	*result;
-	char	*temp;
-	int		i;
 	int		start;
 	char	*var_name;
 	char	*env_value;
 	char	*value;
+
+	start = ++(*i);
+	while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+		(*i)++;
+	var_name = gc_substr(str, start, *i - start, gc);
+	env_value = get_env_value(var_name, env);
+	if (env_value)
+		value = gc_strdup(env_value, gc);
+	else
+		value = gc_strdup("", gc);
+	return (value);
+}
+
+static char	*normal_char(const char *str, int *i, t_gc *gc, char *result)
+{
 	char	letter[2];
+	char	*temp;
+
+	letter[0] = str[*i];
+	letter[1] = '\0';
+	temp = gc_strjoin(result, letter, gc);
+	gc_free(gc, result);
+	(*i)++;
+	return (temp);
+}
+
+char	*expand_all_vars(const char *str, char **env, t_gc *gc)
+{
+	char	*result;
+	char	*temp;
+	char	*expansion;
+	int		i;
 
 	result = gc_strdup("", gc);
 	i = 0;
@@ -39,32 +67,37 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc)
 		if (str[i] == '$' && str[i + 1]
 			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
 		{
-			start = ++i;
-			while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
-				i++;
-			var_name = gc_substr(str, start, i - start, gc);
-			env_value = get_env_value(var_name, env);
-			value = NULL;
-			if (env_value)
-				value = gc_strdup(env_value, gc);
-			else
-				value = gc_strdup("", gc);
-			temp = gc_strjoin(result, value, gc);
+			expansion = get_var_expansion(str, &i, env, gc);
+			temp = gc_strjoin(result, expansion, gc);
 			gc_free(gc, result);
 			result = temp;
 		}
 		else
 		{
-			letter[0] = str[i];
-			letter[1] = '\0';
-			temp = gc_strjoin(result, letter, gc);
-			gc_free(gc, result);
+			temp = normal_char(str, &i, gc, result);
 			result = temp;
-			i++;
 		}
 	}
 	return (result);
 }
+
+// char	*expand_all_vars(const char *str, char **env, t_gc *gc)
+// {
+// 	char	*result;
+// 	int		i;
+
+// 	result = gc_strdup("", gc);
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '$' && str[i + 1]
+// 			&& (ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
+// 			result = expanded_var(str, &i, env, gc, result);
+// 		else
+// 			result = normal_char(str, &i, gc, result);
+// 	}
+// 	return (result);
+// }
 
 void	expand_token_values(t_data *data)
 {

@@ -6,19 +6,18 @@ int	main(void)
 {
 	t_gc	*gc;
 	char	*result;
+	char	*input;
 	char	*env[] = {
-		"USER=Roberto",
+		"USER=Jefferson",
 		"HOME=/home/jeff",
 		"SHELL=/bin/bash",
 		NULL
 	};
 
 	gc = gc_init();
-
-	char *input = "Olá, $USER! VSF e obrigado, $HOME e shell é $SHELL.";
+	input = "Olá, $USER!\nHome: $HOME\nShell: $SHELL.";
 	result = expand_all_vars(input, env, gc);
 	printf("Resultado: %s\n", result);
-
 	gc_clear(gc);
 	return (0);
 }

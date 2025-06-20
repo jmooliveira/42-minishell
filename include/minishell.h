@@ -75,7 +75,7 @@ typedef struct s_ast
 
 typedef struct s_data
 {
-	const char	*prompt;		//str indicativa para digitar comando ex: "minishell$ "
+	const char	*prompt;		//str indicativa ex: "minishell$ "
 	char		*input;			//linha de comando (read_line())
 	char		**env;			//array de var de ambiente
 	int			env_len;		//comprimento desse arr
