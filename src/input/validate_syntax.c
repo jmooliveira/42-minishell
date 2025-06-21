@@ -31,7 +31,8 @@ int	check_first_node(t_token *token_l)
 {
 	if (!token_l)
 		return (1);
-	if (is_logical_op(token_l->type) || token_l->type == PAR_CLOSE)
+	if (is_logical_op(token_l->type) || token_l->type == PAR_CLOSE
+		|| is_redir(token_l->type))
 		return (1);
 	return (0);
 }
@@ -151,5 +152,5 @@ int	validate_syntax(t_data *data)
 	// redirecionamento incompleto (faltando o comando apos o redirecionamento)
 	else if (check_invalid_redir(data->token_list))
 		return (syntax_error("unexpected redirection", data));
-	return (1);
+	return (0);
 }

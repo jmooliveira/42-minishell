@@ -14,7 +14,7 @@ int	tokenizer_list(t_data *data)
 		if (data->input[i])
 			i = get_token(data, i);
 	}
-	print_token(data->token_list); //DEBUG
+	// print_token(data->token_list); //DEBUG
 	return (i);
 }
 

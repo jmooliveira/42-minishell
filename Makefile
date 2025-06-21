@@ -36,7 +36,8 @@ SRCS		= \
 	$(UTILS_DIR)/list_utils.c \
 	$(INIT_DIR)/loop.c \
 	$(EXPAND_DIR)/expand.c \
-	# $(TEST_DIR)/test_expand.c \
+	$(PARSE_DIR)/build_ast.c \
+	# $(TEST_DIR)/test_expand.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 

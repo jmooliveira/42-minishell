@@ -69,6 +69,7 @@ typedef struct s_ast
 {
 	t_type			type;
 	char			*value;
+	char			**args;
 	struct s_ast	*right;
 	struct s_ast	*left;
 }	t_ast;
@@ -84,7 +85,7 @@ typedef struct s_data
 	t_gc		*gc;
 	t_env		*envl;
 	t_token		*token_list;	
-	t_ast		**tree;
+	t_ast		*tree;
 }	t_data;
 
 // FUNCTIONS:
@@ -120,6 +121,10 @@ char	*gc_strjoin(char *s1, char *s2, t_gc *gc);
 // SYNTAXE VALIDATE
 int		syntax_error(char *msg, t_data *data);
 int		validate_syntax(t_data *data);
+
+// PARSE
+void    parse(t_data *data);
+t_ast   *build_ast(t_token *tokens, t_gc *gc);
 
 // GARBAGE COLLECTOR
 void	*gc_malloc(t_gc *gc, size_t size);
