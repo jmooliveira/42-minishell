@@ -1,5 +1,5 @@
 NAME		=	minishell
-CC			=	cc
+CC			=	gcc
 
 # Diretórios
 SRC_DIR 	=	src
@@ -19,7 +19,7 @@ LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
-C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
+C_FLAGS		= -Wall -Werror -Wextra -g3 $(INCLUDES)
 
 # Libs
 LIBFT		=	$(LIBFT_DIR)/libft.a
@@ -85,6 +85,7 @@ re: fclean all
 
 val:
 	@valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-origins=yes --track-fds=yes --suppressions=readline.supp ./$(NAME)
+
 
 .PHONY: all clean fclean re libft val test_expand
 

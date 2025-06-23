@@ -74,6 +74,7 @@ t_token   *find_operator(t_token *tokens)
 		return (NULL);
 	cur = tokens;
 	par_count = 0;
+    last = NULL;
 	while (cur)
 	{
 		if (cur->type == PAR_OPEN)
@@ -86,6 +87,7 @@ t_token   *find_operator(t_token *tokens)
 	}
 	return (last);
 }
+
 t_token	*find_redir(t_token *tokens)
 {
 	t_token	*cur;
