@@ -5,7 +5,7 @@ CC			=	cc
 SRC_DIR 	=	src
 OBJ_DIR		=	objs
 LIB_DIR		=	lib
-INPUT_DIR 	=	$(SRC_DIR)/input
+INPUT_DIR	=	$(SRC_DIR)/input
 INIT_DIR	=	$(SRC_DIR)/init
 GC_DIR		=	$(SRC_DIR)/garbage
 TOKEN_DIR	=	$(SRC_DIR)/token
@@ -14,9 +14,6 @@ EXPAND_DIR	=	$(SRC_DIR)/expand
 UTILS_DIR	=	$(SRC_DIR)/utils
 ERR_DIR		=	$(SRC_DIR)/errors
 TEST_DIR	=	$(SRC_DIR)/test
-
-EXEC_DIR	=	$(SRC_DIR)/exec
-PARSE_DIR	=	$(SRC_DIR)/parse
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -29,7 +26,6 @@ LIBFT		=	$(LIBFT_DIR)/libft.a
 LIBS		=	-lreadline -lncurses
 
 # Fontes principais (minishell)
-# Para testes de mesa, colocar main para fora
 SRCS		= \
 	$(INPUT_DIR)/main.c \
 	$(INPUT_DIR)/loop.c \
@@ -42,8 +38,8 @@ SRCS		= \
 	$(VALID_DIR)/validate_utils.c \
 	$(EXPAND_DIR)/expand.c \
 	$(UTILS_DIR)/utils_debug.c \
-	$(ERR_DIR)/handle_errors.c \
-	# $(TEST_DIR)/test_expand.c \
+	$(UTILS_DIR)/utils.c \
+	$(ERR_DIR)/handle_errors.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
@@ -59,19 +55,18 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 # ==========================
 # Target específico só para teste do expand
 # ==========================
-TEST_OBJS = \
-	$(OBJ_DIR)/token/token.o \
-	$(OBJ_DIR)/utils/utils_debug.o \
-	$(OBJ_DIR)/utils/list_utils.o \
-	$(OBJ_DIR)/input/validate_syntax.o \
-	$(OBJ_DIR)/garbage/gc_utils.o \
-	$(OBJ_DIR)/expand/expand.o \
-	$(OBJ_DIR)/test/test_expand.o
+TEST_SRCS = \
+	$(TOKEN_DIR)/token.c \
+	$(UTILS_DIR)/utils_debug.c \
+	$(GC_DIR)/gc_utils.c \
+	$(EXPAND_DIR)/expand.c \
+	$(TEST_DIR)/test_expand.c
+
+TEST_OBJS = $(foreach src,$(TEST_SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
 test_expand: libft $(TEST_OBJS)
 	@$(CC) $(TEST_OBJS) $(LIBFT) -o test_expand
 
-# Compilar objetos dos arquivos de teste
 $(OBJ_DIR)/test/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -c $< -o $@
