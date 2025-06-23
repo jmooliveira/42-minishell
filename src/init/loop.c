@@ -15,8 +15,8 @@ void	loop(t_data *data)
 			add_history(input);
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
-		expand_token_values(data);
 		print_token(data->token_list);
+		expand_token_values(data);
 		if (!validate_syntax(data))
 		{
 			parse(data);

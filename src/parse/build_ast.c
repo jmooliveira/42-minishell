@@ -143,9 +143,13 @@ t_token *create_token_copy(t_token *src, t_gc *gc)
     if (!new)
         return (NULL);
     *new = *src;
+    new->type = src->type;
+    new->expandable = src->expandable;
     new->next = NULL;
     if (src->value)
         new->value = gc_strdup(src->value, gc);
+    else
+        new->value = NULL;
     return (new);
 }
 
@@ -269,6 +273,24 @@ t_ast   *parse_cmd(t_token *tokens, t_gc *gc)
     return (node);
 }
 
+t_ast   *parse_redir(t_token *tokens, t_token *op, t_gc *gc)
+{
+    t_ast   *node;
+    t_token *left;
+    t_token *right;
+
+    node = create_node_ast(op->value, op->type, gc);
+    if (!node)
+        return (NULL);
+    left = slice_tokens(tokens, op, gc);
+    node->left = build_ast(left, gc);
+    if (!op->next)
+        return (NULL);
+    right = slice_tokens(op->next, op->next, gc);
+    node->right = build_ast(right, gc);
+    return (node);
+}
+
 t_ast   *build_ast(t_token *tokens, t_gc *gc)
 {
 	t_token    *op;
@@ -280,9 +302,9 @@ t_ast   *build_ast(t_token *tokens, t_gc *gc)
 	op = find_operator(tokens);
 	if (op)
 		return (parse_operator(tokens, op, gc));
-	// op = find_redir_bool(tokens);
-	// if (op)
-	// 	return (parse_redir(tokens, op, gc));
+	op = find_redir(tokens);
+	if (op)
+		return (parse_redir(tokens, op, gc));
 	return (parse_cmd(tokens, gc));
 
 }
