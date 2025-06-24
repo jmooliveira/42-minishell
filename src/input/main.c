@@ -2,6 +2,8 @@
 
 #include "../../include/minishell.h"
 
+volatile __sig_atomic_t	g_signal;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;

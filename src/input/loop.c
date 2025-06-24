@@ -2,12 +2,22 @@
 
 #include "../../include/minishell.h"
 
+
+static void	start_iteration(t_data *data)
+{
+	interactive_signal();
+	if (data->input)
+		free(data->input);
+	// remove_heredoc_files(data);
+}
+
 void	loop(t_data *data)
 {
 	char	*input;
 
 	while (42)
 	{
+		start_iteration(data);
 		input = readline(data->prompt);
 		if (!input)
 			break ;

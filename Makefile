@@ -13,6 +13,7 @@ VALID_DIR	=	$(SRC_DIR)/validate
 EXPAND_DIR	=	$(SRC_DIR)/expand
 UTILS_DIR	=	$(SRC_DIR)/utils
 ERR_DIR		=	$(SRC_DIR)/errors
+SIG_DIR		=	$(SRC_DIR)/signal
 TEST_DIR	=	$(SRC_DIR)/test
 
 LIBFT_DIR	=	$(LIB_DIR)
@@ -39,6 +40,7 @@ SRCS		= \
 	$(EXPAND_DIR)/expand.c \
 	$(UTILS_DIR)/utils_debug.c \
 	$(UTILS_DIR)/utils.c \
+	$(SIG_DIR)/signals.c \
 	$(ERR_DIR)/handle_errors.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)

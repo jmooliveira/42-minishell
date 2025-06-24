@@ -5,11 +5,14 @@
 
 # include <stdbool.h>
 # include <stdlib.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/include/libft.h"
 
 # define NO_PRINTABLE " \t\n\v\f\r "
+
+extern volatile int	g_signal;
 
 typedef enum e_type
 {
@@ -136,6 +139,16 @@ int		is_logical_op(t_type type);
 
 int		syntax_error(char *msg, t_data *data);
 t_token	*ft_token_last(t_token *lst);
+
+// SIGNAL
+void    handle_heredoc(int sig);
+void    handle_sigint(int sig);
+void    handle_redo_line(int sig);
+void    handle_sigpipe(int sig);
+void	interactive_signal(void);
+void	setup_signals(int pid);
+void	heredoc_signal(void);
+
 
 // GARBAGE COLLECTOR
 t_gc	*gc_init(void);
