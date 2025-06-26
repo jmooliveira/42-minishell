@@ -19,7 +19,7 @@ LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
-C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
+C_FLAGS		=	-Wall -Werror -Wextra -g $(INCLUDES)
 
 # Libs
 LIBFT		=	$(LIBFT_DIR)/libft.a
@@ -37,6 +37,10 @@ SRCS		= \
 	$(INIT_DIR)/loop.c \
 	$(EXPAND_DIR)/expand.c \
 	$(PARSE_DIR)/build_ast.c \
+	$(PARSE_DIR)/parser.c \
+	$(PARSE_DIR)/parser_search.c \
+	$(PARSE_DIR)/parser_utils.c \
+	$(PARSE_DIR)/debug_util.c \
 	# $(TEST_DIR)/test_expand.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
