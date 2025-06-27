@@ -3,7 +3,7 @@
 static void	print_indent(int depth)
 {
 	for (int i = 0; i < depth; i++)
-		printf("  ");
+		printf("     ");
 }
 
 static const char *get_type_name(t_type type)
