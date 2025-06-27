@@ -87,6 +87,27 @@ typedef struct s_data
 	t_ast		**tree;
 }	t_data;
 
+// adiciondao para o ast, parser e builtins
+typedef enum e_node_type
+{
+	NODE_CMD,     // comando simples: echo, ls, etc.
+	NODE_PIPE,    // pipe: |
+	NODE_REDIR,   // redirecionamento: >, <, >>, <<
+	NODE_LOGIC    // operadores lógicos: &&, ||
+}	t_node_type;
+
+typedef struct s_cmd
+{
+	t_node_type	type;
+	char		**argv;	// comando e argumentos: ["echo", "oi"]
+	bool		is_builtin;	// true se for builtin
+	int			infile;	// fd de entrada, se houver
+	int			outfile;	 // fd de saída, se houver
+	struct s_cmd	*left;	// para operadores como pipe ou &&
+	struct s_cmd	*right;
+}	t_cmd;
+
+
 // FUNCTIONS:
 
 //MAIN
