@@ -1,3 +1,5 @@
+/*parser_utils.c*/
+
 #include "../../include/minishell.h"
 
 bool    is_operator(t_type type)

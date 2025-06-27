@@ -1,3 +1,5 @@
+/*build_ast.c*/
+
 #include "../../include/minishell.h"
 
 t_ast   *create_node_ast(char *value, t_type type, t_gc *gc)
