@@ -69,6 +69,7 @@ typedef struct s_ast
 {
 	t_type			type;
 	char			*value;
+	char			**args;
 	struct s_ast	*right;
 	struct s_ast	*left;
 }	t_ast;
@@ -84,7 +85,7 @@ typedef struct s_data
 	t_gc		*gc;
 	t_env		*envl;
 	t_token		*token_list;	
-	t_ast		**tree;
+	t_ast		*tree;
 }	t_data;
 
 // adiciondao para o ast, parser e builtins
@@ -157,6 +158,26 @@ int		is_logical_op(t_type type);
 
 int		syntax_error(char *msg, t_data *data);
 t_token	*ft_token_last(t_token *lst);
+
+// PARSE
+t_token 	*find_operator(t_token *tokens);
+t_token		*find_redir(t_token *tokens);
+t_ast		*parse_subshell(t_token *tokens, t_gc *gc);
+t_ast   	*parse_operator(t_token *tokens, t_token *op, t_gc *gc);
+t_ast   	*parse_cmd(t_token *tokens, t_gc *gc);
+t_ast   	*parse_redir(t_token *tokens, t_token *op, t_gc *gc);
+bool    	is_operator(t_type type);
+bool    	is_redir_bool(t_type type);
+int			is_subshell(t_token *tokens);
+t_token 	*create_token_copy(t_token *src, t_gc *gc);
+t_token		*slice_tokens(t_token *start, t_token *end, t_gc *gc);
+void		handle_error(char *msg, t_data *data);
+t_ast   	*create_node_ast(char *value, t_type type, t_gc *gc);
+int			get_args_len(t_token *tokens);
+char		**extract_args(t_token *tokens, t_gc *gc);
+t_ast   	*build_ast(t_token *tokens, t_gc *gc);
+void    	parse(t_data *data);
+void		print_ast(t_ast *node, int depth);
 
 // GARBAGE COLLECTOR
 t_gc	*gc_init(void);

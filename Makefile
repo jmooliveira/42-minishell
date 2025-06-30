@@ -14,12 +14,13 @@ EXPAND_DIR	=	$(SRC_DIR)/expand
 UTILS_DIR	=	$(SRC_DIR)/utils
 ERR_DIR		=	$(SRC_DIR)/errors
 TEST_DIR	=	$(SRC_DIR)/test
+PARSE_DIR	=	$(SRC_DIR)/parse
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
-C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
+C_FLAGS		=	-Wall -Werror -Wextra -g $(INCLUDES)
 
 # Libs
 LIBFT		=	$(LIBFT_DIR)/libft.a
@@ -39,7 +40,14 @@ SRCS		= \
 	$(EXPAND_DIR)/expand.c \
 	$(UTILS_DIR)/utils_debug.c \
 	$(UTILS_DIR)/utils.c \
-	$(ERR_DIR)/handle_errors.c
+	$(ERR_DIR)/handle_errors.c \
+	$(PARSE_DIR)/build_ast.c \
+	$(PARSE_DIR)/parser.c \
+	$(PARSE_DIR)/parser_search.c \
+	$(PARSE_DIR)/parser_utils.c \
+	$(PARSE_DIR)/debug_util.c
+
+#$(TEST_DIR)/test_expand.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 

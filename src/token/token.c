@@ -2,28 +2,33 @@
 
 #include "../../include/minishell.h"
 
-void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
-{
-	t_token	*new;
-	t_token	*tmp;
-	// char	*clean_value;
+// void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
+// {
+// 	t_token	*new;
+// 	t_token	*tmp;
+// 	// char	*clean_value;
 
-	// clean_value = trim_quotes(token_def, data->gc);
-	new = new_token(token_def, id_token, data->gc);
-	if (!new)
-		return ;
-	new->expandable = (id_token == WORD || id_token == WORD_D);
-	// marca true quando tem que expandir uma variavel
-	if (!data->token_list)
-	{
-		data->token_list = new;
-		return ;
-	}
-	tmp = data->token_list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
+// 	// clean_value = trim_quotes(token_def, data->gc);
+// 	new = new_token(token_def, id_token, data->gc);
+// 	if (!new)
+// 		return ;
+// 	new->expandable = (id_token == WORD || id_token == WORD_D);
+// 	// marca true quando tem que expandir uma variavel
+// 	if (!data->token_list)
+// 	{
+// 		data->token_list = new;
+// 		return ;
+// 	}
+// // <<<<<<< HEAD
+// 	tmp = data->token_list;
+// 	while (tmp->next)
+// 		tmp = tmp->next;
+// 	tmp->next = new;
+// // =======
+// 	// print_token(data->token_list); //DEBUG
+// 	// return (i);
+// // >>>>>>> feature/build-ast
+// }
 
 int	give_id(char *token_def)
 {
@@ -99,18 +104,38 @@ int	get_token(t_data *data, int start)
 	return (end);
 }
 
-int	tokenizer_list(t_data *data)
-{
-	int	i;
+// t_token	*new_token(char *value, t_type type, t_gc *gc)
+// {
+// 	t_token	*token;
 
-	i = 0;
-	while (data->input[i])
+// 	token = gc_calloc(1, sizeof(t_token), gc);
+// 	if (!token)
+// 		return (NULL);
+// 	token->value = value;
+// 	token->type = type;
+// 	token->expandable = false;
+// 	token->next = NULL;
+// 	return (token);
+// }
+
+void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
+{
+	t_token	*new;
+	t_token	*tmp;
+	char	*clean_value;
+
+	clean_value = trim_quotes(token_def, data->gc);
+	new = new_token(clean_value, id_token, data->gc);
+	if (!new)
+		return ;
+	new->expandable = (id_token == WORD || id_token == WORD_D);
+	if (!data->token_list)
 	{
-		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
-			i++;
-		if (data->input[i])
-			i = get_token(data, i);
+		data->token_list = new;
+		return ;
 	}
-	print_token(data->token_list); //DEBUG
-	return (i);
+	tmp = data->token_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }

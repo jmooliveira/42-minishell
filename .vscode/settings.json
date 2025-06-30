@@ -4,5 +4,12 @@
 		"minishell.h": "c",
 		"stdbool.h": "c",
 		"libft.h": "c"
-	}
+	},
+	"makefile.launchConfigurations": [
+		{
+			"cwd": "/nfs/homes/ancarol9/cadete/common_core/4_milestone/42-minishell",
+			"binaryPath": "/nfs/homes/ancarol9/cadete/common_core/4_milestone/42-minishell/minishell",
+			"binaryArgs": []
+		}
+	]
 }
