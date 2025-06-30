@@ -139,3 +139,19 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 		tmp = tmp->next;
 	tmp->next = new;
 }
+
+int	tokenizer_list(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (data->input[i])
+	{
+		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
+			i++;
+		if (data->input[i])
+			i = get_token(data, i);
+	}
+	print_token(data->token_list); //DEBUG
+	return (i);
+}
