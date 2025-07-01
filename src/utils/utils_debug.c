@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_debug.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/23 15:43:22 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/21 18:47:30 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/06/30 22:04:51 by jeff             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,13 @@
 
 #include "../../include/minishell.h"
 
-static const char *get_type_name(t_type type)
+void	print_token(t_token *token_list)
 {
-	if (type == WORD || type == WORD_S || type == WORD_D) return "WORD";
-	if (type == REDIR_IN) return "REDIR_IN";
-	if (type == REDIR_OUT) return "REDIR_OUT";
-	if (type == APPEND) return "APPEND";
-	if (type == HEREDOC) return "HEREDOC";
-	if (type == AND) return "AND";
-	if (type == OR) return "OR";
-	if (type == PIPE) return "PIPE";
-	if (type == PAR_OPEN) return "PAR_OPEN";
-	if (type == PAR_CLOSE) return "PAR_CLOSE";
-	if (type == SUBSHELL) return "SUBSHELL";
-	if (type == ASSIGNMENT) return "ASSIGNMENT";
-	if (type == NONE) return "NONE";
-	return "UNKNOWN";
-}
+	int		i;
+	t_token	*current;
 
-void print_token(t_token *token_list)
-{
-	int i = 0;
-	t_token *current = token_list;
-
+	i = 0;
+	current = token_list;
 	while (current)
 	{
 		printf("token%d:, type: %s, value: %s\n",

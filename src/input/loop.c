@@ -16,12 +16,12 @@ void	loop(t_data *data)
 			add_history(input);
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
-		print_token(data->token_list);
+		// print_token(data->token_list);
 		expand_token_values(data);
 		if (!validate_syntax(data))
 		{
 			parse(data);
-			// - executar
+			exec_ast(data->tree, data);
 		}
 		gc_free(data->gc, data->input);
 		free(input); // sempre liberar input
