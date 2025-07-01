@@ -5,6 +5,7 @@
 
 # include <stdbool.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/include/libft.h"
@@ -81,6 +82,7 @@ typedef struct s_data
 	char		**env;			//array de var de ambiente
 	int			env_len;		//comprimento desse arr
 	int			exit_status;	//saida padrao do ultimo comando executado
+	int			has_error;		//para verificar se existe algum erro, implementado para tratamento de aspas na tokenização ser pego na validação
 	int			fd_bk[2];		//bk dos fds
 	t_gc		*gc;
 	t_env		*envl;
@@ -119,6 +121,7 @@ char	*get_env_value(const char *var_name, char **env);
 char	*gc_strjoin(char *s1, char *s2, t_gc *gc);
 
 // SYNTAXE VALIDATE
+int		is_word(t_type type);
 int		syntax_error(char *msg, t_data *data);
 int		validate_syntax(t_data *data);
 

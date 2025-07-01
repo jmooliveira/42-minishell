@@ -44,7 +44,6 @@ t_ast   *parse_operator(t_token *tokens, t_token *op, t_gc *gc)
     return (node);
 }
 
-
 t_ast   *parse_cmd(t_token *tokens, t_gc *gc)
 {
     t_ast   *node;
@@ -70,7 +69,6 @@ void    handle_start_redir(t_token *op, t_ast *node, t_gc *gc)
     node->left = build_ast(cmd, gc);
     node->right = build_ast(target, gc);
 }
-
 
 t_ast   *parse_redir(t_token *tokens, t_token *op, t_gc *gc)
 {

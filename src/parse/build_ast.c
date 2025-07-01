@@ -15,6 +15,7 @@ t_ast   *create_node_ast(char *value, t_type type, t_gc *gc)
     return (node);
 }
 
+
 int get_args_len(t_token *tokens)
 {
     int     count;
@@ -22,7 +23,7 @@ int get_args_len(t_token *tokens)
 
     count = 0;
     cur = tokens;
-    while (cur && (cur->type == WORD || cur->type == ASSIGNMENT))
+    while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
     {
         count++;
         cur = cur->next;
@@ -44,7 +45,7 @@ char    **extract_args(t_token *tokens, t_gc *gc)
         return (NULL);
     cur = tokens;
     count = 0;
-    while (cur && (cur->type == WORD || cur->type == ASSIGNMENT))
+    while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
     {
         args[count++] = cur->value;
         cur = cur->next;

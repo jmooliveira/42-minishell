@@ -82,7 +82,8 @@ int	get_token(t_data *data, int start)
 	if (end == -1)
 	{
 		syntax_error("unclosed quote", data);
-		return (ft_strlen(data->input)); // força a parada da tokenização
+		data->has_error = 1;
+		return (ft_strlen(data->input));
 	}			
 	token_def = gc_substr(data->input, start, end - start, data->gc);
 	id_token = give_id(token_def);

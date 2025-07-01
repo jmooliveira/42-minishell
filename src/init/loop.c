@@ -11,13 +11,13 @@ void	loop(t_data *data)
 		input = readline(data->prompt);
 		if (!input)
 			break ;
-		if (*input && ft_strspn(input, NO_PRINTABLE) != ft_strlen(input)) //se nao for um str vazia, nao sei se tem que ver white spaces
+		if (*input && ft_strspn(input, NO_PRINTABLE) != ft_strlen(input))
 			add_history(input);
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
 		print_token(data->token_list);
 		expand_token_values(data);
-		if (!validate_syntax(data))
+		if (validate_syntax(data) == 0)
 		{
 			parse(data);
 			// - executar

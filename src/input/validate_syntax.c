@@ -229,6 +229,8 @@ int	check_invalid_subshell_content(t_data *data)
 
 int	validate_syntax(t_data *data)
 {
+	if (data->has_error)
+		return (1);
 	// operador no inicio
 	if (check_first_node(data->token_list))
 		return (syntax_error("unexpected token", data));
