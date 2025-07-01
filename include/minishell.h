@@ -120,7 +120,8 @@ int		count_envlen(char **ev);
 
 // LOOP
 void	loop(t_data *data);
-size_t	ft_strspn(const char *s, const char *accept); // pode ir para repo utils
+
+size_t	ft_strspn(const char *s, const char *accept);
 
 // TOKEN:
 int		tokenizer_list(t_data *data);
@@ -157,7 +158,6 @@ int		is_redir(t_type type);
 int		is_logical_op(t_type type);
 
 int		syntax_error(char *msg, t_data *data);
-t_token	*ft_token_last(t_token *lst);
 
 // PARSE
 t_token 	*find_operator(t_token *tokens);
@@ -193,6 +193,13 @@ void	gc_clear(t_gc *gc);
 
 // DEBUG UTILS
 void	print_token(t_token *token_list);
+
+// EXEC BUILTINS
+bool	is_builtin(char *cmd);
+int		execute_builtin(t_cmd *cmd, t_data *data);
+void	exec_ast(t_ast *node, t_data *data);
+
+int		builtin_echo(char **argv);
 
 // UTILS LIST
 

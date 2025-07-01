@@ -15,6 +15,7 @@ UTILS_DIR	=	$(SRC_DIR)/utils
 ERR_DIR		=	$(SRC_DIR)/errors
 TEST_DIR	=	$(SRC_DIR)/test
 PARSE_DIR	=	$(SRC_DIR)/parse
+BUILT_DIR	=	$(SRC_DIR)/builtins
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -45,7 +46,9 @@ SRCS		= \
 	$(PARSE_DIR)/parser.c \
 	$(PARSE_DIR)/parser_search.c \
 	$(PARSE_DIR)/parser_utils.c \
-	$(PARSE_DIR)/debug_util.c
+	$(PARSE_DIR)/debug_util.c \
+	$(BUILT_DIR)/exec_builtin.c \
+	$(BUILT_DIR)/echo.c
 
 #$(TEST_DIR)/test_expand.c
 
