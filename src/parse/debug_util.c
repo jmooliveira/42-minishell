@@ -39,6 +39,22 @@ static const char *get_type_name(t_type type)
 	return ("UNKNOWN");
 }
 
+void	print_token(t_token *token_list)
+{
+	int		i;
+	t_token	*current;
+
+	i = 0;
+	current = token_list;
+	while (current)
+	{
+		printf("token%d:, type: %s, value: %s\n",
+			i, get_type_name(current->type), current->value);
+		current = current->next;
+		i++;
+	}
+}
+
 void	print_ast(t_ast *node, int depth)
 {
 	if (!node)

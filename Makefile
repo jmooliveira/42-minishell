@@ -39,7 +39,6 @@ SRCS		= \
 	$(VALID_DIR)/validate_syntax.c \
 	$(VALID_DIR)/validate_utils.c \
 	$(EXPAND_DIR)/expand.c \
-	$(UTILS_DIR)/utils_debug.c \
 	$(UTILS_DIR)/utils.c \
 	$(ERR_DIR)/handle_errors.c \
 	$(PARSE_DIR)/build_ast.c \
