@@ -47,7 +47,9 @@ SRCS		= \
 	$(PARSE_DIR)/parser_utils.c \
 	$(PARSE_DIR)/debug_util.c \
 	$(BUILT_DIR)/exec_builtin.c \
-	$(BUILT_DIR)/echo.c
+	$(BUILT_DIR)/echo.c \
+	$(BUILT_DIR)/cd.c \
+	$(BUILT_DIR)/pwd.c 
 
 #$(TEST_DIR)/test_expand.c
 
