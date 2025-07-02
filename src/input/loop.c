@@ -22,7 +22,8 @@ void	loop(t_data *data)
 		if (validate_syntax(data) == 0)
 		{
 			parse(data);
-			// - executar
+			data->cmd_list = convert_ast_to_cmd(data->tree, data->gc);
+			exec_node(data->cmd_list, data);
 		}
 		gc_free(data->gc, data->input);
 		free(input); // sempre liberar input

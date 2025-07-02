@@ -16,6 +16,7 @@ ERR_DIR		=	$(SRC_DIR)/errors
 SIG_DIR		=	$(SRC_DIR)/signal
 TEST_DIR	=	$(SRC_DIR)/test
 PARSE_DIR	=	$(SRC_DIR)/parse
+BUILT_DIR	=	$(SRC_DIR)/builtins
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -39,7 +40,6 @@ SRCS		= \
 	$(VALID_DIR)/validate_syntax.c \
 	$(VALID_DIR)/validate_utils.c \
 	$(EXPAND_DIR)/expand.c \
-	$(UTILS_DIR)/utils_debug.c \
 	$(UTILS_DIR)/utils.c \
 	$(ERR_DIR)/handle_errors.c \
 	$(SIG_DIR)/signals.c \
@@ -49,7 +49,12 @@ SRCS		= \
 	$(PARSE_DIR)/parser_search.c \
 	$(PARSE_DIR)/parser_utils.c \
 	$(PARSE_DIR)/debug_util.c \
-	# $(TEST_DIR)/test_expand.c
+	$(BUILT_DIR)/exec_builtin.c \
+	$(BUILT_DIR)/echo.c \
+	$(BUILT_DIR)/cd.c \
+	$(BUILT_DIR)/pwd.c 
+
+#$(TEST_DIR)/test_expand.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 

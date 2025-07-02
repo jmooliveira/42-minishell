@@ -39,40 +39,18 @@ int	check_invalid_op(t_token *token_l)
 		{
 			if (is_logical_op(cur->type))
 			{
-				if (is_logical_op(cur->next->type))
+				if (is_logical_op(cur->next->type) || is_redir(cur->next->type))
 					return (1);
 			}
 			else if (is_redir(cur->type))
 			{
-				if (is_redir(cur->next->type)
-					|| is_logical_op(cur->next->type))
+				if (is_redir(cur->next->type) || is_logical_op(cur->next->type))
 					return (1);
 			}
 		}
 		cur = cur->next;
 	}
 	return (0);
-}
-
-int	check_unbalanced_quotes(t_token *tokens)
-{
-	t_token *cur = tokens;
-	char quote = 0;
-
-	while (cur)
-	{
-		char *s = cur->value;
-		while (s && *s)
-		{
-			if (!quote && (*s == '\'' || *s == '"'))
-				quote = *s; // abre aspas
-			else if (quote && *s == quote)
-				quote = 0; // fecha aspas
-			s++;
-		}
-		cur = cur->next;
-	}
-	return (quote != 0); // 1 se alguma aspa ficou aberta
 }
 
 
@@ -188,6 +166,7 @@ int	check_invalid_subshell_content(t_data *data)
 	}
 	return (0);
 }
+
 
 int	validate_syntax(t_data *data)
 {

@@ -1,26 +1,5 @@
 #include "../../include/minishell.h"
 
-void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
-{
-	t_token	*new;
-	t_token	*tmp;
-
-	new = new_token(token_def, id_token, data->gc);
-	if (!new)
-		return ;
-	new->expandable = (id_token == WORD || id_token == WORD_D);
-	// marca true quando tem que expandir uma variavel
-	if (!data->token_list)
-	{
-		data->token_list = new;
-		return ;
-	}
-	tmp = data->token_list;
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new;
-}
-
 int	give_id(char *token_def)
 {
 	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
@@ -94,6 +73,29 @@ int	get_token(t_data *data, int start)
 	id_token = give_id(token_def);
 	add_token_to_list(data, token_def, id_token);
 	return (end);
+}
+
+void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
+{
+	t_token	*new;
+	t_token	*tmp;
+
+	new = new_token(token_def, id_token, data->gc);
+	if (!new)
+		return ;
+	if (id_token == WORD_D || id_token == WORD)
+		new->expandable = true;
+	else
+		new->expandable = false;
+	if (!data->token_list)
+	{
+		data->token_list = new;
+		return ;
+	}
+	tmp = data->token_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
 int	tokenizer_list(t_data *data)
