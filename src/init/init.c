@@ -1,20 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/29 19:34:09 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/06/10 16:54:55 by jemorais         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+/*init.c*/
 
 #include "../../include/minishell.h"
 
 int	count_envlen(char **ev)
 {
-	int len;
+	int	len;
 
 	len = 0;
 	while (ev[len])
@@ -22,11 +12,31 @@ int	count_envlen(char **ev)
 	return (len);
 }
 
+char	**copy_env(char **ev, t_gc *gc)
+{
+	char	**env_copy;
+	int		i;
+
+	env_copy = gc_malloc(gc, sizeof(char *) * (count_envlen(ev) + 1));
+	if (!env_copy)
+		return (NULL);
+	i = 0;
+	while (ev[i])
+	{
+		env_copy[i] = gc_strdup(ev[i], gc);
+		if (!env_copy[i])
+			return (NULL);
+		i++;
+	}
+	env_copy[i] = NULL;
+	return (env_copy);
+}
+
 t_data	*init_data(char **ev)
 {
 	t_data	*data;
 	t_gc	*gc;
-	
+
 	gc = gc_init();
 	data = gc_malloc(gc, sizeof(t_data));
 	if (!data)
@@ -35,9 +45,11 @@ t_data	*init_data(char **ev)
 		return (NULL);
 	}
 	ft_memset(data, 0, sizeof(t_data));
-	data->env = ev;
+	data->env = copy_env(ev, gc);
+	// copia o env para o data->env, adicionado para pegar envp
 	data->env_len = count_envlen(ev);
 	data->prompt = "minishell$ ";
 	data->gc = gc;
+	data->has_error = 0;
 	return (data);
 }

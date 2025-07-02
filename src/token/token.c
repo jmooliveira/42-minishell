@@ -1,65 +1,58 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jeff <jeff@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 17:35:51 by jemorais          #+#    #+#             */
-/*   Updated: 2025/06/12 19:04:57 by jeff             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/*token.c*/
-
 #include "../../include/minishell.h"
 
-int	tokenizer_list(t_data *data)
+void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
-	int	i;
+	t_token	*new;
+	t_token	*tmp;
 
-	i = 0;
-	while (data->input[i])
+	new = new_token(token_def, id_token, data->gc);
+	if (!new)
+		return ;
+	new->expandable = (id_token == WORD || id_token == WORD_D);
+	// marca true quando tem que expandir uma variavel
+	if (!data->token_list)
 	{
-		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
-			i++;
-		if (data->input[i])
-			i = get_token(data, i);
+		data->token_list = new;
+		return ;
 	}
-	print_token(data->token_list);			//DEBUG
-	return (i);
+	tmp = data->token_list;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
 }
 
-int	skip_quotes(char *input, int start)
+int	give_id(char *token_def)
 {
-	char	quote;
-	int		i;
-
-	quote = input[start];
-	i = start + 1;
-	while (input[i] && input[i] != quote)
-		i++;
-	if (input[i] != quote)
-		return (-1);
-	return (i + 1);
-
-}
-
-char	*trim_quotes(char *str, t_gc *gc)
-{
-	size_t	len;
-
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	if ((str[0] == '\'' && str[len - 1] == '\'') || (str[0] == '"' && str[len - 1] == '"'))
-		return (gc_substr(str, 1, len - 2, gc));
-	return (gc_strdup(str, gc));
+	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
+		return (PIPE);
+	if (!ft_strncmp(token_def, "&&", 2) && token_def[2] == '\0')
+		return (AND);
+	if (!ft_strncmp(token_def, "||", 2) && token_def[2] == '\0')
+		return (OR);
+	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
+		return (PAR_OPEN);
+	if (!ft_strncmp(token_def, ")", 1) && token_def[1] == '\0')
+		return (PAR_CLOSE);
+	if (!ft_strncmp(token_def, "<", 1) && token_def[1] == '\0')
+		return (REDIR_IN);
+	if (!ft_strncmp(token_def, ">", 1) && token_def[1] == '\0')
+		return (REDIR_OUT);
+	if (!ft_strncmp(token_def, ">>", 2) && token_def[2] == '\0')
+		return (APPEND);
+	if (!ft_strncmp(token_def, "<<", 2) && token_def[2] == '\0')
+		return (HEREDOC);
+	if (ft_strchr(token_def, '=') && token_def[0] != '=')
+		return (ASSIGNMENT);
+	if (token_def[0] == '\'' && token_def[ft_strlen(token_def) - 1] == '\'')
+		return (WORD_S);
+	if (token_def[0] == '"' && token_def[ft_strlen(token_def) - 1] == '"')
+		return (WORD_D);
+	return (WORD);
 }
 
 int	find_token_end(char *inpt, int start)
 {
-	int end;
+	int	end;
 	int	quote_end;
 
 	if (ft_strchr("|&<>()", inpt[start]))
@@ -94,87 +87,27 @@ int	get_token(t_data *data, int start)
 	if (end == -1)
 	{
 		syntax_error("unclosed quote", data);
-		return (ft_strlen(data->input)); // força a parada da tokenização
-	}			
+		data->has_error = 1;
+		return (ft_strlen(data->input));
+	}
 	token_def = gc_substr(data->input, start, end - start, data->gc);
 	id_token = give_id(token_def);
 	add_token_to_list(data, token_def, id_token);
 	return (end);
 }
 
-int	give_id(char *token_def)
+int	tokenizer_list(t_data *data)
 {
-	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
-		return (PIPE);
-	if (!ft_strncmp(token_def, "&&", 2) && token_def[2] == '\0')
-		return (AND);
-	if (!ft_strncmp(token_def, "||", 2)  && token_def[2] == '\0')
-		return (OR);
-	if (!ft_strncmp(token_def, "(", 1) && token_def[1] == '\0')
-		return (PAR_OPEN);
-	if (!ft_strncmp(token_def, ")", 1) && token_def[1] == '\0')
-		return (PAR_CLOSE);
-	if (!ft_strncmp(token_def, "<", 1) && token_def[1] == '\0')
-		return (REDIR_IN);
-	if (!ft_strncmp(token_def, ">", 1) && token_def[1] == '\0')
-		return (REDIR_OUT);
-	if (!ft_strncmp(token_def, ">>", 2) && token_def[2] == '\0')
-		return (APPEND);
-	if (!ft_strncmp(token_def, "<<", 2) && token_def[2] == '\0')
-		return (HEREDOC);
-	if (ft_strchr(token_def, '=') && token_def[0] != '=')
-		return (ASSIGNMENT);
-	if (token_def[0] == '\'' && token_def[ft_strlen(token_def) - 1] == '\'')
-		return (WORD_S);
-	if (token_def[0] == '"' && token_def[ft_strlen(token_def) - 1] == '"')
-		return (WORD_D);
-	return (WORD);
-}
+	int	i;
 
-t_token	*new_token(char *value, t_type type, t_gc *gc)
-{
-	t_token	*token;
-
-	token = gc_calloc(1, sizeof(t_token), gc);
-	if (!token)
-		return (NULL);
-	token->value = value;
-	token->type = type;
-	token->expandable = false;
-	token->next = NULL;
-	return (token);
-}
-
-void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
-{
-	t_token	*new;
-	t_token	*tmp;
-	// char	*clean_value;
-
-	// clean_value = trim_quotes(token_def, data->gc);
-	new = new_token(token_def, id_token, data->gc);
-	if (!new)
-		return ;
-	new->expandable = (id_token == WORD || id_token == WORD_D);		//marca true quando tem que expandir uma variavel
-	if (!data->token_list)
+	i = 0;
+	while (data->input[i])
 	{
-		data->token_list = new;
-		return ;
+		while (data->input[i] && ft_strchr(NO_PRINTABLE, data->input[i]))
+			i++;
+		if (data->input[i])
+			i = get_token(data, i);
 	}
-		tmp = data->token_list;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new;
-}
-
-void	delete_token_list(t_token **token_l, t_gc *gc)
-{
-	t_token	*tmp;
-
-	while(*token_l)
-	{
-		tmp = (*token_l)->next;
-		gc_free(gc, *token_l);
-		*token_l = tmp;
-	}
+	print_token(data->token_list); //DEBUG
+	return (i);
 }
