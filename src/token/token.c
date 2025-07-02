@@ -124,11 +124,17 @@ void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 	t_token	*tmp;
 	char	*clean_value;
 
-	clean_value = trim_quotes(token_def, data->gc);
+	if (id_token == WORD_S || id_token == WORD_D)
+		clean_value = trim_quotes(token_def, data->gc);
+	else
+		clean_value = gc_strdup(token_def, data->gc);
 	new = new_token(clean_value, id_token, data->gc);
 	if (!new)
 		return ;
-	new->expandable = (id_token == WORD || id_token == WORD_D);
+	if (id_token == WORD_D || id_token == WORD)
+		new->expandable = true;
+	else
+		new->expandable = false;
 	if (!data->token_list)
 	{
 		data->token_list = new;
