@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void    handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
     (void)sig;
     ft_putendl_fd("", STDOUT_FILENO);

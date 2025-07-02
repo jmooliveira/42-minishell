@@ -1,14 +1,10 @@
-/*token.c*/
-
 #include "../../include/minishell.h"
 
 void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
 	t_token	*new;
 	t_token	*tmp;
-	char	*clean_value;
 
-	clean_value = trim_quotes(token_def, data->gc);
 	new = new_token(token_def, id_token, data->gc);
 	if (!new)
 		return ;
@@ -91,7 +87,8 @@ int	get_token(t_data *data, int start)
 	if (end == -1)
 	{
 		syntax_error("unclosed quote", data);
-		return (ft_strlen(data->input)); // força a parada da tokenização
+		data->has_error = 1;
+		return (ft_strlen(data->input));
 	}
 	token_def = gc_substr(data->input, start, end - start, data->gc);
 	id_token = give_id(token_def);

@@ -2,34 +2,28 @@
 
 #include "../../include/minishell.h"
 
-
-static void	start_iteration(t_data *data)
-{
-	interactive_signal();
-	if (data->input)
-		free(data->input);
-	// remove_heredoc_files(data);
-}
-
 void	loop(t_data *data)
 {
 	char	*input;
 
 	while (42)
 	{
-		start_iteration(data);
+		interactive_signal();
+		// tem que limpar os arquivos do heredoc nesse ponto tambem, talvez nao?
 		input = readline(data->prompt);
 		if (!input)
 			break ;
 		if (*input && ft_strspn(input, NO_PRINTABLE) != ft_strlen(input))
-		// se nao for um str vazia, nao sei se tem que ver white spaces
 			add_history(input);
 		data->input = gc_strdup(input, data->gc);
 		tokenizer_list(data);
+		// print_token(data->token_list);
 		expand_token_values(data);
-		validate_syntax(data);
-		// - construir árvore
-		// - executar
+		if (validate_syntax(data) == 0)
+		{
+			parse(data);
+			// - executar
+		}
 		gc_free(data->gc, data->input);
 		free(input); // sempre liberar input
 		delete_token_list(&data->token_list, data->gc);

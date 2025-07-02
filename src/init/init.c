@@ -50,5 +50,6 @@ t_data	*init_data(char **ev)
 	data->env_len = count_envlen(ev);
 	data->prompt = "minishell$ ";
 	data->gc = gc;
+	data->has_error = 0;
 	return (data);
 }

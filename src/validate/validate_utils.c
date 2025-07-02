@@ -18,24 +18,6 @@ int	is_word(t_type type)
 	return (type == WORD_D || type == WORD_S || type == WORD);
 }
 
-int	check_invalid_redir(t_token *token_l)
-{
-	t_token	*cur;
-
-	cur = token_l;
-	while (cur)
-	{
-		if (is_redir(cur->type))
-		{
-			if (!cur->next)
-				return (1);
-			if (!is_word(cur->next->type) && cur->next->type != PAR_OPEN)
-				return (1);
-		}
-		cur = cur->next;
-	}
-	return (0);
-}
 
 int	check_empty_parentheses(t_token *token_l)
 {
@@ -50,3 +32,4 @@ int	check_empty_parentheses(t_token *token_l)
 	}
 	return (0);
 }
+

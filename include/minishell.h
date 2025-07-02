@@ -6,6 +6,7 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <signal.h>
+# include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/include/libft.h"
@@ -72,6 +73,7 @@ typedef struct s_ast
 {
 	t_type			type;
 	char			*value;
+	char			**args;
 	struct s_ast	*right;
 	struct s_ast	*left;
 }	t_ast;
@@ -83,11 +85,12 @@ typedef struct s_data
 	char		**env;			//array de var de ambiente
 	int			env_len;		//comprimento desse arr
 	int			exit_status;	//saida padrao do ultimo comando executado
+	int			has_error;		//para verificar se existe algum erro, implementado para tratamento de aspas na tokenização ser pego na validação
 	int			fd_bk[2];		//bk dos fds
 	t_gc		*gc;
 	t_env		*envl;
 	t_token		*token_list;	
-	t_ast		**tree;
+	t_ast		*tree;
 }	t_data;
 
 // FUNCTIONS:
@@ -124,31 +127,36 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc);
 // static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc);
 char	*get_env_value(const char *var_name, char **env);
 
-// VALIDATE_SINTAX
-int		validate_syntax(t_data *data);
-int		check_first_node(t_token *token_l);
-int		check_last_node(t_token *token_l);
-int		check_invalid_op(t_token *token_l);
-int		check_unbalanced_parentheses(t_token *token_list);
+char	*gc_strjoin(char *s1, char *s2, t_gc *gc);
 
-int		check_empty_parentheses(t_token *token_l);
-int		check_invalid_redir(t_token *token_l);
+// SYNTAXE VALIDATE
 int		is_word(t_type type);
 int		is_redir(t_type type);
 int		is_logical_op(t_type type);
-
+int		check_invalid_redir(t_token *token_l);
+int		check_empty_parentheses(t_token *token_l);
 int		syntax_error(char *msg, t_data *data);
-t_token	*ft_token_last(t_token *lst);
+int		validate_syntax(t_data *data);
 
-// SIGNAL
-void    handle_heredoc(int sig);
-void    handle_sigint(int sig);
-void    handle_redo_line(int sig);
-void    handle_sigpipe(int sig);
-void	interactive_signal(void);
-void	setup_signals(int pid);
-void	heredoc_signal(void);
-
+// PARSE
+t_token 	*find_operator(t_token *tokens);
+t_token		*find_redir(t_token *tokens);
+t_ast		*parse_subshell(t_token *tokens, t_gc *gc);
+t_ast   	*parse_operator(t_token *tokens, t_token *op, t_gc *gc);
+t_ast   	*parse_cmd(t_token *tokens, t_gc *gc);
+t_ast   	*parse_redir(t_token *tokens, t_token *op, t_gc *gc);
+bool    	is_operator(t_type type);
+bool    	is_redir_bool(t_type type);
+int			is_subshell(t_token *tokens);
+t_token 	*create_token_copy(t_token *src, t_gc *gc);
+t_token		*slice_tokens(t_token *start, t_token *end, t_gc *gc);
+void		handle_error(char *msg, t_data *data);
+t_ast   	*create_node_ast(char *value, t_type type, t_gc *gc);
+int			get_args_len(t_token *tokens);
+char		**extract_args(t_token *tokens, t_gc *gc);
+t_ast   	*build_ast(t_token *tokens, t_gc *gc);
+void    	parse(t_data *data);
+void		print_ast(t_ast *node, int depth);
 
 // GARBAGE COLLECTOR
 t_gc	*gc_init(void);
@@ -161,6 +169,15 @@ char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char	*gc_strdup(const char *s, t_gc *gc);
 void	gc_free(t_gc *gc, void *ptr);
 void	gc_clear(t_gc *gc);
+
+// SIGNALS
+void    handle_heredoc(int sig);
+void	handle_sigint(int sig);
+void    handle_redo_line(int sig);
+void    handle_sigpipe(int sig);
+void	heredoc_signal(void);
+void	interactive_signal(void);
+void	setup_signals(int pid);
 
 // DEBUG UTILS
 void	print_token(t_token *token_list);

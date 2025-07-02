@@ -15,12 +15,13 @@ UTILS_DIR	=	$(SRC_DIR)/utils
 ERR_DIR		=	$(SRC_DIR)/errors
 SIG_DIR		=	$(SRC_DIR)/signal
 TEST_DIR	=	$(SRC_DIR)/test
+PARSE_DIR	=	$(SRC_DIR)/parse
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
-C_FLAGS		=	-Wall -Werror -Wextra $(INCLUDES)
+C_FLAGS		=	-Wall -Werror -Wextra -g $(INCLUDES)
 
 # Libs
 LIBFT		=	$(LIBFT_DIR)/libft.a
@@ -28,7 +29,7 @@ LIBS		=	-lreadline -lncurses
 
 # Fontes principais (minishell)
 SRCS		= \
-	$(INPUT_DIR)/main.c \
+		$(INPUT_DIR)/main.c \
 	$(INPUT_DIR)/loop.c \
 	$(INIT_DIR)/init.c \
 	$(GC_DIR)/garbage_collector.c \
@@ -40,8 +41,15 @@ SRCS		= \
 	$(EXPAND_DIR)/expand.c \
 	$(UTILS_DIR)/utils_debug.c \
 	$(UTILS_DIR)/utils.c \
+	$(ERR_DIR)/handle_errors.c \
 	$(SIG_DIR)/signals.c \
-	$(ERR_DIR)/handle_errors.c
+	$(SIG_DIR)/signals_handler.c \
+	$(PARSE_DIR)/build_ast.c \
+	$(PARSE_DIR)/parser.c \
+	$(PARSE_DIR)/parser_search.c \
+	$(PARSE_DIR)/parser_utils.c \
+	$(PARSE_DIR)/debug_util.c \
+	# $(TEST_DIR)/test_expand.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
