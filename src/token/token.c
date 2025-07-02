@@ -2,34 +2,6 @@
 
 #include "../../include/minishell.h"
 
-// void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
-// {
-// 	t_token	*new;
-// 	t_token	*tmp;
-// 	// char	*clean_value;
-
-// 	// clean_value = trim_quotes(token_def, data->gc);
-// 	new = new_token(token_def, id_token, data->gc);
-// 	if (!new)
-// 		return ;
-// 	new->expandable = (id_token == WORD || id_token == WORD_D);
-// 	// marca true quando tem que expandir uma variavel
-// 	if (!data->token_list)
-// 	{
-// 		data->token_list = new;
-// 		return ;
-// 	}
-// // <<<<<<< HEAD
-// 	tmp = data->token_list;
-// 	while (tmp->next)
-// 		tmp = tmp->next;
-// 	tmp->next = new;
-// // =======
-// 	// print_token(data->token_list); //DEBUG
-// 	// return (i);
-// // >>>>>>> feature/build-ast
-// }
-
 int	give_id(char *token_def)
 {
 	if (!ft_strncmp(token_def, "|", 1) && token_def[1] == '\0')
@@ -103,20 +75,6 @@ int	get_token(t_data *data, int start)
 	add_token_to_list(data, token_def, id_token);
 	return (end);
 }
-
-// t_token	*new_token(char *value, t_type type, t_gc *gc)
-// {
-// 	t_token	*token;
-
-// 	token = gc_calloc(1, sizeof(t_token), gc);
-// 	if (!token)
-// 		return (NULL);
-// 	token->value = value;
-// 	token->type = type;
-// 	token->expandable = false;
-// 	token->next = NULL;
-// 	return (token);
-// }
 
 void	add_token_to_list(t_data *data, char *token_def, t_type id_token)
 {
