@@ -92,3 +92,55 @@ char	*gc_strjoin(char *s1, char *s2, t_gc *gc)
 	gc_add(gc, joined);
 	return (joined);
 }
+
+static unsigned int	ft_nbr_digit(int n) // as tres abaixo são utilizadas na gc_itoa
+{
+	unsigned int	count;
+	unsigned int	nb;
+
+	count = 1;
+	nb = (n < 0) ? -n : n;
+	while (nb >= 10)
+	{
+		nb /= 10;
+		count++;
+	}
+	return (count);
+}
+
+static void	ft_at(char *str, unsigned int digits, unsigned int n)
+{
+	str[digits] = '\0';
+	while (digits-- > 0)
+	{
+		str[digits] = (n % 10) + '0';
+		n /= 10;
+	}
+}
+
+char	*gc_itoa(int n, t_gc *gc)
+{
+	char			*nbr;
+	unsigned int	nbr_digits;
+	unsigned int	nbr_number;
+
+	nbr_digits = ft_nbr_digit(n);
+	if (n < 0)
+	{
+		nbr_digits++;
+		nbr = gc_calloc(nbr_digits + 1, sizeof(char), gc);
+		if (!nbr)
+			return (NULL);
+		nbr_number = -n;
+		ft_at(nbr, nbr_digits, nbr_number);
+		nbr[0] = '-';
+	}
+	else
+	{
+		nbr = gc_calloc(nbr_digits + 1, sizeof(char), gc);
+		if (!nbr)
+			return (NULL);
+		ft_at(nbr, nbr_digits, n);
+	}
+	return (nbr);
+}

@@ -142,7 +142,7 @@ t_token		*ft_token_last(t_token *lst);
 
 // EXPAND
 void		expand_token_values(t_data *data);
-char		*expand_all_vars(const char *str, char **env, t_gc *gc);
+char		*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data);
 // static char	*normal_char(const char *str, int *i, t_gc *gc, char *result);
 // static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc);
 char		*get_env_value(const char *var_name, char **env);
@@ -195,6 +195,7 @@ char		*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char		*gc_strdup(const char *s, t_gc *gc);
 void		gc_free(t_gc *gc, void *ptr);
 void		gc_clear(t_gc *gc);
+char		*gc_itoa(int n, t_gc *gc);
 
 // SIGNALS
 void    handle_heredoc(int sig);
@@ -218,6 +219,7 @@ t_cmd		*convert_ast_to_cmd(t_ast *ast, t_gc *gc);
 int			builtin_echo(char **argv);
 int			builtin_cd(char **argv, t_data *data);
 int			builtin_pwd(void);
+int			builtin_env(char **envp);
 
 // UTILS LIST
 

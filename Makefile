@@ -52,7 +52,8 @@ SRCS		= \
 	$(BUILT_DIR)/exec_builtin.c \
 	$(BUILT_DIR)/echo.c \
 	$(BUILT_DIR)/cd.c \
-	$(BUILT_DIR)/pwd.c 
+	$(BUILT_DIR)/pwd.c \
+	$(BUILT_DIR)/env.c
 
 #$(TEST_DIR)/test_expand.c
 
@@ -64,25 +65,6 @@ $(NAME): libft $(OBJS)
 	@$(CC) $(OBJS) $(LIBFT) -o $(NAME) $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	@$(CC) $(C_FLAGS) -c $< -o $@
-
-# ==========================
-# Target específico só para teste do expand
-# ==========================
-TEST_SRCS = \
-	$(TOKEN_DIR)/token.c \
-	$(UTILS_DIR)/utils_debug.c \
-	$(GC_DIR)/gc_utils.c \
-	$(EXPAND_DIR)/expand.c \
-	$(TEST_DIR)/test_expand.c
-
-TEST_OBJS = $(foreach src,$(TEST_SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
-
-test_expand: libft $(TEST_OBJS)
-	@$(CC) $(TEST_OBJS) $(LIBFT) -o test_expand
-
-$(OBJ_DIR)/test/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(C_FLAGS) -c $< -o $@
 

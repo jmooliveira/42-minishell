@@ -16,8 +16,8 @@ int	execute_builtin(t_cmd *cmd, t_data *data)
 	// 	return (builtin_export(cmd->argv, &data->env));
 	// if (!ft_strncmp(cmd->argv[0], "unset", 5))
 	// 	return (builtin_unset(cmd->argv, &data->env));
-	// if (!ft_strncmp(cmd->argv[0], "env", 3))
-	// 	return (builtin_env(data->env));
+	if (!ft_strncmp(cmd->argv[0], "env", 3))
+		return (builtin_env(data->env));
 	// if (!ft_strncmp(cmd->argv[0], "exit", 4))
 	// 	return (builtin_exit(cmd->argv, data));
 	return (EXIT_FAILURE);
