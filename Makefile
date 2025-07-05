@@ -17,6 +17,7 @@ SIG_DIR		=	$(SRC_DIR)/signal
 TEST_DIR	=	$(SRC_DIR)/test
 PARSE_DIR	=	$(SRC_DIR)/parse
 BUILT_DIR	=	$(SRC_DIR)/builtins
+EXEC_DIR	=	$(SRC_DIR)/exec
 
 LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
@@ -53,9 +54,8 @@ SRCS		= \
 	$(BUILT_DIR)/echo.c \
 	$(BUILT_DIR)/cd.c \
 	$(BUILT_DIR)/pwd.c \
-	$(BUILT_DIR)/env.c
-
-#$(TEST_DIR)/test_expand.c
+	$(BUILT_DIR)/env.c \
+	$(EXEC_DIR)/exec_ast.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
