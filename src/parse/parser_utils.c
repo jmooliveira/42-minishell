@@ -48,16 +48,16 @@ t_token	*slice_tokens(t_token *start, t_token *end, t_gc *gc)
 			return (NULL);
 		if (!head)
 		{
-			head = tail = new_token;
-			// ajustar multiplas atribuições
+			head = new_token;
+			tail = new_token;
 		}
 		else
 		{
 			tail->next = new_token;
 			tail = new_token;
 		}
-		if (cur == end) // quebra aqui se end for alcançado
-			break ;
+		if (cur == end)
+			break;
 		cur = cur->next;
 	}
 	return (head);

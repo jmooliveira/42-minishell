@@ -93,13 +93,17 @@ char	*gc_strjoin(char *s1, char *s2, t_gc *gc)
 	return (joined);
 }
 
-static unsigned int	ft_nbr_digit(int n) // as tres abaixo são utilizadas na gc_itoa
+// as tres abaixo são utilizadas na gc_itoa
+static unsigned int	ft_nbr_digit(int n)
 {
 	unsigned int	count;
 	unsigned int	nb;
 
 	count = 1;
-	nb = (n < 0) ? -n : n;
+	if (n < 0)
+		nb = (unsigned int)(-(long)n);
+	else
+		nb = (unsigned int)n;
 	while (nb >= 10)
 	{
 		nb /= 10;

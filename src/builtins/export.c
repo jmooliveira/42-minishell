@@ -31,16 +31,14 @@ static void	print_export_format(char **env)
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		equal_pos = ft_strchr(env[i], '=');
 		if (equal_pos)
-		{// Imprime nome da variável
+		{ // Imprime nome da variável
 			write(STDOUT_FILENO, env[i], equal_pos - env[i]);
 			ft_putstr_fd("=\"", STDOUT_FILENO);
 			ft_putstr_fd(equal_pos + 1, STDOUT_FILENO);
 			ft_putstr_fd("\"", STDOUT_FILENO);
 		}
 		else
-		{
 			ft_putstr_fd(env[i], STDOUT_FILENO);
-		}
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		i++;
 	}
@@ -114,7 +112,7 @@ static int	export_variable(const char *arg, t_data *data)
 		env_index = find_env_index(data->env, arg);
 		if (env_index == -1) // Adiciona variável sem valor
 			data->env = add_new_env(data->env, arg, data);
-	}// Se já existe, não faz nada
+	} // Se já existe, não faz nada
 	return (0);
 }
 
@@ -124,12 +122,10 @@ int	builtin_export(char **argv, t_data *data)
 	int	exit_status;
 
 	if (!argv[1])
-	{
-		// Sem argumentos, imprime todas as variáveis
+	{ // Sem argumentos, imprime todas as variáveis
 		print_export_format(data->env);
 		return (0);
 	}
-
 	exit_status = 0;
 	i = 1;
 	while (argv[i])
@@ -138,6 +134,5 @@ int	builtin_export(char **argv, t_data *data)
 			exit_status = 1;
 		i++;
 	}
-
 	return (exit_status);
 }

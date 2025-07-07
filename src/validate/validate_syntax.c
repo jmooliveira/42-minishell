@@ -53,7 +53,6 @@ int	check_invalid_op(t_token *token_l)
 	return (0);
 }
 
-
 int	check_unbalanced_parentheses(t_token *token_list)
 {
 	int		balance;
@@ -73,7 +72,6 @@ int	check_unbalanced_parentheses(t_token *token_list)
 	}
 	return (balance != 0);
 }
-
 
 int	check_invalid_redir(t_token *token_l)
 {
@@ -167,7 +165,6 @@ int	check_invalid_subshell_content(t_data *data)
 	return (0);
 }
 
-
 int	validate_syntax(t_data *data)
 {
 	if (data->has_error)
@@ -195,4 +192,3 @@ int	validate_syntax(t_data *data)
 		return (syntax_error("unexpected token", data));
 	return (0);
 }
-

@@ -79,12 +79,12 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 	{
 		if (str[i] == '$' && str[i + 1]) // caso especial
 		{
-			if (str[i+1] == '?')
+			if (str[i + 1] == '?')
 			{
 				expansion = gc_itoa(data->exit_status, gc);
 				i += 2;
 			}
-			else if (str[i + 1] == '{') 
+			else if (str[i + 1] == '{')
 			{
 				i++;
 				expansion = get_var_expansion(str, &i, env, gc);
@@ -110,16 +110,16 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 void	expand_token_values(t_data *data)
 {
 	t_token	*token;
-	char	*expanded_value;
+	char	*exp_val;
 
 	token = data->token_list;
 	while (token)
 	{
 		if (token->expandable && (token->type == WORD || token->type == WORD_D))
 		{
-			expanded_value = expand_all_vars(token->value, data->env, data->gc, data);
+			exp_val = expand_all_vars(token->value, data->env, data->gc, data);
 			gc_free(data->gc, token->value);
-			token->value = expanded_value;
+			token->value = exp_val;
 		}
 		token = token->next;
 	}

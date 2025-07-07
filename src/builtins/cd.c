@@ -34,8 +34,7 @@ static void	update_env(char ***env, char *key, char *value)
 int	builtin_cd(char **argv, t_data *data)
 {
 	char	*path;
-	char	*oldpwd;
-	// char	cwd[1000]; // buffer para armazenar o diretório atual PATH_MAX
+	char	*oldpwd; // char	cwd[1000]; // buffer para armazenar o diretório atual PATH_MAX
 
 	if (!argv[1] || (argv[1][0] == '~' && argv[1][1] == '\0'))
 		path = get_env_from_list(data->env, "HOME");

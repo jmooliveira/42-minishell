@@ -189,9 +189,7 @@ void		print_token(t_token *token_list);
 // EXEC BUILTINS
 void		exec_ast(t_ast *node, t_data *data);
 bool		is_builtin(const char *node);
-
 int			execute_builtin(t_ast *node, t_data *data);
-
 int			builtin_echo(char **argv);
 int			builtin_cd(char **argv, t_data *data);
 int			builtin_pwd(void);

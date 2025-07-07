@@ -1,3 +1,5 @@
+/*signals.c*/
+
 #include "../../include/minishell.h"
 
 void	heredoc_signal(void)

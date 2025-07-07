@@ -32,4 +32,3 @@ int	check_empty_parentheses(t_token *token_l)
 	}
 	return (0);
 }
-
