@@ -198,6 +198,7 @@ int			builtin_pwd(void);
 int			builtin_env(char **envp);
 int			builtin_exit(char **argv, t_data *data);
 int			builtin_export(char **argv, t_data *data);
+int			builtin_unset(char **argv, t_data *data);
 
 // UTILS LIST
 
