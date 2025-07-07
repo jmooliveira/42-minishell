@@ -1,3 +1,86 @@
 /*exit.c*/
 
 #include "../../include/minishell.h"
+
+static int	is_numeric(char *str)
+{
+	int	i;
+
+	if (!str)
+		return (0);
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static int	get_exit_code(char *arg)
+{
+	long long	num;
+	int			sign;
+	int			i;
+
+	if (!arg)
+		return (0);
+	i = 0;
+	sign = 1;
+	num = 0;
+	while (arg[i] == ' ' || arg[i] == '\t')
+		i++;
+	if (arg[i] == '-')
+		sign = -1;
+	if (arg[i] == '+' || arg[i] == '-')
+		i++;
+	while (arg[i] && ft_isdigit(arg[i]))
+	{
+		num = num * 10 + (arg[i] - '0');
+		if (num > 9223372036854775807LL)
+			return (-1);
+		i++;
+	}
+	return ((int)((num * sign) % 256));
+}
+
+int	builtin_exit(char **argv, t_data *data)
+{
+	int	exit_code;
+
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	if (!argv[1])
+	{
+		gc_clear(data->gc);
+		exit(data->exit_status);
+	}
+	if (!is_numeric(argv[1]))
+	{
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(argv[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		gc_clear(data->gc);
+		exit(2);
+	}
+	if (argv[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
+		return (1);
+	}
+	exit_code = get_exit_code(argv[1]);
+	if (exit_code == -1)
+	{
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(argv[1], STDERR_FILENO);
+		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
+		gc_clear(data->gc);
+		exit(2);
+	}
+	gc_clear(data->gc);
+	exit(exit_code);
+}

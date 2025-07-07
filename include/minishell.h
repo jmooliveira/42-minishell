@@ -126,8 +126,6 @@ char		*expand_all_vars(const char *str, char **env,
 				t_gc *gc, t_data *data);
 char		*get_env_value(const char *var_name, char **env);
 
-char		*gc_strjoin(char *s1, char *s2, t_gc *gc);
-
 // VALIDATE_SINTAX
 int			validate_syntax(t_data *data);
 int			check_first_node(t_token *token_l);
@@ -198,6 +196,8 @@ int			builtin_echo(char **argv);
 int			builtin_cd(char **argv, t_data *data);
 int			builtin_pwd(void);
 int			builtin_env(char **envp);
+int			builtin_exit(char **argv, t_data *data);
+int			builtin_export(char **argv, t_data *data);
 
 // UTILS LIST
 

@@ -12,14 +12,14 @@ int	execute_builtin(t_ast *node, t_data *data)
 		return (builtin_cd(node->args, data));
 	if (!ft_strncmp(node->args[0], "pwd", 3))
 		return (builtin_pwd());
-	// if (!ft_strncmp(node->args[0], "export", 6))
-	// 	return (builtin_export(node->args, &data->env));
+	if (!ft_strncmp(node->args[0], "export", 6))
+		return (builtin_export(node->args, data));
 	// if (!ft_strncmp(node->args[0], "unset", 5))
 	// 	return (builtin_unset(node->args, &data->env));
 	if (!ft_strncmp(node->args[0], "env", 3))
 		return (builtin_env(data->env));
-	// if (!ft_strncmp(node->args[0], "exit", 4))
-	// 	return (builtin_exit(node->args, data));
+	if (!ft_strncmp(node->args[0], "exit", 4))
+		return (builtin_exit(node->args, data));
 	return (EXIT_FAILURE);
 }
 
