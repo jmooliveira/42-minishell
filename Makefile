@@ -22,7 +22,7 @@ LIBFT_DIR	=	$(LIB_DIR)
 INCLUDES	=	-I $(LIB_DIR)/includes -I ./includes -I $(SRC_DIR)
 
 # Flags
-C_FLAGS		=	-Wall -Werror -Wextra -g $(INCLUDES)
+C_FLAGS		=	-Wall -Werror -Wextra -g3 $(INCLUDES)
 
 # Libs
 LIBFT		=	$(LIBFT_DIR)/libft.a

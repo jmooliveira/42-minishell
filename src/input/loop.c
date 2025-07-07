@@ -25,6 +25,7 @@ void	loop(t_data *data)
 			data->cmd_list = convert_ast_to_cmd(data->tree, data->gc);
 			exec_node(data->cmd_list, data);
 		}
+		print_ast(data->tree, 0);
 		gc_free(data->gc, data->input);
 		free(input); // sempre liberar input
 		delete_token_list(&data->token_list, data->gc);

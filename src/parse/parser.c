@@ -46,55 +46,67 @@ t_ast	*parse_operator(t_token *tokens, t_token *op, t_gc *gc)
 	return (node);
 }
 
+char	*generate_heredoc_tmp(t_gc *gc)
+{
+	static int	id = 0;
+	char		*tmp;
+	char		*suffix;
+
+	suffix = gc_itoa(id++, gc);
+	tmp = gc_strjoin("/tmp/.hd_tmp_", suffix, gc);
+	return (tmp);
+}
+
+void    add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
+{
+    t_redir *new;
+    t_redir *cur;
+    
+    new = gc_malloc(gc, sizeof(t_redir));
+    if (!new)
+        return ;
+    new->type = type;
+    new->filename = filename;
+    new->delim = NULL;
+    new->next = NULL;
+	if (type == HEREDOC)
+	{
+		new->filename = generate_heredoc_tmp(gc);
+		new->delim = filename;
+	}
+    if (!node->redir)
+        node->redir = new;
+    else
+    {
+        cur = node->redir;
+        while (cur->next)
+            cur = cur->next;
+        cur->next = new;
+    }
+}
+
 t_ast   *parse_cmd(t_token *tokens, t_gc *gc)
 {
 	t_ast	*node;
+	t_token	*cur;
 
 	if (!tokens)
 		return (NULL);
 	node = create_node_ast(tokens->value, tokens->type, gc);
 	if (!node)
 		return (NULL);
+	if (is_builtin(tokens->value))
+		node->is_builtin = true;
 	node->args = extract_args(tokens, gc);
-	return (node);
-}
-
-void	handle_start_redir(t_token *op, t_ast *node, t_gc *gc)
-{
-	t_token	*target;
-	t_token	*cmd;
-
-	if (!op->next || !op->next->next)
-		return ;
-	target = slice_tokens(op->next, op->next, gc);
-	cmd = slice_tokens(op->next->next, NULL, gc);
-	node->left = build_ast(cmd, gc);
-	node->right = build_ast(target, gc);
-}
-
-t_ast   *parse_redir(t_token *tokens, t_token *op, t_gc *gc)
-{
-	t_ast	*node;
-	t_token	*cur;
-	t_token	*left;
-	t_token	*right;
-
-	node = create_node_ast(op->value, op->type, gc);
-	if (!node)
-		return (NULL);
-	if (tokens == op)
-	{
-		handle_start_redir(op, node, gc);
-		return (node);
-	}
 	cur = tokens;
-	while (cur && cur->next != op)
+	while (cur)
+	{
+		if (is_redir(cur->type) && cur->next)
+		{
+			add_redir(node, cur->type, cur->next->value, gc);
+			cur = cur->next;	
+		}
 		cur = cur->next;
-	left = slice_tokens(tokens, cur, gc);
-	node->left = build_ast(left, gc);
-	if (!op->next)
-		return (NULL);
-	right = slice_tokens(op->next, op->next, gc);
-	node->right = build_ast(right, gc);
+	}
 	return (node);
 }

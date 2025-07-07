@@ -2,7 +2,7 @@
 
 #include "../../include/minishell.h"
 
-t_token	*find_operator(t_token *tokens)
+t_token	*find_and_or(t_token *tokens)
 {
 	t_token	*cur;
 	t_token	*last;
@@ -19,7 +19,31 @@ t_token	*find_operator(t_token *tokens)
 			par_count++;
 		else if (cur->type == PAR_CLOSE)
 			par_count--;
-		else if (par_count == 0 && is_operator(cur->type))
+		else if (par_count == 0 && (cur->type == AND || cur->type == OR))
+			last = cur;
+		cur = cur->next;
+	}
+	return (last);
+}
+
+t_token	*find_pipe(t_token *tokens)
+{
+	t_token	*cur;
+	t_token	*last;
+	int		par_count;
+
+	if (!tokens)
+		return (NULL);
+	cur = tokens;
+	par_count = 0;
+	last = NULL;
+	while (cur)
+	{
+		if (cur->type == PAR_OPEN)
+			par_count++;
+		else if (cur->type == PAR_CLOSE)
+			par_count--;
+		else if (par_count == 0 && cur->type == PIPE)
 			last = cur;
 		cur = cur->next;
 	}

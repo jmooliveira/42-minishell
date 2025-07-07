@@ -11,6 +11,7 @@ t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
 		return (NULL);
 	node->type = type;
 	node->value = value;
+	node->is_builtin = false;
 	node->args = NULL;
 	node->left = NULL;
 	node->right = NULL;
@@ -63,12 +64,12 @@ t_ast	*build_ast(t_token *tokens, t_gc *gc)
 		return (NULL);
 	if (is_subshell(tokens))
 		return (parse_subshell(tokens, gc));
-	op = find_operator(tokens);
+	op = find_and_or(tokens);
 	if (op)
 		return (parse_operator(tokens, op, gc));
-	op = find_redir(tokens);
+	op = find_pipe(tokens);
 	if (op)
-		return (parse_redir(tokens, op, gc));
+		return (parse_operator(tokens, op, gc));
 	return (parse_cmd(tokens, gc));
 }
 
@@ -80,5 +81,4 @@ void	parse(t_data *data)
 		fprintf(stderr, "Error: parsing failed, AST is NULL\n");
 		return ;
 	}
-	print_ast(data->tree, 0);
 }
