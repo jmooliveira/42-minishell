@@ -10,9 +10,14 @@ t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
 	if (!node)
 		return (NULL);
 	node->type = type;
-	node->value = value;
+	// node->value = value; (ANTES)
+	if (value != NULL)
+		node->value = gc_strdup(value, gc); // Garante uma cópia propria gerenciada pelo coletor (CAIO) 
+	else
+		node->value = NULL;
 	node->is_builtin = false;
 	node->args = NULL;
+	node->redir = NULL; // Somente essa linha já resolve o segfault (CAIO)
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
@@ -49,7 +54,8 @@ char	**extract_args(t_token *tokens, t_gc *gc)
     count = 0;
     while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
     {
-        args[count++] = cur->value;
+		// args[count++] = cur->value; (ANTES)
+        args[count++] = gc_strdup(cur->value, gc); // Usa gc_strdup para alocar e copiar cur->value no coletor de lixo, garantindo que args armazene uma cópia segura da string (CAIO)
         cur = cur->next;
     }
     args[count] = NULL;

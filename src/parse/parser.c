@@ -66,7 +66,8 @@ void    add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
     if (!new)
         return ;
     new->type = type;
-    new->filename = filename;
+	// new->filename = filename; (ANTES)
+    new->filename = gc_strdup(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
     new->delim = NULL;
     new->next = NULL;
 	if (type == HEREDOC)
