@@ -2,6 +2,7 @@
 
 #pastas
 .vscode/
+minishell_tester/
 
 # Compilação
 *.o

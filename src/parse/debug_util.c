@@ -74,12 +74,12 @@ void	print_ast(t_ast *node, int depth)
 	{
 		print_indent(depth);
 		printf("├─ left:\n");
-		print_ast(node->left, depth + 1);
+		// print_ast(node->left, depth + 1);
 	}
 	if (node->right)
 	{
 		print_indent(depth);
 		printf("└─ right:\n");
-		print_ast(node->right, depth + 1);
+		// print_ast(node->right, depth + 1);
 	}
 }

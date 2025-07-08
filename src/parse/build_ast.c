@@ -80,7 +80,7 @@ void	parse(t_data *data)
 		fprintf(stderr, "Error: parsing failed, AST is NULL\n");
 		return ;
 	}
-	print_ast(data->tree, 0);
+	// print_ast(data->tree, 0);
 }
 
 // int exce_tree(t_ast *node, t_data *data)

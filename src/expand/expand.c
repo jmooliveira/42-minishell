@@ -66,7 +66,7 @@ static char	*normal_char(const char *str, int *i, t_gc *gc, char *result)
 	return (temp);
 }
 
-char	*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
+char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 {
 	char	*result;
 	char	*temp;
@@ -77,22 +77,22 @@ char	*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1]) // caso especial
+		if (str[i] == '$' && str[i + 1]) // Caso especial para variáveis
 		{
-			if (str[i + 1] == '?')
+			if (str[i + 1] == '?') // Expansão de $?
 			{
 				expansion = gc_itoa(data->exit_status, gc);
 				i += 2;
 			}
-			else if (str[i + 1] == '{')
+			else if (ft_isalnum(str[i + 1]) || str[i + 1] == '_') // Expansão de $VAR
 			{
 				i++;
 				expansion = get_var_expansion(str, &i, env, gc);
 			}
-			else
+			else // Caso: $ sozinho
 			{
+				expansion = gc_strdup("$", gc);
 				i++;
-				expansion = get_var_expansion(str, &i, env, gc);
 			}
 			temp = gc_strjoin(result, expansion, gc);
 			gc_free(gc, result);
@@ -111,15 +111,25 @@ void	expand_token_values(t_data *data)
 {
 	t_token	*token;
 	char	*exp_val;
+	char	*trimmed_val;
 
 	token = data->token_list;
 	while (token)
 	{
+		// Primeiro expande as variáveis se aplicável
 		if (token->expandable && (token->type == WORD || token->type == WORD_D))
 		{
 			exp_val = expand_all_vars(token->value, data->env, data->gc, data);
 			gc_free(data->gc, token->value);
 			token->value = exp_val;
+		}
+		// Depois sempre remove TODAS as aspas dos tokens de palavra
+		if (token->type == WORD || token->type == WORD_D || token->type == WORD_S)
+		{
+			trimmed_val = trim_quotes(token->value, data->gc);
+			gc_free(data->gc, token->value);
+			token->value = trimmed_val;
+			token->type = WORD;
 		}
 		token = token->next;
 	}

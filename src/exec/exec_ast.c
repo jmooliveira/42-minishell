@@ -11,11 +11,7 @@ void	exec_ast(t_ast *node, t_data *data)
 	if (node->type == WORD && node->args && node->args[0])
 	{
 		if (is_builtin(node->args[0]))
-		{
 			data->exit_status = execute_builtin(node, data);
-			// Executa a builtin
-			// execute_builtin(node, data);
-		}
 	// 	else
 	// 	{
 	// 		// Executa comandos externos (fork + execve)
