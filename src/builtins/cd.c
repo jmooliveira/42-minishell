@@ -36,6 +36,11 @@ int	builtin_cd(char **argv, t_data *data)
 	char	*path;
 	char	*oldpwd; // char	cwd[1000]; // buffer para armazenar o diretório atual PATH_MAX
 
+	if (argv[1] && argv[2])
+	{
+		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
+		return (1);
+	}
 	if (!argv[1] || (argv[1][0] == '~' && argv[1][1] == '\0'))
 		path = get_env_from_list(data->env, "HOME");
 	else if (argv[1] && !ft_strncmp(argv[1], "-", 1))
@@ -52,7 +57,7 @@ int	builtin_cd(char **argv, t_data *data)
 		perror("minishell: cd");
 		return (1);
 	}
-	oldpwd = getcwd(NULL, 0); // atualiza env
+	oldpwd = getcwd(NULL, 0);
 	if (oldpwd)
 		update_env(&data->env, "OLDPWD", get_env_from_list(data->env, "PWD"));
 	update_env(&data->env, "PWD", oldpwd);

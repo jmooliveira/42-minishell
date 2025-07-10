@@ -208,7 +208,7 @@ int			builtin_exit(char **argv, t_data *data);
 int			builtin_export(char **argv, t_data *data);
 int			builtin_unset(char **argv, t_data *data);
 
-void		execute_external(t_ast *node, t_data *data);
+// void		execute_external(t_ast *node, t_data *data);
 
 // UTILS LIST
 
