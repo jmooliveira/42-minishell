@@ -69,12 +69,21 @@ typedef struct s_env
 	struct s_env	*prev;
 }	t_env;
 
+typedef struct s_redir
+{
+	t_type				type;
+	char				*filename;
+	char				*delim;
+	struct s_redir		*next;
+}	t_redir;
+
 typedef struct s_ast
 {
 	t_type			type;
 	char			*value;
 	char			**args;
 	bool			is_builtin;
+	t_redir			*redir;
 	struct s_ast	*right;
 	struct s_ast	*left;
 }	t_ast;
@@ -142,7 +151,8 @@ int			is_logical_op(t_type type);
 int			syntax_error(char *msg, t_data *data);
 
 // PARSE
-t_token		*find_operator(t_token *tokens);
+t_token		*find_and_or(t_token *tokens);
+t_token		*find_pipe(t_token *tokens);
 t_token		*find_redir(t_token *tokens);
 t_ast		*parse_subshell(t_token *tokens, t_gc *gc);
 t_ast		*parse_operator(t_token *tokens, t_token *op, t_gc *gc);

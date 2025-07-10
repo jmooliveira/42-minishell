@@ -10,8 +10,14 @@ t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
 	if (!node)
 		return (NULL);
 	node->type = type;
-	node->value = value;
+	// node->value = value; (ANTES)
+	if (value != NULL)
+		node->value = gc_strdup(value, gc); // Garante uma cópia propria gerenciada pelo coletor (CAIO) 
+	else
+		node->value = NULL;
+	node->is_builtin = false;
 	node->args = NULL;
+	node->redir = NULL; // Somente essa linha já resolve o segfault (CAIO)
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
@@ -38,21 +44,21 @@ char	**extract_args(t_token *tokens, t_gc *gc)
 	char	**args;
 	t_token	*cur;
 
-	if (!tokens)
-		return (NULL);
-	count = get_args_len(tokens);
-	args = gc_malloc(gc, sizeof(char *) * (count + 1));
-	if (!args)
-		return (NULL);
-	cur = tokens;
-	count = 0;
-	while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
-	{
-		args[count++] = cur->value;
+    if (!tokens)
+        return (NULL);
+    count = get_args_len(tokens);
+    args = gc_malloc(gc, sizeof(char *) * (count + 1));
+    if (!args)
+        return (NULL);
+    cur = tokens;
+    count = 0;
+    while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
+    {
+        args[count++] = gc_strdup(cur->value, gc);
 		cur = cur->next;
-	}
-	args[count] = NULL;
-	return (args);
+    }
+    args[count] = NULL;
+    return (args);
 }
 
 t_ast	*build_ast(t_token *tokens, t_gc *gc)
@@ -63,12 +69,12 @@ t_ast	*build_ast(t_token *tokens, t_gc *gc)
 		return (NULL);
 	if (is_subshell(tokens))
 		return (parse_subshell(tokens, gc));
-	op = find_operator(tokens);
+	op = find_and_or(tokens);
 	if (op)
 		return (parse_operator(tokens, op, gc));
-	op = find_redir(tokens);
+	op = find_pipe(tokens);
 	if (op)
-		return (parse_redir(tokens, op, gc));
+		return (parse_operator(tokens, op, gc));
 	return (parse_cmd(tokens, gc));
 }
 
@@ -80,22 +86,4 @@ void	parse(t_data *data)
 		fprintf(stderr, "Error: parsing failed, AST is NULL\n");
 		return ;
 	}
-	// print_ast(data->tree, 0);
 }
-
-// int exce_tree(t_ast *node, t_data *data)
-// {
-// 	t_ast	*cur;
-
-// 	cur = node;
-// 	if (node->type == AND ||node->type == OR)
-// 		return (exec_and_or(cur, data));
-// 	if (node->type == PIPE)
-// 		return (exec_pipe(cur, data));
-// 	if (is_redir(node->type))
-// 		return (exec_redir(cur, data));
-// 	if (node->type == SUBSHELL)
-// 		return (exec_subshell(cur, data));
-// 	else
-// 		return (exec_cmd(cur, data));
-// }
