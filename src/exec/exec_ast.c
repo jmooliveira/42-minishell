@@ -42,6 +42,8 @@ void	exec_ast(t_ast *node, t_data *data)
 	}
 }
 
+/* EXECUTE PARA PROCESSOS EXTERNOS*/
+
 // void	execute_external(t_ast *node, t_data *data)
 // {
 // 	pid_t pid;
