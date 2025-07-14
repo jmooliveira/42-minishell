@@ -153,27 +153,34 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 void	expand_token_values(t_data *data)
 {
 	t_token	*token;
+	t_token	*prev;
 	char	*exp_val;
 	char	*trimmed_val;
 
 	token = data->token_list;
+	prev = NULL;
 	while (token)
 	{
-		// Primeiro expande as variáveis se aplicável
-		if (token->expandable && (token->type == WORD || token->type == WORD_D))
+		if (token->expandable && (token->type == WORD || token->type == WORD_D))// Primeiro expande as variáveis se aplicável
 		{
 			exp_val = expand_all_vars(token->value, data->env, data->gc, data);
 			gc_free(data->gc, token->value);
 			token->value = exp_val;
+			if (token->value[0] == '\0' && !prev)// Se o token expandiu para vazio e é o primeiro token, remova-o
+			{
+				data->token_list = token->next;
+				token = data->token_list;
+				continue ;
+			}
 		}
-		// Depois sempre remove TODAS as aspas dos tokens de palavra
-		if (token->type == WORD || token->type == WORD_D || token->type == WORD_S)
+		if (token->type == WORD || token->type == WORD_D || token->type == WORD_S)// Depois sempre remove TODAS as aspas dos tokens de palavra
 		{
 			trimmed_val = trim_quotes(token->value, data->gc);
 			gc_free(data->gc, token->value);
 			token->value = trimmed_val;
 			token->type = WORD;
 		}
+		prev = token;
 		token = token->next;
 	}
 }

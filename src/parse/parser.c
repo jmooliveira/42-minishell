@@ -53,7 +53,7 @@ char	*generate_heredoc_tmp(t_gc *gc)
 	char		*id_str;
 	char		*pid_str;
 	char		*suffix;
-	
+
 	id_str = gc_itoa(id++, gc);
 	pid_str = gc_itoa(getpid(), gc);
 	suffix = gc_strjoin(pid_str, "_", gc);
@@ -62,43 +62,66 @@ char	*generate_heredoc_tmp(t_gc *gc)
 	return (tmp);
 }
 
-void    add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
+void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 {
-    t_redir *new;
-    t_redir *cur;
-    
-    new = gc_malloc(gc, sizeof(t_redir));
-    if (!new)
-        return ;
-    new->type = type;
-	// new->filename = filename; (ANTES)
-    new->filename = gc_strdup(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
-    new->delim = NULL;
-    new->next = NULL;
+	t_redir	*new;
+	t_redir	*cur;
+	// t_token *next_token;
+	// char *new_filename;
+
+	new = gc_malloc(gc, sizeof(t_redir));
+	if (!new)
+		return ;
+	new->type = type;
+	new->filename = gc_strdup(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
+	// next_token = node->tokens;
+	// while (next_token && is_word(next_token->type))
+	// {
+	// 	new_filename = gc_strjoin(new->filename, next_token->value, gc);
+	// 	gc_free(gc, new->filename);
+	// 	new->filename = new_filename;
+	// 	next_token = next_token->next;
+	// }
+	new->delim = NULL;
+	new->next = NULL;
 	new->hd_written = false;
 	if (type == HEREDOC)
 	{
 		new->filename = generate_heredoc_tmp(gc);
 		new->delim = filename;
 	}
-    if (!node->redir)
-        node->redir = new;
-    else
-    {
-        cur = node->redir;
-        while (cur->next)
-            cur = cur->next;
-        cur->next = new;
-    }
+	if (!node->redir)
+		node->redir = new;
+	else
+	{
+		cur = node->redir;
+		while (cur->next)
+			cur = cur->next;
+		cur->next = new;
+	}
 }
 
-t_ast   *parse_cmd(t_token *tokens, t_gc *gc)
+t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
 {
 	t_ast	*node;
 	t_token	*cur;
+	t_token	*cmd_token;
 
+	cur = tokens;
+	cmd_token = NULL;
 	if (!tokens)
 		return (NULL);
+	while (cur && is_redir(cur->type))
+	{
+		if (cur->next)
+			cur = cur->next->next; // Pula o redirecionamento e seu argumento
+		else
+			break ;
+	}
+	if (!cmd_token)// Se não houver comando após os redirecionamentos, use o primeiro token
+		cmd_token = cur;
+	else
+		cmd_token = tokens;
 	node = create_node_ast(tokens->value, tokens->type, gc);
 	if (!node)
 		return (NULL);
@@ -111,7 +134,7 @@ t_ast   *parse_cmd(t_token *tokens, t_gc *gc)
 		if (is_redir(cur->type) && cur->next)
 		{
 			add_redir(node, cur->type, cur->next->value, gc);
-			cur = cur->next;	
+			cur = cur->next;
 		}
 		cur = cur->next;
 	}

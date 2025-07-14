@@ -1,3 +1,5 @@
+/*exec_operators.c*/
+
 #include "../../include/minishell.h"
 
 int execute_and_or(t_ast *node, t_data *data)

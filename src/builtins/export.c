@@ -2,24 +2,44 @@
 
 #include "../../include/minishell.h"
 
+// static int is_valid_identifier(const char *str)
+// {
+// 	int i;
+
+// 	if (!str || !*str)
+// 		return (0);
+// 	if (!ft_isalpha(str[0]) && str[0] != '_')
+// 		return (0);
+// 	i = 1;
+// 	while (str[i] && str[i] != '=')
+// 	{
+// 		if (!ft_isalnum(str[i]) && str[i] != '_')
+// 			return (0);
+// 		i++;
+// 	}
+// 	if (str[0] == '=' || (str[i] == '=' && i == 0))
+// 		return (0);
+// 	return (1);
+// }
+
 static int is_valid_identifier(const char *str)
 {
-	int i;
+    int i;
 
-	if (!str || !*str)
-		return (0);
-	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (0);
-	i = 1;
-	while (str[i] && str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
-		i++;
-	}
-	if (str[0] == '=' || (str[i] == '=' && i == 0))
-		return (0);
-	return (1);
+    if (!str || !*str)
+        return (0);
+    if (!ft_isalpha(str[0]) && str[0] != '_')
+        return (0);
+    i = 1;
+    while (str[i] && str[i] != '=')
+    {
+        if (!ft_isalnum(str[i]) && str[i] != '_')
+            return (0);
+        i++;
+    }
+    if (str[0] == '=' || (str[i] == '=' && i == 0))
+        return (0);
+    return (1);
 }
 
 static void	print_export_format(char **env)
@@ -136,5 +156,6 @@ int	builtin_export(char **argv, t_data *data)
 			exit_status = 1;
 		i++;
 	}
+	data->exit_status = exit_status;
 	return (exit_status);
 }

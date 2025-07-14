@@ -46,31 +46,64 @@ int	get_clean_args_len(t_token *tokens)
 
 char	**extract_args(t_token *tokens, t_gc *gc)
 {
-	int		count;
-	char	**args;
 	t_token	*cur;
-	bool	non_empty_seen;
+	int		arg_count;
+	char	**args;
 
-    if (!tokens)
-		return (NULL);
-	count = get_clean_args_len(tokens);
-	args = gc_malloc(gc, sizeof(char *) * (count + 1));
-	if (!args)
-        return (NULL);
-    cur = tokens;
-    count = 0;
-    while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
-    {
-		if (cur->value && (non_empty_seen || cur->value[0] != '\0'))
-		{
-			non_empty_seen = true;
-			args[count++] = gc_strdup(cur->value, gc);
-		}
+	cur = tokens;
+	arg_count = 0;
+	while (cur)// conta quantos argumentos existem
+	{
+		if (is_word(cur->type) || cur->type == ASSIGNMENT)
+			arg_count++;
+		else if (is_redir(cur->type) && cur->next)
+			cur = cur->next;// Pula o token de filename
 		cur = cur->next;
-    }
-    args[count] = NULL;
-    return (args);
+	}
+	args = gc_malloc(gc, sizeof(char *) * (arg_count + 1));// Aloca memória para os argumentos
+	if (!args)
+		return (NULL);
+	cur = tokens;
+	arg_count = 0;
+	while (cur)// Segunda passagem: copia os valores
+	{
+		if (is_word(cur->type) || cur->type == ASSIGNMENT)
+			args[arg_count++] = gc_strdup(cur->value, gc);
+		else if (is_redir(cur->type) && cur->next)
+			cur = cur->next; // Pula o token de filename
+		cur = cur->next;
+	}
+	args[arg_count] = NULL;
+	return (args);
 }
+
+// char	**extract_args(t_token *tokens, t_gc *gc)
+// {
+// 	int		count;
+// 	char	**args;
+// 	t_token	*cur;
+// 	bool	non_empty_seen;
+
+//     if (!tokens)
+// 		return (NULL);
+// 	count = get_clean_args_len(tokens);
+// 	args = gc_malloc(gc, sizeof(char *) * (count + 1));
+// 	if (!args)
+//         return (NULL);
+//     cur = tokens;
+//     count = 0;
+//     while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
+//     {
+// 		if (cur->value && (non_empty_seen || cur->value[0] != '\0'))
+// 		{
+// 			non_empty_seen = true;
+// 			args[count++] = gc_strdup(cur->value, gc);
+// 		}
+// 		cur = cur->next;
+//     }
+//     args[count] = NULL;
+//     return (args);
+// }
 
 
 t_ast	*build_ast(t_token *tokens, t_gc *gc)

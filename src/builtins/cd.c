@@ -19,7 +19,7 @@ static char	*get_env_from_list(char **env, const char *name)
 }
 
 static void	update_env(char ***env, char *key, char *value)
-{
+	{
 	char	*tmp;
 	char	*entry;
 
@@ -29,38 +29,46 @@ static void	update_env(char ***env, char *key, char *value)
 	free(tmp);
 	// export_env(entry, env); // função que trata export ou sobrescreve env
 	free(entry);
-}
+	}
 
-int	builtin_cd(char **argv, t_data *data)
+	int	builtin_cd(char **argv, t_data *data)
 {
 	char	*path;
-	char	*oldpwd; // char	cwd[1000]; // buffer para armazenar o diretório atual PATH_MAX
+	char	*oldpwd;
 
+	// Verifica se há mais de um argumento
 	if (argv[1] && argv[2])
 	{
 		ft_putendl_fd("minishell: cd: too many arguments", STDERR_FILENO);
-		return (1);
+		return (1); // Código de erro correto
 	}
+
+	// Determina o caminho para o diretório
 	if (!argv[1] || (argv[1][0] == '~' && argv[1][1] == '\0'))
 		path = get_env_from_list(data->env, "HOME");
 	else if (argv[1] && !ft_strncmp(argv[1], "-", 1))
 	{
 		path = get_env_from_list(data->env, "OLDPWD");
 		if (!path)
-			return (ft_putendl_fd("minishell: cd: OLDPWD not set", 2), 1);
-		ft_putendl_fd(path, 1); // printa novo path
+			return (ft_putendl_fd("minishell: cd: OLDPWD not set", STDERR_FILENO), 1);
+		ft_putendl_fd(path, STDOUT_FILENO); // Imprime o novo path
 	}
 	else
 		path = argv[1];
+
+	// Tenta mudar para o diretório especificado
 	if (!path || chdir(path) != 0)
 	{
 		perror("minishell: cd");
-		return (1);
+		return (1); // IMPORTANTE: retornar erro quando chdir falha
 	}
+
+	// Atualiza as variáveis de ambiente PWD e OLDPWD
 	oldpwd = getcwd(NULL, 0);
 	if (oldpwd)
 		update_env(&data->env, "OLDPWD", get_env_from_list(data->env, "PWD"));
 	update_env(&data->env, "PWD", oldpwd);
 	free(oldpwd);
-	return (0);
+
+	return (0); // Sucesso
 }

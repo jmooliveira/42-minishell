@@ -4,23 +4,27 @@
 
 int	execute_builtin(t_ast *node, t_data *data)
 {
+	int	status;
+
+	status = 0;
 	if (!node || !node->args || !node->args[0])
 		return (EXIT_FAILURE);
 	if (!ft_strncmp(node->args[0], "echo", 4))
-		return (builtin_echo(node->args));
+		status = (builtin_echo(node->args));
 	if (!ft_strncmp(node->args[0], "cd", 2))
-		return (builtin_cd(node->args, data));
+		status = (builtin_cd(node->args, data));
 	if (!ft_strncmp(node->args[0], "pwd", 3))
-		return (builtin_pwd());
+		status = (builtin_pwd());
 	if (!ft_strncmp(node->args[0], "export", 6))
-		return (builtin_export(node->args, data));
+		status = (builtin_export(node->args, data));
 	if (!ft_strncmp(node->args[0], "unset", 5))
-		return (builtin_unset(node->args, data));
+		status = (builtin_unset(node->args, data));
 	if (!ft_strncmp(node->args[0], "env", 3))
-		return (builtin_env(data->env));
+		status = (builtin_env(data->env));
 	if (!ft_strncmp(node->args[0], "exit", 4))
-		return (builtin_exit(node->args, data));
-	return (EXIT_FAILURE);
+		status = (builtin_exit(node->args, data));
+	data->exit_status = status;
+	return (data->exit_status);
 }
 
 bool	is_builtin(const char *node)

@@ -1,3 +1,5 @@
+/*exec_external.c*/
+
 #include "../../include/minishell.h"
 
 // Protótipos de funções auxiliares (você pode adaptar para seu GC)
