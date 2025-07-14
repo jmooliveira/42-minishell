@@ -82,7 +82,7 @@ char	*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc)
 	return (substr);
 }
 
-char	*gc_strjoin(char *s1, char *s2, t_gc *gc)
+char	*gc_strjoin(const char *s1, const char *s2, t_gc *gc)
 {
 	char	*joined;
 

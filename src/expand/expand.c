@@ -2,6 +2,16 @@
 
 #include "../../include/minishell.h"
 
+static bool	is_valid_var_start(char c)
+{
+	return (ft_isalpha(c) || c == '_');
+}
+
+static bool	is_valid_var_char(char c)
+{
+	return (ft_isalnum(c) || c == '_');
+}
+
 char	*get_env_value(const char *var_name, char **env)
 {
 	size_t	var_len;
@@ -41,7 +51,7 @@ static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
 	else // $VAR
 	{
 		start = *i;
-		while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+		while (str[*i] && is_valid_var_char(str[*i]))
 			(*i)++;
 		var_name = gc_substr(str, start, *i - start, gc);
 	}
@@ -52,6 +62,39 @@ static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
 		value = gc_strdup("", gc);
 	return (value);
 }
+
+
+// static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
+// {
+// 	int		start;
+// 	char	*var_name;
+// 	char	*env_value;
+// 	char	*value;
+
+// 	if (str[*i] == '{') // ${VAR}
+// 	{
+// 		start = ++(*i);
+// 		while (str[*i] && str[*i] != '}')
+// 			(*i)++;
+// 		if (str[*i] != '}')
+// 			return (gc_strdup("", gc)); // não encontrou fechamento
+// 		var_name = gc_substr(str, start, *i - start, gc);
+// 		(*i)++; // pula '}'
+// 	}
+// 	else // $VAR
+// 	{
+// 		start = *i;
+// 		while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
+// 			(*i)++;
+// 		var_name = gc_substr(str, start, *i - start, gc);
+// 	}
+// 	env_value = get_env_value(var_name, env);
+// 	if (env_value)
+// 		value = gc_strdup(env_value, gc);
+// 	else
+// 		value = gc_strdup("", gc);
+// 	return (value);
+// }
 
 static char	*normal_char(const char *str, int *i, t_gc *gc, char *result)
 {
@@ -77,19 +120,19 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1]) // Caso especial para variáveis
+		if (str[i] == '$' && str[i + 1])
 		{
-			if (str[i + 1] == '?') // Expansão de $?
+			if (str[i + 1] == '?') // $?
 			{
 				expansion = gc_itoa(data->exit_status, gc);
 				i += 2;
 			}
-			else if (ft_isalnum(str[i + 1]) || str[i + 1] == '_') // Expansão de $VAR
+			else if (is_valid_var_start(str[i + 1])) // $VAR
 			{
 				i++;
 				expansion = get_var_expansion(str, &i, env, gc);
 			}
-			else // Caso: $ sozinho
+			else // $ seguido de número ou símbolo → trata como '$'
 			{
 				expansion = gc_strdup("$", gc);
 				i++;

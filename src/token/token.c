@@ -43,6 +43,8 @@ int	find_token_end(char *inpt, int start)
 		return (start + 1);
 	}
 	end = start;
+	if ((inpt[start] == '<' || inpt[start] == '>') && !ft_strchr(" \t\n", inpt[start + 1]))
+		return (start + 1);
 	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
 	{
 		if (inpt[end] == '\'' || inpt[end] == '"')
