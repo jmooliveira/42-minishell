@@ -7,6 +7,12 @@
 # include <stdlib.h>
 # include <signal.h>
 # include <fcntl.h>
+# include <unistd.h>
+# include <stdio.h>
+# include <errno.h>
+
+# include <sys/stat.h>
+# include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../lib/include/libft.h"
@@ -74,6 +80,7 @@ typedef struct s_redir
 	t_type				type;
 	char				*filename;
 	char				*delim;
+	bool				hd_written;
 	struct s_redir		*next;
 }	t_redir;
 
@@ -123,10 +130,10 @@ int			give_id(char *token_def);
 void		add_token_to_list(t_data *data, char *token_def, t_type id_token);
 
 // TOKEN_UTILS
-t_token		*new_token(char *value, t_type type, t_gc *gc);
 void		delete_token_list(t_token **token_l, t_gc *gc);
 char		*trim_quotes(char *str, t_gc *gc);
 int			skip_quotes(char *input, int start);
+t_token		*new_token(char *value, t_type type, t_gc *gc);
 t_token		*ft_token_last(t_token *lst);
 
 // EXPAND
@@ -165,7 +172,7 @@ t_token		*create_token_copy(t_token *src, t_gc *gc);
 t_token		*slice_tokens(t_token *start, t_token *end, t_gc *gc);
 void		handle_error(char *msg, t_data *data);
 t_ast		*create_node_ast(char *value, t_type type, t_gc *gc);
-int			get_args_len(t_token *tokens);
+int			get_clean_args_len(t_token *tokens);
 char		**extract_args(t_token *tokens, t_gc *gc);
 t_ast		*build_ast(t_token *tokens, t_gc *gc);
 void		parse(t_data *data);
@@ -176,8 +183,7 @@ t_gc		*gc_init(void);
 void		*gc_malloc(t_gc *gc, size_t size);
 void		*gc_calloc(size_t nmemb, size_t size, t_gc *gc);
 void		gc_add(t_gc *gc, void *ptr);
-
-char		*gc_strjoin(char *s1, char *s2, t_gc *gc);
+char		*gc_strjoin(const char *s1, const char *s2, t_gc *gc);
 char		*gc_substr(char const *s, unsigned int start, size_t len, t_gc *gc);
 char		*gc_strdup(const char *s, t_gc *gc);
 void		gc_free(t_gc *gc, void *ptr);
@@ -197,8 +203,8 @@ void		setup_signals(int pid);
 void		print_token(t_token *token_list);
 
 // EXEC BUILTINS
-void		exec_ast(t_ast *node, t_data *data);
 bool		is_builtin(const char *node);
+int			exec_ast(t_ast *node, t_data *data);
 int			execute_builtin(t_ast *node, t_data *data);
 int			builtin_echo(char **argv);
 int			builtin_cd(char **argv, t_data *data);
@@ -208,10 +214,18 @@ int			builtin_exit(char **argv, t_data *data);
 int			builtin_export(char **argv, t_data *data);
 int			builtin_unset(char **argv, t_data *data);
 
-void		execute_external(t_ast *node, t_data *data);
+int			exec_cmd(t_ast *node, t_data *data);
+int 		execute_external(t_ast *node, t_data *data, t_gc *gc);
+int			execute_pipe(t_ast *node, t_data *data);
+int			execute_and_or(t_ast *node, t_data *data);
+int			execute_subshell(t_ast *node, t_data *data);
+int		    execute_redir(t_ast *node, t_data *data);
+int		    exec_heredoc(t_redir *r);
+int			preprocess_heredoc(t_ast *node);
 
 // UTILS LIST
-
 size_t		ft_strspn(const char *s, const char *accept);
+
+const char *get_type_name(t_type type);
 
 #endif

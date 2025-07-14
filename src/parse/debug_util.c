@@ -8,7 +8,7 @@ static void print_indent(int depth)
 		printf("     ");
 }
 
-static const char *get_type_name(t_type type)
+const char *get_type_name(t_type type)
 {
 	if (type == WORD || type == WORD_S || type == WORD_D)
 		return ("WORD");
@@ -107,13 +107,13 @@ void print_ast(t_ast *node, int depth)
 	{
 		print_indent(depth);
 		printf("├─ left:\n");
-		// print_ast(node->left, depth + 1);
+		print_ast(node->left, depth + 1);
 	}
 
 	if (node->right)
 	{
 		print_indent(depth);
 		printf("└─ right:\n");
-		// print_ast(node->right, depth + 1);
+		print_ast(node->right, depth + 1);
 	}
 }

@@ -2,9 +2,9 @@
 
 #include "../../include/minishell.h"
 
-static int	is_valid_identifier(const char *str)
+static int is_valid_identifier(const char *str)
 {
-	int	i;
+	int i;
 
 	if (!str || !*str)
 		return (0);
@@ -17,6 +17,8 @@ static int	is_valid_identifier(const char *str)
 			return (0);
 		i++;
 	}
+	if (str[0] == '=' || (str[i] == '=' && i == 0))
+		return (0);
 	return (1);
 }
 

@@ -50,9 +50,14 @@ char	*generate_heredoc_tmp(t_gc *gc)
 {
 	static int	id = 0;
 	char		*tmp;
+	char		*id_str;
+	char		*pid_str;
 	char		*suffix;
-
-	suffix = gc_itoa(id++, gc);
+	
+	id_str = gc_itoa(id++, gc);
+	pid_str = gc_itoa(getpid(), gc);
+	suffix = gc_strjoin(pid_str, "_", gc);
+	suffix = gc_strjoin(suffix, id_str, gc);
 	tmp = gc_strjoin("/tmp/.hd_tmp_", suffix, gc);
 	return (tmp);
 }
@@ -70,6 +75,7 @@ void    add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
     new->filename = gc_strdup(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
     new->delim = NULL;
     new->next = NULL;
+	new->hd_written = false;
 	if (type == HEREDOC)
 	{
 		new->filename = generate_heredoc_tmp(gc);

@@ -2,6 +2,7 @@
 
 #include "../../include/minishell.h"
 
+
 void	loop(t_data *data)
 {
 	char	*input;
@@ -9,10 +10,14 @@ void	loop(t_data *data)
 	while (42)
 	{
 		interactive_signal();
-		// tem que limpar os arquivos do heredoc nesse ponto tambem, talvez nao?
 		input = readline(data->prompt);
 		if (!input)
 			break ;
+		if (ft_strspn(input, NO_PRINTABLE) == ft_strlen(input))
+		{
+			free(input);
+			continue ;
+		}
 		if (*input && ft_strspn(input, NO_PRINTABLE) != ft_strlen(input))
 			add_history(input);
 		data->input = gc_strdup(input, data->gc);

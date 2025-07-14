@@ -58,7 +58,11 @@ SRCS		= \
 	$(BUILT_DIR)/exit.c \
 	$(BUILT_DIR)/export.c \
 	$(BUILT_DIR)/unset.c \
-	$(EXEC_DIR)/exec_ast.c
+	$(EXEC_DIR)/exec_ast.c \
+	$(EXEC_DIR)/exec_operators.c \
+	$(EXEC_DIR)/exec_redir.c \
+	$(EXEC_DIR)/exec_heredoc.c \
+	$(EXEC_DIR)/exec_external.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 
