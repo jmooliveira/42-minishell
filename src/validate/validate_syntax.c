@@ -39,7 +39,7 @@ int	check_invalid_op(t_token *token_l)
 		{
 			if (is_logical_op(cur->type))
 			{
-				if (is_logical_op(cur->next->type) || is_redir(cur->next->type))
+				if (is_logical_op(cur->next->type))
 					return (1);
 			}
 			else if (is_redir(cur->type))
@@ -167,6 +167,8 @@ int	check_invalid_subshell_content(t_data *data)
 
 int	validate_syntax(t_data *data)
 {
+	if (!data->token_list)
+		return (0);
 	if (data->has_error)
 		return (1);
 	// operador no inicio

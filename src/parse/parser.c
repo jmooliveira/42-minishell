@@ -66,22 +66,12 @@ void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 {
 	t_redir	*new;
 	t_redir	*cur;
-	// t_token *next_token;
-	// char *new_filename;
 
 	new = gc_malloc(gc, sizeof(t_redir));
 	if (!new)
 		return ;
 	new->type = type;
-	new->filename = gc_strdup(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
-	// next_token = node->tokens;
-	// while (next_token && is_word(next_token->type))
-	// {
-	// 	new_filename = gc_strjoin(new->filename, next_token->value, gc);
-	// 	gc_free(gc, new->filename);
-	// 	new->filename = new_filename;
-	// 	next_token = next_token->next;
-	// }
+	new->filename = trim_quotes(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
 	new->delim = NULL;
 	new->next = NULL;
 	new->hd_written = false;

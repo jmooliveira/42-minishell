@@ -1,0 +1,11 @@
+total 152
+-rw-r--r--  1 jemorais candidate      0 Jul 14  2025 file2
+drwxr-xr-x  2 jemorais candidate   4096 Jul 14 13:34 include
+drwxr-xr-x  6 jemorais candidate   4096 Jul 14 18:02 lib
+-rw-r--r--  1 jemorais candidate   2424 Jul 14 13:34 Makefile
+-rwxr-xr-x  1 jemorais candidate 116720 Jul 14 18:02 minishell
+drwxr-xr-x  6 jemorais candidate   4096 Jul 14 18:03 minishell_tester
+drwxr-xr-x 14 jemorais candidate   4096 Jul 14 18:02 objs
+-rw-r--r--  1 jemorais candidate     93 Jul 14 12:26 readline.supp
+-rw-r--r--  1 jemorais candidate   1343 Jul 14 12:26 README.md
+drwxr-xr-x 14 jemorais candidate   4096 Jul 14 12:26 src

@@ -128,7 +128,7 @@ void	parse(t_data *data)
 	data->tree = build_ast(data->token_list, data->gc);
 	if (!data->tree)
 	{
-		fprintf(stderr, "Error: parsing failed, AST is NULL\n");
+		// fprintf(stderr, "Error: parsing failed, AST is NULL\n");
 		return ;
 	}
 	// print_ast(data->tree, 0);
