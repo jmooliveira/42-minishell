@@ -79,16 +79,30 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 
 	if (!node || !node->args || !node->args[0])
 		return (1);
-
-	cmd_path = find_executable(node->args[0], data->env, gc);
-	if (!cmd_path || access(cmd_path, F_OK) != 0)
+	if (ft_strchr(node->args[0], '/'))
 	{
-		fprintf(stderr, "[DEBUG] Comando inválido: '%s'\n", node->args[0]);
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(node->args[0], STDERR_FILENO);
-		ft_putendl_fd(": command not found", STDERR_FILENO);
-		data->exit_status = 127;
-		return (127);
+		cmd_path = gc_strdup(node->args[0], gc);
+		if (access(cmd_path, F_OK) != 0)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(node->args[0], STDERR_FILENO);
+			ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+			data->exit_status = 127;
+			return (127);
+		}
+	}
+	else
+	{
+
+		cmd_path = find_executable(node->args[0], data->env, gc);
+		if (!cmd_path || access(cmd_path, F_OK) != 0)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			ft_putstr_fd(node->args[0], STDERR_FILENO);
+			ft_putendl_fd(": command not found", STDERR_FILENO);
+			data->exit_status = 127;
+			return (127);
+		}
 	}
 	if (stat(cmd_path, &sb) == 0 && S_ISDIR(sb.st_mode))
 	{
