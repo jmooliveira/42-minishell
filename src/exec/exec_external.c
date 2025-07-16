@@ -9,43 +9,42 @@ char	*gc_strjoin(const char *s1, const char *s2, t_gc *gc);
 char	*gc_strdup(const char *s, t_gc *gc);
 void	free_split(char **arr);
 
-void free_split(char **split)
+void	free_split(char **split)
 {
-    int i = 0;
-    if (!split)
-        return;
-    while (split[i])
-    {
-        free(split[i]);
-        i++;
-    }
-    free(split);
+	int	i = 0;
+
+	if (!split)
+		return ;
+	while (split[i])
+	{
+		free(split[i]);
+		i++;
+	}
+	free(split);
 }
 
 // Função que junta caminho + '/' + comando
-static char *join_path(const char *path, const char *cmd, t_gc *gc)
+static char	*join_path(const char *path, const char *cmd, t_gc *gc)
 {
-	char *tmp;
-	char *full;
+	char	*tmp;
+	char	*full;
 
 	tmp = gc_strjoin(path, "/", gc);
 	full = gc_strjoin(tmp, cmd, gc);
-	// tmp é gerenciado pelo gc, então não precisa free
 	return (full);
 }
 
 // Busca executável no PATH (retorna string alocada no gc ou NULL)
-static char *find_executable(const char *cmd, char **env, t_gc *gc)
+static char	*find_executable(const char *cmd, char **env, t_gc *gc)
 {
-	char **paths;
-	char *path_env;
-	char *full_path;
-	int i;
+	char	**paths;
+	char	*path_env;
+	char	*full_path;
+	int		i;
 
 	// Se o comando já tem '/' é caminho absoluto/relativo, retorna duplicado
 	if (ft_strchr(cmd, '/'))
 		return (gc_strdup(cmd, gc));
-
 	path_env = get_env_value("PATH", env);
 	if (!path_env)
 		return (NULL);
@@ -53,7 +52,6 @@ static char *find_executable(const char *cmd, char **env, t_gc *gc)
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-
 	i = 0;
 	while (paths[i])
 	{
@@ -79,11 +77,10 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 
 	if (!node || !node->args || !node->args[0])
 		return (1);
-
 	cmd_path = find_executable(node->args[0], data->env, gc);
 	if (!cmd_path || access(cmd_path, F_OK) != 0)
 	{
-		fprintf(stderr, "[DEBUG] Comando inválido: '%s'\n", node->args[0]);
+		// fprintf(stderr, "[DEBUG] Comando inválido: '%s'\n", node->args[0]);
 		ft_putstr_fd("minishell: ", STDERR_FILENO);
 		ft_putstr_fd(node->args[0], STDERR_FILENO);
 		ft_putendl_fd(": command not found", STDERR_FILENO);
@@ -107,7 +104,6 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 		data->exit_status = 126;
 		return (126);
 	}
-
 	pid = fork();
 	if (pid == 0)
 	{
@@ -130,7 +126,6 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 		perror("minishell: fork");
 		data->exit_status = 1;
 	}
-
 	return (data->exit_status);
 }
 

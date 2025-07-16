@@ -2,44 +2,24 @@
 
 #include "../../include/minishell.h"
 
-// static int is_valid_identifier(const char *str)
-// {
-// 	int i;
-
-// 	if (!str || !*str)
-// 		return (0);
-// 	if (!ft_isalpha(str[0]) && str[0] != '_')
-// 		return (0);
-// 	i = 1;
-// 	while (str[i] && str[i] != '=')
-// 	{
-// 		if (!ft_isalnum(str[i]) && str[i] != '_')
-// 			return (0);
-// 		i++;
-// 	}
-// 	if (str[0] == '=' || (str[i] == '=' && i == 0))
-// 		return (0);
-// 	return (1);
-// }
-
-static int is_valid_identifier(const char *str)
+static int	is_valid_identifier(const char *str)
 {
-    int i;
+	int	i;
 
-    if (!str || !*str)
-        return (0);
-    if (!ft_isalpha(str[0]) && str[0] != '_')
-        return (0);
-    i = 1;
-    while (str[i] && str[i] != '=')
-    {
-        if (!ft_isalnum(str[i]) && str[i] != '_')
-            return (0);
-        i++;
-    }
-    if (str[0] == '=' || (str[i] == '=' && i == 0))
-        return (0);
-    return (1);
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+		i++;
+	}
+	if (str[0] == '=' || (str[i] == '=' && i == 0))
+		return (0);
+	return (1);
 }
 
 static void	print_export_format(char **env)
@@ -52,8 +32,8 @@ static void	print_export_format(char **env)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		equal_pos = ft_strchr(env[i], '=');
-		if (equal_pos)
-		{ // Imprime nome da variável
+		if (equal_pos) // Imprime nome da variável
+		{
 			write(STDOUT_FILENO, env[i], equal_pos - env[i]);
 			ft_putstr_fd("=\"", STDOUT_FILENO);
 			ft_putstr_fd(equal_pos + 1, STDOUT_FILENO);
@@ -134,7 +114,7 @@ static int	export_variable(const char *arg, t_data *data)
 		env_index = find_env_index(data->env, arg);
 		if (env_index == -1) // Adiciona variável sem valor
 			data->env = add_new_env(data->env, arg, data);
-	} // Se já existe, não faz nada
+	}
 	return (0);
 }
 
@@ -143,8 +123,8 @@ int	builtin_export(char **argv, t_data *data)
 	int	i;
 	int	exit_status;
 
-	if (!argv[1])
-	{ // Sem argumentos, imprime todas as variáveis
+	if (!argv[1]) // Sem argumentos, imprime todas as variáveis
+	{
 		print_export_format(data->env);
 		return (0);
 	}
