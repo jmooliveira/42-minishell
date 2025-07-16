@@ -53,7 +53,7 @@ int	builtin_exit(char **argv, t_data *data)
 {
 	int	exit_code;
 
-	ft_putstr_fd("exit\n", STDERR_FILENO);
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
 	if (!argv[1])
 	{
 		gc_clear(data->gc);
