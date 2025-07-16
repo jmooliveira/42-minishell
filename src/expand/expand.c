@@ -63,39 +63,6 @@ static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
 	return (value);
 }
 
-
-// static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
-// {
-// 	int		start;
-// 	char	*var_name;
-// 	char	*env_value;
-// 	char	*value;
-
-// 	if (str[*i] == '{') // ${VAR}
-// 	{
-// 		start = ++(*i);
-// 		while (str[*i] && str[*i] != '}')
-// 			(*i)++;
-// 		if (str[*i] != '}')
-// 			return (gc_strdup("", gc)); // não encontrou fechamento
-// 		var_name = gc_substr(str, start, *i - start, gc);
-// 		(*i)++; // pula '}'
-// 	}
-// 	else // $VAR
-// 	{
-// 		start = *i;
-// 		while (str[*i] && (ft_isalnum(str[*i]) || str[*i] == '_'))
-// 			(*i)++;
-// 		var_name = gc_substr(str, start, *i - start, gc);
-// 	}
-// 	env_value = get_env_value(var_name, env);
-// 	if (env_value)
-// 		value = gc_strdup(env_value, gc);
-// 	else
-// 		value = gc_strdup("", gc);
-// 	return (value);
-// }
-
 static char	*normal_char(const char *str, int *i, t_gc *gc, char *result)
 {
 	char	letter[2];

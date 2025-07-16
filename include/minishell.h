@@ -64,7 +64,6 @@ typedef struct s_token
 	char				*value;
 	struct s_token		*next;
 	bool				expandable;
-	// struct s_token	*prev;
 }	t_token;
 
 typedef struct s_env
@@ -215,17 +214,17 @@ int			builtin_export(char **argv, t_data *data);
 int			builtin_unset(char **argv, t_data *data);
 
 int			exec_cmd(t_ast *node, t_data *data);
-int 		execute_external(t_ast *node, t_data *data, t_gc *gc);
+int			execute_external(t_ast *node, t_data *data, t_gc *gc);
 int			execute_pipe(t_ast *node, t_data *data);
 int			execute_and_or(t_ast *node, t_data *data);
 int			execute_subshell(t_ast *node, t_data *data);
-int		    execute_redir(t_ast *node, t_data *data);
-int		    exec_heredoc(t_redir *r);
+int			execute_redir(t_ast *node, t_data *data);
+int			exec_heredoc(t_redir *r);
 int			preprocess_heredoc(t_ast *node);
 
 // UTILS LIST
 size_t		ft_strspn(const char *s, const char *accept);
 
-const char *get_type_name(t_type type);
+const char	*get_type_name(t_type type);
 
 #endif
