@@ -43,36 +43,44 @@ int	get_clean_args_len(t_token *tokens)
 	return (count);
 }
 
+static int	count_args(t_token *cur)
+{
+	int	count;
+
+	count = 0;
+	while (cur)
+	{
+		if (is_word(cur->type) || cur->type == ASSIGNMENT)
+			count++;
+		else if (is_redir(cur->type) && cur->next)
+			cur = cur->next;
+		cur = cur->next;
+	}
+	return (count);
+}
+
 char	**extract_args(t_token *tokens, t_gc *gc)
 {
 	t_token	*cur;
 	int		arg_count;
 	char	**args;
+	int		i;
 
-	cur = tokens;
-	arg_count = 0;
-	while (cur)
-	{
-		if (is_word(cur->type) || cur->type == ASSIGNMENT)
-			arg_count++;
-		else if (is_redir(cur->type) && cur->next)
-			cur = cur->next;
-		cur = cur->next;
-	}
+	arg_count = count_args(tokens);
 	args = gc_malloc(gc, sizeof(char *) * (arg_count + 1));
 	if (!args)
 		return (NULL);
 	cur = tokens;
-	arg_count = 0;
+	i = 0;
 	while (cur)
 	{
 		if (is_word(cur->type) || cur->type == ASSIGNMENT)
-			args[arg_count++] = gc_strdup(cur->value, gc);
+			args[i++] = gc_strdup(cur->value, gc);
 		else if (is_redir(cur->type) && cur->next)
 			cur = cur->next;
 		cur = cur->next;
 	}
-	args[arg_count] = NULL;
+	args[i] = NULL;
 	return (args);
 }
 
@@ -98,5 +106,4 @@ void	parse(t_data *data)
 	data->tree = build_ast(data->token_list, data->gc);
 	if (!data->tree)
 		return ;
-	// print_ast(data->tree, 0);
 }

@@ -38,16 +38,13 @@ char *trim_quotes(char *str, t_gc *gc)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	// Verifica se temos aspas delimitadoras do mesmo tipo no início e fim
 	if (len >= 2)
 	{
-		// Caso: string delimitada por aspas duplas
-		if (str[0] == '"' && str[len - 1] == '"')// Remove apenas as aspas duplas delimitadoras, preserva aspas simples internas
+		if (str[0] == '"' && str[len - 1] == '"')
 			return gc_substr(str, 1, len - 2, gc);
-		// Caso: string delimitada por aspas simples
-		else if (str[0] == '\'' && str[len - 1] == '\'') // Remove apenas as aspas simples delimitadoras, preserva aspas duplas internas
+		else if (str[0] == '\'' && str[len - 1] == '\'')
 			return gc_substr(str, 1, len - 2, gc);
-	}// Se não há aspas delimitadoras, remove todas as aspas (caso hello'world' ou hello""world)
+	}
 	result = gc_malloc(gc, len + 1);
 	if (!result)
 		return (NULL);

@@ -8,7 +8,8 @@ int print_redir_error(char *filename, t_data *data)
     ft_putstr_fd(filename, STDERR_FILENO);
     ft_putstr_fd(": ", STDERR_FILENO);
     perror("");
-    data->exit_status = 1;
+    if (data)
+        data->exit_status = 1;
     return (1);
 }
 
@@ -99,6 +100,16 @@ void restore_fds(t_data * data)
     close(data->fd_bk[1]);
 }
 
+void    cleanup_heredoc_files(t_redir *r)
+{
+    while (r)
+    {
+    	if (r->type == HEREDOC && r->filename)
+    		unlink(r->filename);
+    	r = r->next;
+    }
+}
+
 int     execute_redir(t_ast *node, t_data *data)
 {
     int         status;
@@ -121,13 +132,7 @@ int     execute_redir(t_ast *node, t_data *data)
 	else if (node->args && node->args[0])
         status = exec_cmd(node, data);
     restore_fds(data);
-    t_redir *r = node->redir;
-    while (r)
-    {
-    	if (r->type == HEREDOC && r->filename)
-    		unlink(r->filename);
-    	r = r->next;
-    }
+    cleanup_heredoc_files(node->redir);
     data->exit_status = status;
 	return (status);
 }

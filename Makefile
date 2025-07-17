@@ -50,6 +50,7 @@ SRCS		= \
 	$(PARSE_DIR)/parser_search.c \
 	$(PARSE_DIR)/parser_utils.c \
 	$(PARSE_DIR)/debug_util.c \
+	$(PARSE_DIR)/parser_heredoc.c \
 	$(BUILT_DIR)/exec_builtin.c \
 	$(BUILT_DIR)/echo.c \
 	$(BUILT_DIR)/cd.c \
@@ -61,7 +62,6 @@ SRCS		= \
 	$(EXEC_DIR)/exec_ast.c \
 	$(EXEC_DIR)/exec_operators.c \
 	$(EXEC_DIR)/exec_redir.c \
-	$(EXEC_DIR)/exec_heredoc.c \
 	$(EXEC_DIR)/exec_external.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)

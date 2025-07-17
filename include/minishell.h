@@ -220,6 +220,7 @@ int			execute_and_or(t_ast *node, t_data *data);
 int			execute_subshell(t_ast *node, t_data *data);
 int		    execute_redir(t_ast *node, t_data *data);
 int		    exec_heredoc(char *filename, char *delim);
+int			print_redir_error(char *filename, t_data *data);
 
 // UTILS LIST
 size_t		ft_strspn(const char *s, const char *accept);
