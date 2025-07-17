@@ -87,7 +87,7 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1])
+		if (str[i] == '$' && str[i + 1]) // expansao
 		{
 			if (str[i + 1] == '?') // $?
 			{
@@ -108,7 +108,9 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 			gc_free(gc, result);
 			result = temp;
 		}
-		else
+		else if (str[i] == '"') // ignora aspas duplas  /**/
+			i++;
+		else // caracteres normais ou strings literias
 		{
 			temp = normal_char(str, &i, gc, result);
 			result = temp;
@@ -140,6 +142,15 @@ void	expand_token_values(t_data *data)
 				continue ;
 			}
 		}
+		prev = token;
+		token = token->next;
+	}
+	// Concatena strings adjacentes
+	// join_adjacent_string_tokens(data);
+	// print_token(data->token_list);
+	token = data->token_list;
+	while (token)
+	{
 		if (token->type == WORD || token->type == WORD_D || token->type == WORD_S)// Depois sempre remove TODAS as aspas dos tokens de palavra
 		{
 			trimmed_val = trim_quotes(token->value, data->gc);
@@ -147,7 +158,6 @@ void	expand_token_values(t_data *data)
 			token->value = trimmed_val;
 			token->type = WORD;
 		}
-		prev = token;
 		token = token->next;
 	}
 }

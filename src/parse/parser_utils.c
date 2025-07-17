@@ -57,7 +57,7 @@ t_token	*slice_tokens(t_token *start, t_token *end, t_gc *gc)
 			tail = new_token;
 		}
 		if (cur == end)
-			break;
+			break ;
 		cur = cur->next;
 	}
 	return (head);

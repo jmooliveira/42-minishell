@@ -64,6 +64,7 @@ typedef struct s_token
 	char				*value;
 	struct s_token		*next;
 	bool				expandable;
+	bool				is_builtin;
 }	t_token;
 
 typedef struct s_env

@@ -2,9 +2,9 @@
 
 #include "../../include/minishell.h"
 
-int     preprocess_heredoc(t_ast *node)
+int	preprocess_heredoc(t_ast *node)
 {
-	t_redir *r;
+	t_redir	*r;
 
 	if (!node)
 		return (0);
@@ -23,10 +23,10 @@ int     preprocess_heredoc(t_ast *node)
 	return (0);
 }
 
-int     exec_heredoc(t_redir *r)
+int	exec_heredoc(t_redir *r)
 {
-	int     fd;
-	char    *line;
+	int		fd;
+	char	*line;
 
 	if (r->hd_written)
 		return (0);

@@ -10,6 +10,11 @@
 			"cwd": "/nfs/homes/ancarol9/cadete/common_core/4_milestone/42-minishell",
 			"binaryPath": "/nfs/homes/ancarol9/cadete/common_core/4_milestone/42-minishell/minishell",
 			"binaryArgs": []
+		},
+		{
+			"cwd": "/nfs/homes/jemorais/42/commom_core/minishell",
+			"binaryPath": "/nfs/homes/jemorais/42/commom_core/minishell/minishell",
+			"binaryArgs": []
 		}
 	]
 }

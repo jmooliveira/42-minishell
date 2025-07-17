@@ -30,38 +30,51 @@ int	skip_quotes(char *input, int start)
 
 char *trim_quotes(char *str, t_gc *gc)
 {
-	size_t	len;
-	char	*result;
-	size_t	i;
-	size_t	j;
+    size_t len;
+    char *result;
+    size_t i, j;
+    bool has_adjacent_quotes = false;
 
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	// Verifica se temos aspas delimitadoras do mesmo tipo no início e fim
-	if (len >= 2)
-	{
-		// Caso: string delimitada por aspas duplas
-		if (str[0] == '"' && str[len - 1] == '"')// Remove apenas as aspas duplas delimitadoras, preserva aspas simples internas
-			return gc_substr(str, 1, len - 2, gc);
-		// Caso: string delimitada por aspas simples
-		else if (str[0] == '\'' && str[len - 1] == '\'') // Remove apenas as aspas simples delimitadoras, preserva aspas duplas internas
-			return gc_substr(str, 1, len - 2, gc);
-	}// Se não há aspas delimitadoras, remove todas as aspas (caso hello'world' ou hello""world)
-	result = gc_malloc(gc, len + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (i < len)
-	{
-		if (str[i] == '\'' || str[i] == '"')
-			i++;
-		else
-			result[j++] = str[i++];
-	}
-	result[j] = '\0';
-	return (result);
+    if (!str)
+        return (NULL);
+        
+    len = ft_strlen(str);
+    if (len < 2)
+        return gc_strdup(str, gc);
+    
+    // Verifica se há aspas adjacentes (como em hello'world')
+    for (i = 0; i < len - 1; i++) {
+        if ((str[i] == '\'' || str[i] == '"') && 
+            i > 0 && i < len - 1 && 
+            str[i-1] != ' ' && str[i+1] != ' ') {
+            has_adjacent_quotes = true;
+            break;
+        }
+    }
+    
+    // Se tiver aspas adjacentes, remove todas as aspas
+    if (has_adjacent_quotes) {
+        result = gc_malloc(gc, len + 1);
+        if (!result)
+            return (NULL);
+        
+        i = 0;
+        j = 0;
+        while (i < len) {
+            if (str[i] != '\'' && str[i] != '"')
+                result[j++] = str[i];
+            i++;
+        }
+        result[j] = '\0';
+        return result;
+    }
+    
+    // Remove apenas as aspas externas do mesmo tipo
+    if ((str[0] == '\'' && str[len - 1] == '\'') || 
+        (str[0] == '"' && str[len - 1] == '"'))
+        return gc_substr(str, 1, len - 2, gc);
+    
+    return gc_strdup(str, gc);
 }
 
 void	delete_token_list(t_token **token_l, t_gc *gc)
@@ -87,5 +100,6 @@ t_token	*new_token(char *value, t_type type, t_gc *gc)
 	token->type = type;
 	token->expandable = false;
 	token->next = NULL;
+	token->is_builtin = is_builtin(value);
 	return (token);
 }

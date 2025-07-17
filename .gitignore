@@ -1,28 +1,29 @@
-#DEPOIS VERIFICAR O QUE NECESSITA
+/* #DEPOIS VERIFICAR O QUE NECESSITA */
 
-#pastas
+// #pastas
 .vscode/
 minishell_tester/
 
-# Compilação
+// # Compilação
 *.o
 *.out
 *.a
 
-# Binários
+// # Binários
 minishell
 
-# Arquivos temporários
+// # Arquivos temporários
 *~
 *.swp
 *.tmp
 *.log
 
-# Histórico do Valgrind
+// # Histórico do Valgrind
 vgcore.*
 
-# Arquivos de sistema
+// # Arquivos de sistema
 .DS_Store
 
-# Outros
+// # Outros
 .env
+basic_interactive_test.sh
