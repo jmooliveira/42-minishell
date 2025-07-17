@@ -8,8 +8,6 @@ int	check_first_node(t_token *token_l)
 		return (1);
 	if (is_logical_op(token_l->type) || token_l->type == PAR_CLOSE)
 		return (1);
-	if (token_l->type == HEREDOC)
-		return (1);
 	return (0);
 }
 

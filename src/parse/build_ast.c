@@ -10,14 +10,13 @@ t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
 	if (!node)
 		return (NULL);
 	node->type = type;
-	// node->value = value; (ANTES)
 	if (value != NULL)
-		node->value = gc_strdup(value, gc); // Garante uma cópia propria gerenciada pelo coletor (CAIO) 
+		node->value = gc_strdup(value, gc);
 	else
 		node->value = NULL;
 	node->is_builtin = false;
 	node->args = NULL;
-	node->redir = NULL; // Somente essa linha já resolve o segfault (CAIO)
+	node->redir = NULL;
 	node->left = NULL;
 	node->right = NULL;
 	return (node);
@@ -52,59 +51,30 @@ char	**extract_args(t_token *tokens, t_gc *gc)
 
 	cur = tokens;
 	arg_count = 0;
-	while (cur)// conta quantos argumentos existem
+	while (cur)
 	{
 		if (is_word(cur->type) || cur->type == ASSIGNMENT)
 			arg_count++;
 		else if (is_redir(cur->type) && cur->next)
-			cur = cur->next;// Pula o token de filename
+			cur = cur->next;
 		cur = cur->next;
 	}
-	args = gc_malloc(gc, sizeof(char *) * (arg_count + 1));// Aloca memória para os argumentos
+	args = gc_malloc(gc, sizeof(char *) * (arg_count + 1));
 	if (!args)
 		return (NULL);
 	cur = tokens;
 	arg_count = 0;
-	while (cur)// Segunda passagem: copia os valores
+	while (cur)
 	{
 		if (is_word(cur->type) || cur->type == ASSIGNMENT)
 			args[arg_count++] = gc_strdup(cur->value, gc);
 		else if (is_redir(cur->type) && cur->next)
-			cur = cur->next; // Pula o token de filename
+			cur = cur->next;
 		cur = cur->next;
 	}
 	args[arg_count] = NULL;
 	return (args);
 }
-
-// char	**extract_args(t_token *tokens, t_gc *gc)
-// {
-// 	int		count;
-// 	char	**args;
-// 	t_token	*cur;
-// 	bool	non_empty_seen;
-
-//     if (!tokens)
-// 		return (NULL);
-// 	count = get_clean_args_len(tokens);
-// 	args = gc_malloc(gc, sizeof(char *) * (count + 1));
-// 	if (!args)
-//         return (NULL);
-//     cur = tokens;
-//     count = 0;
-//     while (cur && (is_word(cur->type) || cur->type == ASSIGNMENT))
-//     {
-// 		if (cur->value && (non_empty_seen || cur->value[0] != '\0'))
-// 		{
-// 			non_empty_seen = true;
-// 			args[count++] = gc_strdup(cur->value, gc);
-// 		}
-// 		cur = cur->next;
-//     }
-//     args[count] = NULL;
-//     return (args);
-// }
-
 
 t_ast	*build_ast(t_token *tokens, t_gc *gc)
 {
@@ -127,9 +97,6 @@ void	parse(t_data *data)
 {
 	data->tree = build_ast(data->token_list, data->gc);
 	if (!data->tree)
-	{
-		// fprintf(stderr, "Error: parsing failed, AST is NULL\n");
 		return ;
-	}
 	// print_ast(data->tree, 0);
 }

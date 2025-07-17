@@ -68,7 +68,6 @@ int     exec_append(t_redir *r, t_data *data)
 
 static int  apply_redir(t_redir *redir, t_data *data)
 {
-    int         fd;
     int         ret;
     t_redir     *r;
 
@@ -82,22 +81,7 @@ static int  apply_redir(t_redir *redir, t_data *data)
         else if (r->type == APPEND)
             ret = exec_append(r,data);
         else if (r->type == HEREDOC)
-        {
-            ret = exec_heredoc(r);
-            if (ret != 0)
-                return (ret);
-            fd = open(r->filename, O_RDONLY);
-            if (fd == -1)
-                return (print_redir_error(r->filename, data));
-            if (dup2(fd, STDIN_FILENO) == -1)
-            {
-                close(fd);
-                return (print_redir_error("dup2", data));
-            }
-            close(fd);
-            unlink(r->filename);
-            ret = 0;
-        }
+            ret = exec_redir_in(r, data);
         else
             ret = 0;
         if (ret != 0)
@@ -122,7 +106,10 @@ int     execute_redir(t_ast *node, t_data *data)
     data->fd_bk[0] = dup(STDIN_FILENO);
     data->fd_bk[1] = dup(STDOUT_FILENO);
     if (data->fd_bk[0] == -1 || data->fd_bk[1] == -1)
-        return (print_redir_error("dup", data));
+    {
+        data->exit_status = 130;
+        return (130);
+    }
     status = apply_redir(node->redir, data);
     if (status != 0)
     {
@@ -134,6 +121,13 @@ int     execute_redir(t_ast *node, t_data *data)
 	else if (node->args && node->args[0])
         status = exec_cmd(node, data);
     restore_fds(data);
+    t_redir *r = node->redir;
+    while (r)
+    {
+    	if (r->type == HEREDOC && r->filename)
+    		unlink(r->filename);
+    	r = r->next;
+    }
     data->exit_status = status;
 	return (status);
 }

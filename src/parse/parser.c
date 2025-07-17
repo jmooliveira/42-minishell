@@ -71,14 +71,18 @@ void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 	if (!new)
 		return ;
 	new->type = type;
-	new->filename = trim_quotes(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
+	new->filename = trim_quotes(filename, gc);
 	new->delim = NULL;
 	new->next = NULL;
-	new->hd_written = false;
 	if (type == HEREDOC)
 	{
+		new->delim = gc_strdup(filename, gc);
 		new->filename = generate_heredoc_tmp(gc);
-		new->delim = filename;
+		if (exec_heredoc(new->filename, new->delim) != 0)
+		{
+			g_signal = SIGINT;
+			return ;
+		}
 	}
 	if (!node->redir)
 		node->redir = new;
@@ -104,11 +108,11 @@ t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
 	while (cur && is_redir(cur->type))
 	{
 		if (cur->next)
-			cur = cur->next->next; // Pula o redirecionamento e seu argumento
+			cur = cur->next->next;
 		else
 			break ;
 	}
-	if (!cmd_token)// Se não houver comando após os redirecionamentos, use o primeiro token
+	if (!cmd_token)
 		cmd_token = cur;
 	else
 		cmd_token = tokens;

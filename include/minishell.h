@@ -80,7 +80,6 @@ typedef struct s_redir
 	t_type				type;
 	char				*filename;
 	char				*delim;
-	bool				hd_written;
 	struct s_redir		*next;
 }	t_redir;
 
@@ -220,8 +219,7 @@ int			execute_pipe(t_ast *node, t_data *data);
 int			execute_and_or(t_ast *node, t_data *data);
 int			execute_subshell(t_ast *node, t_data *data);
 int		    execute_redir(t_ast *node, t_data *data);
-int		    exec_heredoc(t_redir *r);
-int			preprocess_heredoc(t_ast *node);
+int		    exec_heredoc(char *filename, char *delim);
 
 // UTILS LIST
 size_t		ft_strspn(const char *s, const char *accept);
