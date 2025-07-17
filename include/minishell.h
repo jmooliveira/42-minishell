@@ -65,6 +65,7 @@ typedef struct s_token
 	struct s_token		*next;
 	bool				expandable;
 	bool				is_builtin;
+	// bool				adjacent_to_next;
 }	t_token;
 
 typedef struct s_env
@@ -135,6 +136,7 @@ char		*trim_quotes(char *str, t_gc *gc);
 int			skip_quotes(char *input, int start);
 t_token		*new_token(char *value, t_type type, t_gc *gc);
 t_token		*ft_token_last(t_token *lst);
+// char		*remove_all_quotes(char *str, t_gc *gc);
 
 // EXPAND
 void		expand_token_values(t_data *data);

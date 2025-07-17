@@ -145,9 +145,6 @@ void	expand_token_values(t_data *data)
 		prev = token;
 		token = token->next;
 	}
-	// Concatena strings adjacentes
-	// join_adjacent_string_tokens(data);
-	// print_token(data->token_list);
 	token = data->token_list;
 	while (token)
 	{
@@ -160,4 +157,5 @@ void	expand_token_values(t_data *data)
 		}
 		token = token->next;
 	}
+	// join_adjacent_tokens(data);
 }
