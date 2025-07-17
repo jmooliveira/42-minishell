@@ -23,24 +23,19 @@ extern volatile int	g_signal;
 
 typedef enum e_type
 {
-	// basico
 	WORD,
 	WORD_S,
 	WORD_D,
-	// redirecionamento
 	REDIR_IN,
 	REDIR_OUT,
 	APPEND,
 	HEREDOC,
-	// operadores logicos
 	AND,
 	OR,
 	PIPE,
-	// parenteses e subshell
 	PAR_OPEN,
 	PAR_CLOSE,
 	SUBSHELL,
-	// variaveis ambiente e outros
 	ASSIGNMENT,
 	NONE
 }	t_type;
@@ -65,7 +60,6 @@ typedef struct s_token
 	struct s_token		*next;
 	bool				expandable;
 	bool				is_builtin;
-	// bool				adjacent_to_next;
 }	t_token;
 
 typedef struct s_env
@@ -97,13 +91,13 @@ typedef struct s_ast
 
 typedef struct s_data
 {
-	const char	*prompt;		//str indicativa ex: "minishell$ "
-	char		*input;			//linha de comando (read_line())
-	char		**env;			//array de var de ambiente
-	int			env_len;		//comprimento desse arr
-	int			exit_status;	//saida padrao do ultimo comando executado
-	int			has_error;		//para verificar se existe algum erro, implementado para tratamento de aspas na tokenização ser pego na validação
-	int			fd_bk[2];		//bk dos fds
+	const char	*prompt;
+	char		*input;
+	char		**env;
+	int			env_len;
+	int			exit_status;
+	int			has_error;
+	int			fd_bk[2];
 	t_gc		*gc;
 	t_env		*envl;
 	t_token		*token_list;
@@ -220,8 +214,8 @@ int			execute_external(t_ast *node, t_data *data, t_gc *gc);
 int			execute_pipe(t_ast *node, t_data *data);
 int			execute_and_or(t_ast *node, t_data *data);
 int			execute_subshell(t_ast *node, t_data *data);
-int		    execute_redir(t_ast *node, t_data *data);
-int		    exec_heredoc(char *filename, char *delim);
+int			execute_redir(t_ast *node, t_data *data);
+int			exec_heredoc(char *filename, char *delim);
 int			print_redir_error(char *filename, t_data *data);
 
 // UTILS LIST

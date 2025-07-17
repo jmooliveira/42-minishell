@@ -2,17 +2,11 @@
 
 #include "../../include/minishell.h"
 
-// Protótipos de funções auxiliares (você pode adaptar para seu GC)
-char	*get_env_value(const char *key, char **env);
-char	**ft_split(char const *s, char c);
-char	*gc_strjoin(const char *s1, const char *s2, t_gc *gc);
-char	*gc_strdup(const char *s, t_gc *gc);
-void	free_split(char **arr);
-
 void	free_split(char **split)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!split)
 		return ;
 	while (split[i])
@@ -23,7 +17,6 @@ void	free_split(char **split)
 	free(split);
 }
 
-// Função que junta caminho + '/' + comando
 static char	*join_path(const char *path, const char *cmd, t_gc *gc)
 {
 	char	*tmp;
@@ -34,7 +27,6 @@ static char	*join_path(const char *path, const char *cmd, t_gc *gc)
 	return (full);
 }
 
-// Busca executável no PATH (retorna string alocada no gc ou NULL)
 static char	*find_executable(const char *cmd, char **env, t_gc *gc)
 {
 	char	**paths;
@@ -42,13 +34,11 @@ static char	*find_executable(const char *cmd, char **env, t_gc *gc)
 	char	*full_path;
 	int		i;
 
-	// Se o comando já tem '/' é caminho absoluto/relativo, retorna duplicado
 	if (ft_strchr(cmd, '/'))
 		return (gc_strdup(cmd, gc));
 	path_env = get_env_value("PATH", env);
 	if (!path_env)
 		return (NULL);
-
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
@@ -58,7 +48,7 @@ static char	*find_executable(const char *cmd, char **env, t_gc *gc)
 		full_path = join_path(paths[i], cmd, gc);
 		if (access(full_path, X_OK) == 0)
 		{
-			free_split(paths); // libera split tradicional
+			free_split(paths);
 			return (full_path);
 		}
 		i++;
@@ -67,7 +57,6 @@ static char	*find_executable(const char *cmd, char **env, t_gc *gc)
 	return (NULL);
 }
 
-// Executa comando externo com fork e execve, retorna status
 int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 {
 	pid_t		pid;

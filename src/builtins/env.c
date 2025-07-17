@@ -11,7 +11,7 @@ int	builtin_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strchr(envp[i], '=')) // só imprime se tiver '='
+		if (ft_strchr(envp[i], '='))
 			ft_putendl_fd(envp[i], STDOUT_FILENO);
 		i++;
 	}

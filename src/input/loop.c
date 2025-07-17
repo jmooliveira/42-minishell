@@ -2,7 +2,6 @@
 
 #include "../../include/minishell.h"
 
-
 void	loop(t_data *data)
 {
 	char	*input;
@@ -28,7 +27,6 @@ void	loop(t_data *data)
 			parse(data);
 			exec_ast(data->tree, data);
 		}
-		// print_ast(data->tree, 0);
 		gc_free(data->gc, data->input);
 		free(input);
 		delete_token_list(&data->token_list, data->gc);

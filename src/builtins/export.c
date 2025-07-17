@@ -32,7 +32,7 @@ static void	print_export_format(char **env)
 	{
 		ft_putstr_fd("declare -x ", STDOUT_FILENO);
 		equal_pos = ft_strchr(env[i], '=');
-		if (equal_pos) // Imprime nome da variável
+		if (equal_pos)
 		{
 			write(STDOUT_FILENO, env[i], equal_pos - env[i]);
 			ft_putstr_fd("=\"", STDOUT_FILENO);
@@ -100,19 +100,19 @@ static int	export_variable(const char *arg, t_data *data)
 		return (1);
 	}
 	equal_pos = ft_strchr(arg, '=');
-	if (equal_pos) // Tem valor para atribuir
+	if (equal_pos)
 	{
 		var_name = gc_substr(arg, 0, equal_pos - arg, data->gc);
 		env_index = find_env_index(data->env, var_name);
-		if (env_index != -1) // Atualiza variável existente
+		if (env_index != -1)
 			data->env[env_index] = gc_strdup(arg, data->gc);
-		else // Adiciona nova variável
+		else
 			data->env = add_new_env(data->env, arg, data);
 	}
-	else // Só o nome da variável, sem valor
+	else
 	{
 		env_index = find_env_index(data->env, arg);
-		if (env_index == -1) // Adiciona variável sem valor
+		if (env_index == -1)
 			data->env = add_new_env(data->env, arg, data);
 	}
 	return (0);
@@ -123,7 +123,7 @@ int	builtin_export(char **argv, t_data *data)
 	int	i;
 	int	exit_status;
 
-	if (!argv[1]) // Sem argumentos, imprime todas as variáveis
+	if (!argv[1])
 	{
 		print_export_format(data->env);
 		return (0);

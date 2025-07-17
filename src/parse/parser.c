@@ -135,7 +135,10 @@ t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
 	if (!tokens)
 		return (NULL);
 	cur = skip_redirs(tokens);
-	cmd_token = cur ? cur : tokens;
+	if (cur)
+		cmd_token = cur;
+	else
+		cmd_token = tokens;
 	node = create_node_ast(tokens->value, tokens->type, gc);
 	if (!node)
 		return (NULL);

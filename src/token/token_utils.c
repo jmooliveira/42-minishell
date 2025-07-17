@@ -28,22 +28,24 @@ int	skip_quotes(char *input, int start)
 	return (i + 1);
 }
 
-char *trim_quotes(char *str, t_gc *gc)
+char	*trim_quotes(char *str, t_gc *gc)
 {
 	size_t	len;
-	char *result;
-	size_t i = 0;
-	size_t j = 0;
-	
+	char	*result;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
 	if (len >= 2)
 	{
 		if (str[0] == '"' && str[len - 1] == '"')
-			return gc_substr(str, 1, len - 2, gc);
+			return (gc_substr(str, 1, len - 2, gc));
 		else if (str[0] == '\'' && str[len - 1] == '\'')
-			return gc_substr(str, 1, len - 2, gc);
+			return (gc_substr(str, 1, len - 2, gc));
 	}
 	result = gc_malloc(gc, len + 1);
 	if (!result)
@@ -56,7 +58,7 @@ char *trim_quotes(char *str, t_gc *gc)
 	}
 	result[j] = '\0';
 	return (result);
-	}
+}
 
 void	delete_token_list(t_token **token_l, t_gc *gc)
 {

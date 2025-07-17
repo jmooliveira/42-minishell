@@ -38,17 +38,17 @@ static char	*get_var_expansion(const char *str, int *i, char **env, t_gc *gc)
 	char	*env_value;
 	char	*value;
 
-	if (str[*i] == '{') // ${VAR}
+	if (str[*i] == '{')
 	{
 		start = ++(*i);
 		while (str[*i] && str[*i] != '}')
 			(*i)++;
 		if (str[*i] != '}')
-			return (gc_strdup("", gc)); // não encontrou fechamento
+			return (gc_strdup("", gc));
 		var_name = gc_substr(str, start, *i - start, gc);
-		(*i)++; // pula '}'
+		(*i)++;
 	}
-	else // $VAR
+	else
 	{
 		start = *i;
 		while (str[*i] && is_valid_var_char(str[*i]))
@@ -76,7 +76,7 @@ static char	*normal_char(const char *str, int *i, t_gc *gc, char *result)
 	return (temp);
 }
 
-char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
+char	*expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 {
 	char	*result;
 	char	*temp;
@@ -87,19 +87,19 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == '$' && str[i + 1]) // expansao
+		if (str[i] == '$' && str[i + 1])
 		{
-			if (str[i + 1] == '?') // $?
+			if (str[i + 1] == '?')
 			{
 				expansion = gc_itoa(data->exit_status, gc);
 				i += 2;
 			}
-			else if (is_valid_var_start(str[i + 1])) // $VAR
+			else if (is_valid_var_start(str[i + 1]))
 			{
 				i++;
 				expansion = get_var_expansion(str, &i, env, gc);
 			}
-			else // $ seguido de número ou símbolo → trata como '$'
+			else
 			{
 				expansion = gc_strdup("$", gc);
 				i++;
@@ -108,9 +108,9 @@ char *expand_all_vars(const char *str, char **env, t_gc *gc, t_data *data)
 			gc_free(gc, result);
 			result = temp;
 		}
-		else if (str[i] == '"') // ignora aspas duplas  /**/
+		else if (str[i] == '"')
 			i++;
-		else // caracteres normais ou strings literias
+		else
 		{
 			temp = normal_char(str, &i, gc, result);
 			result = temp;
@@ -130,12 +130,12 @@ void	expand_token_values(t_data *data)
 	prev = NULL;
 	while (token)
 	{
-		if (token->expandable && (token->type == WORD || token->type == WORD_D))// Primeiro expande as variáveis se aplicável
+		if (token->expandable && (token->type == WORD || token->type == WORD_D))
 		{
 			exp_val = expand_all_vars(token->value, data->env, data->gc, data);
 			gc_free(data->gc, token->value);
 			token->value = exp_val;
-			if (token->value[0] == '\0' && !prev)// Se o token expandiu para vazio e é o primeiro token, remova-o
+			if (token->value[0] == '\0' && !prev)
 			{
 				data->token_list = token->next;
 				token = data->token_list;
@@ -148,7 +148,8 @@ void	expand_token_values(t_data *data)
 	token = data->token_list;
 	while (token)
 	{
-		if (token->type == WORD || token->type == WORD_D || token->type == WORD_S)// Depois sempre remove TODAS as aspas dos tokens de palavra
+		if (token->type == WORD || token->type == WORD_D
+			|| token->type == WORD_S)
 		{
 			trimmed_val = trim_quotes(token->value, data->gc);
 			gc_free(data->gc, token->value);
@@ -157,5 +158,4 @@ void	expand_token_values(t_data *data)
 		}
 		token = token->next;
 	}
-	// join_adjacent_tokens(data);
 }
