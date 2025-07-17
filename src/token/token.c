@@ -51,7 +51,7 @@ int	find_token_end(char *inpt, int start)
 		{
 			quote_end = skip_quotes(inpt, end);
 			if (quote_end == -1)
-				return (-1); // aspa não fechada
+				return (-1);
 			end = quote_end;
 		}
 		else
@@ -114,6 +114,5 @@ int	tokenizer_list(t_data *data)
 		if (data->input[i])
 			i = get_token(data, i);
 	}
-	// print_token(data->token_list); //DEBUG
 	return (i);
 }

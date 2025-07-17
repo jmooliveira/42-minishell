@@ -17,7 +17,6 @@ int exec_cmd(t_ast *node, t_data *data)
 
 int	exec_ast(t_ast *node, t_data *data)
 {
-	preprocess_heredoc(node);
 	if (!node)
 		return (1);
 	if (node->type == PIPE)

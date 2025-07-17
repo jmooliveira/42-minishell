@@ -18,7 +18,6 @@ int	is_word(t_type type)
 	return (type == WORD_D || type == WORD_S || type == WORD);
 }
 
-
 int	check_empty_parentheses(t_token *token_l)
 {
 	t_token	*cur;

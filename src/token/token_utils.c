@@ -38,16 +38,13 @@ char *trim_quotes(char *str, t_gc *gc)
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
-	if (len < 2)
-		return gc_strdup(str, gc);
-	// Se a string começa e termina com aspas do mesmo tipo
-	if ((str[0] == '\'' && str[len - 1] == '\'') || 
-		(str[0] == '"' && str[len - 1] == '"'))
+	if (len >= 2)
 	{
-		// Remove apenas as aspas externas
-		return gc_substr(str, 1, len - 2, gc);
+		if (str[0] == '"' && str[len - 1] == '"')
+			return gc_substr(str, 1, len - 2, gc);
+		else if (str[0] == '\'' && str[len - 1] == '\'')
+			return gc_substr(str, 1, len - 2, gc);
 	}
-	// Para casos como hello'world', remove todas as aspas
 	result = gc_malloc(gc, len + 1);
 	if (!result)
 		return (NULL);

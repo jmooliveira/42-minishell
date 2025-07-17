@@ -8,8 +8,6 @@ int	check_first_node(t_token *token_l)
 		return (1);
 	if (is_logical_op(token_l->type) || token_l->type == PAR_CLOSE)
 		return (1);
-	if (token_l->type == HEREDOC)
-		return (1);
 	return (0);
 }
 
@@ -171,25 +169,18 @@ int	validate_syntax(t_data *data)
 		return (0);
 	if (data->has_error)
 		return (1);
-	// operador no inicio
 	if (check_first_node(data->token_list))
 		return (syntax_error("unexpected token", data));
-	// operador no final
 	else if (check_last_node(data->token_list))
 		return (syntax_error("unexpected token", data));
-	// operadores duplicados
 	else if (check_invalid_op(data->token_list))
 		return (syntax_error("unexpected token", data));
-	// parenteses desbalanceados
 	else if (check_unbalanced_parentheses(data->token_list))
 		return (syntax_error("unexpected token", data));
-	// parenteses vazio
 	else if (check_empty_parentheses(data->token_list))
 		return (syntax_error("empty parentheses", data));
-	// redirecionamento incompleto (faltando o comando apos o redirecionamento)
 	else if (check_invalid_redir(data->token_list))
 		return (syntax_error("unexpected redirection", data));
-	// parenteses com operadores invalidos.
 	else if (check_invalid_subshell_content(data))
 		return (syntax_error("unexpected token", data));
 	return (0);

@@ -62,6 +62,18 @@ char	*generate_heredoc_tmp(t_gc *gc)
 	return (tmp);
 }
 
+int	init_heredoc(t_redir *redir, char *filename, t_gc *gc)
+{
+	redir->delim = gc_strdup(filename, gc);
+	redir->filename = generate_heredoc_tmp(gc);
+	if (exec_heredoc(redir->filename, redir->delim) != 0)
+	{
+		g_signal = SIGINT;
+		return (1);
+	}
+	return (0);
+}
+
 void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 {
 	t_redir	*new;
@@ -71,15 +83,11 @@ void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 	if (!new)
 		return ;
 	new->type = type;
-	new->filename = trim_quotes(filename, gc); // Duplica a string `filename` usando o alocador do GC, garantindo que `new->filename` seja gerenciado automaticamente (CAIO)
+	new->filename = trim_quotes(filename, gc);
 	new->delim = NULL;
 	new->next = NULL;
-	new->hd_written = false;
-	if (type == HEREDOC)
-	{
-		new->filename = generate_heredoc_tmp(gc);
-		new->delim = filename;
-	}
+	if (type == HEREDOC && init_heredoc(new, filename, gc))
+		return ;
 	if (!node->redir)
 		node->redir = new;
 	else
@@ -91,34 +99,22 @@ void	add_redir(t_ast *node, t_type type, char *filename, t_gc *gc)
 	}
 }
 
-t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
+static t_token	*skip_redirs(t_token *tokens)
 {
-	t_ast	*node;
 	t_token	*cur;
-	t_token	*cmd_token;
 
 	cur = tokens;
-	cmd_token = NULL;
-	if (!tokens)
-		return (NULL);
 	while (cur && is_redir(cur->type))
 	{
-		if (cur->next)
-			cur = cur->next->next; // Pula o redirecionamento e seu argumento
-		else
+		if (!cur->next)
 			break ;
+		cur = cur->next->next;
 	}
-	if (!cmd_token)// Se não houver comando após os redirecionamentos, use o primeiro token
-		cmd_token = cur;
-	else
-		cmd_token = tokens;
-	node = create_node_ast(tokens->value, tokens->type, gc);
-	if (!node)
-		return (NULL);
-	if (is_builtin(tokens->value))
-		node->is_builtin = true;
-	node->args = extract_args(tokens, gc);
-	cur = tokens;
+	return (cur);
+}
+
+static void	handle_redirs(t_ast *node, t_token *cur, t_gc *gc)
+{
 	while (cur)
 	{
 		if (is_redir(cur->type) && cur->next)
@@ -128,5 +124,24 @@ t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
 		}
 		cur = cur->next;
 	}
+}
+
+t_ast	*parse_cmd(t_token *tokens, t_gc *gc)
+{
+	t_ast		*node;
+	t_token		*cmd_token;
+	t_token		*cur;
+
+	if (!tokens)
+		return (NULL);
+	cur = skip_redirs(tokens);
+	cmd_token = cur ? cur : tokens;
+	node = create_node_ast(tokens->value, tokens->type, gc);
+	if (!node)
+		return (NULL);
+	if (is_builtin(tokens->value))
+		node->is_builtin = true;
+	node->args = extract_args(tokens, gc);
+	handle_redirs(node, tokens, gc);
 	return (node);
 }
