@@ -20,7 +20,7 @@ int execute_and_or(t_ast *node, t_data *data)
     }
     if (node->type == OR)
     {
-        if (status == 0)
+        if (status != 0)
             return (exec_ast(right, data));
         return (status);
 

@@ -9,10 +9,19 @@ void	loop(t_data *data)
 
 	while (42)
 	{
+		data->has_error = 0;
 		interactive_signal();
 		input = readline(data->prompt);
 		if (!input)
+		{
+			printf("exit\n");
 			break ;
+		}
+		if (g_signal == SIGINT)
+		{
+			data->exit_status = 130;
+			g_signal = 0;
+		}
 		if (ft_strspn(input, NO_PRINTABLE) == ft_strlen(input))
 		{
 			free(input);
