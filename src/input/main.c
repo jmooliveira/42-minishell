@@ -6,7 +6,7 @@ volatile __sig_atomic_t	g_signal;
 
 void disable_tab_completion(void)
 {
-    rl_bind_key('\t', rl_insert); // Faz o TAB inserir um tab mesmo, não autocompletar
+    rl_bind_key('\t', rl_insert);
 }
 
 int	main(int argc, char **argv, char **envp)

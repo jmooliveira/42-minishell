@@ -74,6 +74,7 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 {
 	pid_t		pid;
 	int			status;
+	int			sig;
 	struct stat	sb;
 	char		*cmd_path;
 
@@ -125,6 +126,7 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 	pid = fork();
 	if (pid == 0)
 	{
+		setup_signals(pid);
 		execve(cmd_path, node->args, data->env);
 		perror("minishell");
 		exit(126);
@@ -135,7 +137,12 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 		if (WIFEXITED(status))
 			data->exit_status = WEXITSTATUS(status);
 		else if (WIFSIGNALED(status))
+		{
+			sig = WTERMSIG(status);
+			if (sig == SIGQUIT)
+				printf("Quit (core dumped)\n");
 			data->exit_status = 128 + WTERMSIG(status);
+		}
 		else
 			data->exit_status = 1;
 	}

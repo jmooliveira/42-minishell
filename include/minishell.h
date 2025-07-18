@@ -64,7 +64,6 @@ typedef struct s_token
 	char				*value;
 	struct s_token		*next;
 	bool				expandable;
-	// struct s_token	*prev;
 }	t_token;
 
 typedef struct s_env
@@ -77,10 +76,10 @@ typedef struct s_env
 
 typedef struct s_redir
 {
-	t_type				type;
-	char				*filename;
-	char				*delim;
-	struct s_redir		*next;
+	t_type			type;
+	char			*filename;
+	char			*delim;
+	struct s_redir	*next;
 }	t_redir;
 
 typedef struct s_ast
@@ -137,8 +136,11 @@ t_token		*ft_token_last(t_token *lst);
 
 // EXPAND
 void		expand_token_values(t_data *data);
-char		*expand_all_vars(const char *str, char **env,
-				t_gc *gc, t_data *data);
+
+// char		*expand_all_vars(const char *str, char **env,
+				// t_gc *gc, t_data *data);
+
+char    	*expand_all_vars(const char *str, t_data *data);
 char		*get_env_value(const char *var_name, char **env);
 
 // VALIDATE_SINTAX

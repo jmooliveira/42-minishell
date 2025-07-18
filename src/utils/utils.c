@@ -2,7 +2,6 @@
 
 #include "../../include/minishell.h"
 
-// adicionada para pular espaços iniciais
 size_t	ft_strspn(const char *s, const char *accept)
 {
 	size_t	i;
