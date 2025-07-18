@@ -3,6 +3,7 @@
 #pastas
 .vscode/
 minishell_tester/
+basic_interactive_test.sh
 
 # Compilação
 *.o
