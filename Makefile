@@ -44,6 +44,9 @@ SRCS		= \
 	$(VALID_DIR)/validate_utils.c \
 	$(VALID_DIR)/validate_check.c \
 	$(EXPAND_DIR)/expand.c \
+	$(EXPAND_DIR)/expand_all_vars.c \
+	$(EXPAND_DIR)/expand_validate.c \
+	$(EXPAND_DIR)/expand_quotes.c \
 	$(UTILS_DIR)/utils.c \
 	$(ERR_DIR)/handle_errors.c \
 	$(SIG_DIR)/signals.c \

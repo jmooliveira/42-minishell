@@ -1,34 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   expand_validate.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/18 01:58:02 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/07/18 14:25:01 by jemorais         ###   ########.fr       */
+/*   Created: 2025/07/18 14:23:45 by jemorais          #+#    #+#             */
+/*   Updated: 2025/07/18 14:26:53 by jemorais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-volatile __sig_atomic_t	g_signal;
-
-int	main(int argc, char **argv, char **envp)
+bool	is_valid_var_start(char c)
 {
-	t_data	*data;
+	return (ft_isalpha(c) || c == '_');
+}
 
-	(void)argv;
-	if (argc != 1)
-	{
-		ft_printf("Usage: ./minishell\n");
-		return (1);
-	}
-	data = init_data(envp);
-	if (!data)
-		return (1);
-	loop(data);
-	rl_clear_history();
-	gc_clear(data->gc);
-	return (0);
+bool	is_valid_var_char(char c)
+{
+	return (ft_isalnum(c) || c == '_');
 }

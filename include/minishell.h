@@ -1,4 +1,14 @@
-/*minishell.h*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jemorais <jemorais@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 14:33:50 by jemorais          #+#    #+#             */
+/*   Updated: 2025/07/18 14:37:28 by jemorais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -10,7 +20,6 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <errno.h>
-
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
@@ -39,7 +48,6 @@ typedef enum e_type
 	ASSIGNMENT,
 	NONE
 }	t_type;
-
 
 typedef struct s_gc_node
 {
@@ -131,8 +139,16 @@ t_token		*ft_token_last(t_token *lst);
 
 // EXPAND
 void		expand_token_values(t_data *data);
-char    	*expand_all_vars(const char *str, t_data *data);
+char		*expand_all_vars(const char *str, t_data *data);
 char		*get_env_value(const char *var_name, char **env);
+bool		is_valid_var_start(char c);
+bool		is_valid_var_char(char c);
+void		trim_and_normalize_tokens(t_data *data);
+char		*get_var_expansion(const char *str, int *i, char **env, t_gc *gc);
+char		*expand_s_quotes(const char *str, int *i, t_data *data, char *res);
+char		*expand_d_quotes(const char *str, int *i, t_data *data, char *res);
+char		*normal_char(const char *str, int *i, t_gc *gc, char *result);
+char		*expand_variable(const char *str, int *i, t_data *data, char *res);
 
 // VALIDATE_SINTAX
 int			validate_syntax(t_data *data);
@@ -149,7 +165,6 @@ int			is_redir(t_type type);
 int			is_logical_op(t_type type);
 t_token		*find_subshell_end(t_token *start);
 t_token		*get_token_before(t_token *list, t_token *target);
-
 int			syntax_error(char *msg, t_data *data);
 
 // PARSE
@@ -196,9 +211,6 @@ void		heredoc_signal(void);
 void		interactive_signal(void);
 void		setup_signals(int pid);
 
-// DEBUG UTILS
-void		print_token(t_token *token_list);
-
 // EXEC BUILTINS
 bool		is_builtin(const char *node);
 int			exec_ast(t_ast *node, t_data *data);
@@ -214,22 +226,20 @@ char		**add_new_env(char **env, const char *new_var, t_data *data);
 int			builtin_unset(char **argv, t_data *data);
 int			find_env_index(char **env, const char *name);
 int			exec_cmd(t_ast *node, t_data *data);
-int 		execute_external(t_ast *node, t_data *data, t_gc *gc);
+int			execute_external(t_ast *node, t_data *data, t_gc *gc);
 int			execute_pipe(t_ast *node, t_data *data);
 int			execute_and_or(t_ast *node, t_data *data);
 int			execute_subshell(t_ast *node, t_data *data);
-int		    execute_redir(t_ast *node, t_data *data);
-int		    exec_heredoc(char *filename, char *delim);
+int			execute_redir(t_ast *node, t_data *data);
+int			exec_heredoc(char *filename, char *delim);
 int			print_redir_error(char *filename, t_data *data);
-void	    cleanup_heredoc_files(t_redir *r);
-void		restore_fds(t_data * data);
+void		cleanup_heredoc_files(t_redir *r);
+void		restore_fds(t_data *data);
 int			print_error_not_found(t_data *data, t_ast *node, char *msg);
 int			print_error(t_data *data, char *cmd_path, char *msg);
 char		*find_executable(const char *cmd, char **env, t_gc *gc);
 
 // UTILS LIST
 size_t		ft_strspn(const char *s, const char *accept);
-
-const char *get_type_name(t_type type);
 
 #endif
