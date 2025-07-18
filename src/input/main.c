@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 01:58:02 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/07/18 01:59:06 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:43:27 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **envp)
 	data = init_data(envp);
 	if (!data)
 		return (1);
-	disable_tab_completion();
+	// disable_tab_completion();
 	loop(data);
 	rl_clear_history();
 	gc_clear(data->gc);

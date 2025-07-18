@@ -6,7 +6,7 @@
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 01:41:32 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/07/18 01:50:04 by ancarol9         ###   ########.fr       */
+/*   Updated: 2025/07/18 13:19:47 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	exec_pipe_child(t_ast *node, t_data *data, int *pipefd, bool is_left)
 		close(pipefd[0]);
 	}
 	status = exec_ast(node, data);
+	gc_clear(data->gc);
 	exit(status);
 }
 
