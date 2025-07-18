@@ -31,21 +31,30 @@ int	give_id(char *token_def)
 	return (WORD);
 }
 
-int	find_token_end(char *inpt, int start)
+static int	handle_operator(char *inpt, int start)
 {
-	int	end;
-	int	quote_end;
-
 	if (ft_strchr("|&<>()", inpt[start]))
 	{
 		if ((inpt[start] == inpt[start + 1]) && ft_strchr("|&<>", inpt[start]))
 			return (start + 2);
 		return (start + 1);
 	}
-	end = start;
 	if ((inpt[start] == '<' || inpt[start] == '>')
 		&& !ft_strchr(" \t\n", inpt[start + 1]))
 		return (start + 1);
+	return (-1);
+}
+
+int	find_token_end(char *inpt, int start)
+{
+	int	end;
+	int	quote_end;
+	int	op_result;
+
+	op_result = handle_operator(inpt, start);
+	if (op_result != -1)
+		return (op_result);
+	end = start;
 	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
 	{
 		if (inpt[end] == '\'' || inpt[end] == '"')

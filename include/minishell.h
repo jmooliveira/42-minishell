@@ -10,7 +10,6 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <errno.h>
-
 # include <sys/stat.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
@@ -21,6 +20,7 @@
 
 extern volatile int	g_signal;
 
+// ENUMS
 typedef enum e_type
 {
 	WORD,
@@ -40,7 +40,7 @@ typedef enum e_type
 	NONE
 }	t_type;
 
-// GARBAGE COLLECTOR STRUCTS
+// STRUCTS
 typedef struct s_gc_node
 {
 	void				*ptr;
@@ -52,7 +52,6 @@ typedef struct s_gc
 	t_gc_node			*head;
 }	t_gc;
 
-// MINISHELL STRUCTS
 typedef struct s_token
 {
 	t_type				type;
@@ -116,50 +115,47 @@ int			count_envlen(char **ev);
 // LOOP
 void		loop(t_data *data);
 
-// TOKEN:
+// TOKENIZER
 int			tokenizer_list(t_data *data);
 int			get_token(t_data *data, int start);
 int			find_token_end(char *inpt, int start);
 int			give_id(char *token_def);
 void		add_token_to_list(t_data *data, char *token_def, t_type id_token);
 
-// TOKEN_UTILS
+// TOKEN UTILS
 void		delete_token_list(t_token **token_l, t_gc *gc);
 char		*trim_quotes(char *str, t_gc *gc);
 int			skip_quotes(char *input, int start);
 t_token		*new_token(char *value, t_type type, t_gc *gc);
 t_token		*ft_token_last(t_token *lst);
-// char		*remove_all_quotes(char *str, t_gc *gc);
 
-// EXPAND
+// EXPANSION
 void		expand_token_values(t_data *data);
 char		*expand_all_vars(const char *str, char **env,
 				t_gc *gc, t_data *data);
 char		*get_env_value(const char *var_name, char **env);
 
-// VALIDATE_SINTAX
+// SINTAX VALIDATION
 int			validate_syntax(t_data *data);
 int			check_first_node(t_token *token_l);
 int			check_last_node(t_token *token_l);
 int			check_invalid_op(t_token *token_l);
 int			check_unbalanced_parentheses(t_token *token_list);
-
 int			check_empty_parentheses(t_token *token_l);
 int			check_invalid_redir(t_token *token_l);
 int			is_word(t_type type);
 int			is_redir(t_type type);
 int			is_logical_op(t_type type);
-
 int			syntax_error(char *msg, t_data *data);
 
-// PARSE
+// PARSING
 t_token		*find_and_or(t_token *tokens);
 t_token		*find_pipe(t_token *tokens);
 t_token		*find_redir(t_token *tokens);
 t_ast		*parse_subshell(t_token *tokens, t_gc *gc);
 t_ast		*parse_operator(t_token *tokens, t_token *op, t_gc *gc);
 t_ast		*parse_cmd(t_token *tokens, t_gc *gc);
-t_ast		*parse_redir(t_token *tokens, t_token *op, t_gc *gc);
+// t_ast		*parse_redir(t_token *tokens, t_token *op, t_gc *gc);
 bool		is_operator(t_type type);
 bool		is_redir_bool(t_type type);
 int			is_subshell(t_token *tokens);
@@ -171,7 +167,7 @@ int			get_clean_args_len(t_token *tokens);
 char		**extract_args(t_token *tokens, t_gc *gc);
 t_ast		*build_ast(t_token *tokens, t_gc *gc);
 void		parse(t_data *data);
-void		print_ast(t_ast *node, int depth);
+// void		print_ast(t_ast *node, int depth);
 
 // GARBAGE COLLECTOR
 t_gc		*gc_init(void);
@@ -194,12 +190,8 @@ void		heredoc_signal(void);
 void		interactive_signal(void);
 void		setup_signals(int pid);
 
-// DEBUG UTILS
-void		print_token(t_token *token_list);
-
-// EXEC BUILTINS
+// BUILTINS
 bool		is_builtin(const char *node);
-int			exec_ast(t_ast *node, t_data *data);
 int			execute_builtin(t_ast *node, t_data *data);
 int			builtin_echo(char **argv);
 int			builtin_cd(char **argv, t_data *data);
@@ -209,6 +201,10 @@ int			builtin_exit(char **argv, t_data *data);
 int			builtin_export(char **argv, t_data *data);
 int			builtin_unset(char **argv, t_data *data);
 
+int			find_env_index(char **env, const char *name);
+
+// EXECUTION
+int			exec_ast(t_ast *node, t_data *data);
 int			exec_cmd(t_ast *node, t_data *data);
 int			execute_external(t_ast *node, t_data *data, t_gc *gc);
 int			execute_pipe(t_ast *node, t_data *data);
@@ -220,7 +216,5 @@ int			print_redir_error(char *filename, t_data *data);
 
 // UTILS LIST
 size_t		ft_strspn(const char *s, const char *accept);
-
-const char	*get_type_name(t_type type);
 
 #endif

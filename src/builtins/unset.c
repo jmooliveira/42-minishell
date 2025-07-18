@@ -20,23 +20,6 @@ static int	is_valid_identifier(const char *str)
 	return (1);
 }
 
-static int	find_env_index(char **env, const char *name)
-{
-	int		i;
-	size_t	name_len;
-
-	name_len = ft_strlen(name);
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], name, name_len)
-			&& (env[i][name_len] == '=' || env[i][name_len] == '\0'))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 static char	**remove_env_var(char **env, int index, t_data *data)
 {
 	char	**new_env;
@@ -74,8 +57,8 @@ int	builtin_unset(char **argv, t_data *data)
 	if (!argv[1])
 		return (0);
 	exit_status = 0;
-	i = 1;
-	while (argv[i])
+	i = 0;
+	while (argv[++i])
 	{
 		if (!is_valid_identifier(argv[i]))
 		{
@@ -90,7 +73,6 @@ int	builtin_unset(char **argv, t_data *data)
 			if (env_index != -1)
 				data->env = remove_env_var(data->env, env_index, data);
 		}
-		i++;
 	}
 	return (exit_status);
 }

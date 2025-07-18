@@ -46,7 +46,7 @@ static void	print_export_format(char **env)
 	}
 }
 
-static int	find_env_index(char **env, const char *name)
+int	find_env_index(char **env, const char *name)
 {
 	int		i;
 	size_t	name_len;

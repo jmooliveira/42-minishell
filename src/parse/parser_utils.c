@@ -47,15 +47,10 @@ t_token	*slice_tokens(t_token *start, t_token *end, t_gc *gc)
 		if (!new_token)
 			return (NULL);
 		if (!head)
-		{
 			head = new_token;
-			tail = new_token;
-		}
 		else
-		{
 			tail->next = new_token;
-			tail = new_token;
-		}
+		tail = new_token;
 		if (cur == end)
 			break ;
 		cur = cur->next;

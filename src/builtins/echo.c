@@ -2,14 +2,13 @@
 
 #include "../../include/minishell.h"
 
-int	builtin_echo(char **argv)
+static int	skip_n_flags(char **argv, int *newline)
 {
 	int	i;
 	int	j;
-	int	newline;
 
 	i = 1;
-	newline = 1;
+	*newline = 1;
 	while (argv[i] && ft_strncmp(argv[i], "-n", 2) == 0)
 	{
 		j = 2;
@@ -17,9 +16,18 @@ int	builtin_echo(char **argv)
 			j++;
 		if (argv[i][j] != '\0')
 			break ;
-		newline = 0;
+		*newline = 0;
 		i++;
 	}
+	return (i);
+}
+
+int	builtin_echo(char **argv)
+{
+	int	i;
+	int	newline;
+
+	i = skip_n_flags(argv, &newline);
 	while (argv[i])
 	{
 		ft_putstr_fd(argv[i], STDOUT_FILENO);

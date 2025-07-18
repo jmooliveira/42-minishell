@@ -80,7 +80,7 @@ static int	apply_redir(t_redir *redir, t_data *data)
 		else if (r->type == REDIR_OUT)
 			ret = exec_redir_out(r, data);
 		else if (r->type == APPEND)
-			ret = exec_append(r,data);
+			ret = exec_append(r, data);
 		else if (r->type == HEREDOC)
 			ret = exec_redir_in(r, data);
 		else
@@ -107,7 +107,7 @@ void	cleanup_heredoc_files(t_redir *r)
 		if (r->type == HEREDOC && r->filename)
 			unlink(r->filename);
 		r = r->next;
-}
+	}
 }
 
 int	execute_redir(t_ast *node, t_data *data)

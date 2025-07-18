@@ -35,8 +35,6 @@ char	*trim_quotes(char *str, t_gc *gc)
 	size_t	i;
 	size_t	j;
 
-	i = 0;
-	j = 0;
 	if (!str)
 		return (NULL);
 	len = ft_strlen(str);
@@ -50,11 +48,14 @@ char	*trim_quotes(char *str, t_gc *gc)
 	result = gc_malloc(gc, len + 1);
 	if (!result)
 		return (NULL);
+	i = 0;
+	j = 0;
 	while (i < len)
 	{
-		if (str[i] != '\'' && str[i] != '"')
-			result[j++] = str[i];
-		i++;
+		if (str[i] == '\'' || str[i] == '"')
+			i++;
+		else
+			result[j++] = str[i++];
 	}
 	result[j] = '\0';
 	return (result);
@@ -83,6 +84,5 @@ t_token	*new_token(char *value, t_type type, t_gc *gc)
 	token->type = type;
 	token->expandable = false;
 	token->next = NULL;
-	token->is_builtin = is_builtin(value);
 	return (token);
 }

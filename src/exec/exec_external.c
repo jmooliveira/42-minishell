@@ -132,4 +132,3 @@ int	execute_external(t_ast *node, t_data *data, t_gc *gc)
 	}
 	return (data->exit_status);
 }
-
