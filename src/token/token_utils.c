@@ -1,4 +1,14 @@
-/*token_utils.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 02:02:00 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 02:02:01 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -26,39 +36,6 @@ int	skip_quotes(char *input, int start)
 	if (input[i] != quote)
 		return (-1);
 	return (i + 1);
-}
-
-char *trim_quotes(char *str, t_gc *gc)
-{
-	size_t	len;
-	char	*result;
-	size_t	i;
-	size_t	j;
-
-	if (!str)
-		return (NULL);
-	len = ft_strlen(str);
-	if (len >= 2)
-	{
-		if (str[0] == '"' && str[len - 1] == '"')
-			return gc_substr(str, 1, len - 2, gc);
-		else if (str[0] == '\'' && str[len - 1] == '\'')
-			return gc_substr(str, 1, len - 2, gc);
-	}
-	result = gc_malloc(gc, len + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (i < len)
-	{
-		if (str[i] == '\'' || str[i] == '"')
-			i++;
-		else
-			result[j++] = str[i++];
-	}
-	result[j] = '\0';
-	return (result);
 }
 
 void	delete_token_list(t_token **token_l, t_gc *gc)

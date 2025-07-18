@@ -1,140 +1,78 @@
-/*export.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:35:35 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:39:09 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-// static int is_valid_identifier(const char *str)
-// {
-// 	int i;
-
-// 	if (!str || !*str)
-// 		return (0);
-// 	if (!ft_isalpha(str[0]) && str[0] != '_')
-// 		return (0);
-// 	i = 1;
-// 	while (str[i] && str[i] != '=')
-// 	{
-// 		if (!ft_isalnum(str[i]) && str[i] != '_')
-// 			return (0);
-// 		i++;
-// 	}
-// 	if (str[0] == '=' || (str[i] == '=' && i == 0))
-// 		return (0);
-// 	return (1);
-// }
-
-static int is_valid_identifier(const char *str)
+static int	is_valid_identifier(const char *str)
 {
-    int i;
+	int	i;
 
-    if (!str || !*str)
-        return (0);
-    if (!ft_isalpha(str[0]) && str[0] != '_')
-        return (0);
-    i = 1;
-    while (str[i] && str[i] != '=')
-    {
-        if (!ft_isalnum(str[i]) && str[i] != '_')
-            return (0);
-        i++;
-    }
-    if (str[0] == '=' || (str[i] == '=' && i == 0))
-        return (0);
-    return (1);
-}
-
-static void	print_export_format(char **env)
-{
-	int		i;
-	char	*equal_pos;
-
-	i = 0;
-	while (env[i])
+	if (!str || !*str)
+		return (0);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	i = 1;
+	while (str[i] && str[i] != '=')
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		equal_pos = ft_strchr(env[i], '=');
-		if (equal_pos)
-		{ // Imprime nome da variável
-			write(STDOUT_FILENO, env[i], equal_pos - env[i]);
-			ft_putstr_fd("=\"", STDOUT_FILENO);
-			ft_putstr_fd(equal_pos + 1, STDOUT_FILENO);
-			ft_putstr_fd("\"", STDOUT_FILENO);
-		}
-		else
-			ft_putstr_fd(env[i], STDOUT_FILENO);
-		ft_putstr_fd("\n", STDOUT_FILENO);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
 		i++;
 	}
+	if (str[0] == '=' || (str[i] == '=' && i == 0))
+		return (0);
+	return (1);
 }
 
-static int	find_env_index(char **env, const char *name)
+static int	is_valid_export(const char *arg)
 {
-	int		i;
-	size_t	name_len;
-
-	name_len = ft_strlen(name);
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_strncmp(env[i], name, name_len)
-			&& (env[i][name_len] == '=' || env[i][name_len] == '\0'))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-static char	**add_new_env(char **env, const char *new_var, t_data *data)
-{
-	char	**new_env;
-	int		i;
-	int		env_count;
-
-	env_count = 0;
-	while (env[env_count])
-		env_count++;
-	new_env = gc_malloc(data->gc, sizeof(char *) * (env_count + 2));
-	if (!new_env)
-		return (NULL);
-	i = 0;
-	while (i < env_count)
-	{
-		new_env[i] = gc_strdup(env[i], data->gc);
-		i++;
-	}
-	new_env[i] = gc_strdup(new_var, data->gc);
-	new_env[i + 1] = NULL;
-	return (new_env);
-}
-
-static int	export_variable(const char *arg, t_data *data)
-{
-	char	*equal_pos;
-	char	*var_name;
-	int		env_index;
-
 	if (!is_valid_identifier(arg))
 	{
 		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
-		return (1);
+		return (0);
 	}
+	return (1);
+}
+
+static void	update_or_add_variable(const char *arg, t_data *data)
+{
+	char	*equal_pos;
+	char	*var_name;
+	int		env_index;
+
 	equal_pos = ft_strchr(arg, '=');
-	if (equal_pos) // Tem valor para atribuir
+	if (equal_pos)
 	{
 		var_name = gc_substr(arg, 0, equal_pos - arg, data->gc);
 		env_index = find_env_index(data->env, var_name);
-		if (env_index != -1) // Atualiza variável existente
+		if (env_index != -1)
 			data->env[env_index] = gc_strdup(arg, data->gc);
-		else // Adiciona nova variável
+		else
 			data->env = add_new_env(data->env, arg, data);
 	}
-	else // Só o nome da variável, sem valor
+	else
 	{
 		env_index = find_env_index(data->env, arg);
-		if (env_index == -1) // Adiciona variável sem valor
+		if (env_index == -1)
 			data->env = add_new_env(data->env, arg, data);
-	} // Se já existe, não faz nada
+	}
+}
+
+static int	export_variable(const char *arg, t_data *data)
+{
+	if (!is_valid_export(arg))
+		return (1);
+	update_or_add_variable(arg, data);
 	return (0);
 }
 
@@ -144,7 +82,7 @@ int	builtin_export(char **argv, t_data *data)
 	int	exit_status;
 
 	if (!argv[1])
-	{ // Sem argumentos, imprime todas as variáveis
+	{
 		print_export_format(data->env);
 		return (0);
 	}

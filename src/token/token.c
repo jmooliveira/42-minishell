@@ -1,4 +1,14 @@
-/*token.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 02:02:05 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 02:03:47 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -31,20 +41,20 @@ int	give_id(char *token_def)
 	return (WORD);
 }
 
-int	find_token_end(char *inpt, int start)
+int	find_token_end(char *inpt, int s)
 {
 	int	end;
 	int	quote_end;
 
-	if (ft_strchr("|&<>()", inpt[start]))
+	if (ft_strchr("|&<>()", inpt[s]))
 	{
-		if ((inpt[start] == inpt[start + 1]) && ft_strchr("|&<>", inpt[start]))
-			return (start + 2);
-		return (start + 1);
+		if ((inpt[s] == inpt[s + 1]) && ft_strchr("|&<>", inpt[s]))
+			return (s + 2);
+		return (s + 1);
 	}
-	end = start;
-	if ((inpt[start] == '<' || inpt[start] == '>') && !ft_strchr(" \t\n", inpt[start + 1]))
-		return (start + 1);
+	end = s;
+	if ((inpt[s] == '<' || inpt[s] == '>') && !ft_strchr(" \t\n", inpt[s + 1]))
+		return (s + 1);
 	while (inpt[end] && !ft_strchr(" \t\n|&<>()", inpt[end]))
 	{
 		if (inpt[end] == '\'' || inpt[end] == '"')

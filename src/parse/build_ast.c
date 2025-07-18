@@ -1,26 +1,16 @@
-/*build_ast.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   build_ast.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:59:26 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:59:27 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
-{
-	t_ast	*node;
-
-	node = gc_malloc(gc, sizeof(t_ast));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	if (value != NULL)
-		node->value = gc_strdup(value, gc);
-	else
-		node->value = NULL;
-	node->is_builtin = false;
-	node->args = NULL;
-	node->redir = NULL;
-	node->left = NULL;
-	node->right = NULL;
-	return (node);
-}
 
 int	get_clean_args_len(t_token *tokens)
 {

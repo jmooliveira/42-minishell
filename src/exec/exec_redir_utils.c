@@ -1,44 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals_handler.c                                  :+:      :+:    :+:   */
+/*   exec_redir_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/18 02:01:23 by ancarol9          #+#    #+#             */
-/*   Updated: 2025/07/18 02:01:24 by ancarol9         ###   ########.fr       */
+/*   Created: 2025/07/18 01:41:37 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:51:09 by ancarol9         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	handle_sigint(int sig)
+void	cleanup_heredoc_files(t_redir *r)
 {
-	(void)sig;
-	ft_putendl_fd("", STDOUT_FILENO);
+	while (r)
+	{
+		if (r->type == HEREDOC && r->filename)
+			unlink(r->filename);
+		r = r->next;
+	}
 }
 
-void	handle_heredoc(int sig)
+void	restore_fds(t_data *data)
 {
-	(void)sig;
-	ft_putendl_fd("", STDOUT_FILENO);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	close(STDIN_FILENO);
-	g_signal = SIGINT;
-}
-
-void	handle_redo_line(int sig)
-{
-	(void)sig;
-	ft_putendl_fd("", STDOUT_FILENO);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-	g_signal = SIGINT;
-}
-
-void	handle_sigpipe(int sig)
-{
-	(void)sig;
+	dup2(data->fd_bk[0], STDIN_FILENO);
+	dup2(data->fd_bk[1], STDOUT_FILENO);
+	close(data->fd_bk[0]);
+	close(data->fd_bk[1]);
 }

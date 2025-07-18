@@ -1,4 +1,14 @@
-/*exit.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exit.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:35:27 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:35:28 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -49,17 +59,9 @@ static int	get_exit_code(char *arg)
 	return ((int)((num * sign) % 256));
 }
 
-int	builtin_exit(char **argv, t_data *data)
+static int	validate_exit_args(char **argv, t_data *data)
 {
-	int	exit_code;
-
-	ft_putstr_fd("exit\n", STDERR_FILENO);
-	if (!argv[1])
-	{
-		gc_clear(data->gc);
-		exit(data->exit_status);
-	}
-	if (!is_numeric(argv[1]))
+	if (!is_numeric(argv[1]) || get_exit_code(argv[1]) == -1)
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(argv[1], STDERR_FILENO);
@@ -72,15 +74,22 @@ int	builtin_exit(char **argv, t_data *data)
 		ft_putstr_fd("minishell: exit: too many arguments\n", STDERR_FILENO);
 		return (1);
 	}
-	exit_code = get_exit_code(argv[1]);
-	if (exit_code == -1)
+	return (0);
+}
+
+int	builtin_exit(char **argv, t_data *data)
+{
+	int	exit_code;
+
+	ft_putstr_fd("exit\n", STDOUT_FILENO);
+	if (!argv[1])
 	{
-		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
-		ft_putstr_fd(argv[1], STDERR_FILENO);
-		ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 		gc_clear(data->gc);
-		exit(2);
+		exit(data->exit_status);
 	}
+	if (validate_exit_args(argv, data) == 1)
+		return (1);
+	exit_code = get_exit_code(argv[1]);
 	gc_clear(data->gc);
 	exit(exit_code);
 }

@@ -1,12 +1,22 @@
-/*main.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:58:02 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:59:06 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 volatile __sig_atomic_t	g_signal;
 
-void disable_tab_completion(void)
+void	disable_tab_completion(void)
 {
-    rl_bind_key('\t', rl_insert);
+	rl_bind_key('\t', rl_insert);
 }
 
 int	main(int argc, char **argv, char **envp)

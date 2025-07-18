@@ -1,4 +1,14 @@
-/*parser_utils.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 02:00:21 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 02:00:22 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -47,28 +57,33 @@ t_token	*slice_tokens(t_token *start, t_token *end, t_gc *gc)
 		if (!new_token)
 			return (NULL);
 		if (!head)
-		{
 			head = new_token;
-			tail = new_token;
-		}
 		else
-		{
 			tail->next = new_token;
-			tail = new_token;
-		}
+		tail = new_token;
 		if (cur == end)
-			break;
+			break ;
 		cur = cur->next;
 	}
 	return (head);
 }
 
-void	handle_error(char *msg, t_data *data)
+t_ast	*create_node_ast(char *value, t_type type, t_gc *gc)
 {
-	ft_putstr_fd("Error:", STDERR_FILENO);
-	ft_putstr_fd(msg, STDERR_FILENO);
-	ft_putstr_fd("\n", STDERR_FILENO);
-	data->exit_status = 2;
-	gc_clear(data->gc);
-	exit(EXIT_FAILURE);
+	t_ast	*node;
+
+	node = gc_malloc(gc, sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	if (value != NULL)
+		node->value = gc_strdup(value, gc);
+	else
+		node->value = NULL;
+	node->is_builtin = false;
+	node->args = NULL;
+	node->redir = NULL;
+	node->left = NULL;
+	node->right = NULL;
+	return (node);
 }

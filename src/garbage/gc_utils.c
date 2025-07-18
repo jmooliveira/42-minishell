@@ -1,22 +1,16 @@
-/*gc_utils.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   gc_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:56:38 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:57:12 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-void	gc_clear(t_gc *gc)
-{
-	t_gc_node	*tmp;
-
-	while (gc && gc->head)
-	{
-		tmp = gc->head->next;
-		if (gc->head->ptr)
-			free(gc->head->ptr);
-		free(gc->head);
-		gc->head = tmp;
-	}
-	if (gc)
-		free(gc);
-}
 
 void	gc_free(t_gc *gc, void *ptr)
 {
@@ -91,60 +85,4 @@ char	*gc_strjoin(const char *s1, const char *s2, t_gc *gc)
 		return (NULL);
 	gc_add(gc, joined);
 	return (joined);
-}
-
-// as tres abaixo são utilizadas na gc_itoa
-static unsigned int	ft_nbr_digit(int n)
-{
-	unsigned int	count;
-	unsigned int	nb;
-
-	count = 1;
-	if (n < 0)
-		nb = (unsigned int)(-(long)n);
-	else
-		nb = (unsigned int)n;
-	while (nb >= 10)
-	{
-		nb /= 10;
-		count++;
-	}
-	return (count);
-}
-
-static void	ft_at(char *str, unsigned int digits, unsigned int n)
-{
-	str[digits] = '\0';
-	while (digits-- > 0)
-	{
-		str[digits] = (n % 10) + '0';
-		n /= 10;
-	}
-}
-
-char	*gc_itoa(int n, t_gc *gc)
-{
-	char			*nbr;
-	unsigned int	nbr_digits;
-	unsigned int	nbr_number;
-
-	nbr_digits = ft_nbr_digit(n);
-	if (n < 0)
-	{
-		nbr_digits++;
-		nbr = gc_calloc(nbr_digits + 1, sizeof(char), gc);
-		if (!nbr)
-			return (NULL);
-		nbr_number = -n;
-		ft_at(nbr, nbr_digits, nbr_number);
-		nbr[0] = '-';
-	}
-	else
-	{
-		nbr = gc_calloc(nbr_digits + 1, sizeof(char), gc);
-		if (!nbr)
-			return (NULL);
-		ft_at(nbr, nbr_digits, n);
-	}
-	return (nbr);
 }

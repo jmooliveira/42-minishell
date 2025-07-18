@@ -1,4 +1,14 @@
-/*garbage_collector.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   garbage_collector.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:56:51 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:56:52 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -52,4 +62,20 @@ t_gc	*gc_init(void)
 		return (NULL);
 	gc->head = NULL;
 	return (gc);
+}
+
+void	gc_clear(t_gc *gc)
+{
+	t_gc_node	*tmp;
+
+	while (gc && gc->head)
+	{
+		tmp = gc->head->next;
+		if (gc->head->ptr)
+			free(gc->head->ptr);
+		free(gc->head);
+		gc->head = tmp;
+	}
+	if (gc)
+		free(gc);
 }

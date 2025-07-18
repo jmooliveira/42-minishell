@@ -1,4 +1,14 @@
-/*validate_utils.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 02:04:45 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 02:04:46 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
@@ -18,16 +28,32 @@ int	is_word(t_type type)
 	return (type == WORD_D || type == WORD_S || type == WORD);
 }
 
-int	check_empty_parentheses(t_token *token_l)
+t_token	*get_token_before(t_token *list, t_token *target)
 {
 	t_token	*cur;
 
-	cur = token_l;
-	while (cur && cur->next)
+	cur = list;
+	while (cur && cur->next != target)
+		cur = cur->next;
+	return (cur);
+}
+
+t_token	*find_subshell_end(t_token *start)
+{
+	t_token	*cur;
+	int		balance;
+
+	cur = start;
+	balance = 1;
+	while (cur)
 	{
-		if (cur->type == PAR_OPEN && cur->next->type == PAR_CLOSE)
-			return (1);
+		if (cur->type == PAR_OPEN)
+			balance++;
+		else if (cur->type == PAR_CLOSE)
+			balance--;
+		if (balance == 0)
+			return (cur);
 		cur = cur->next;
 	}
-	return (0);
+	return (NULL);
 }

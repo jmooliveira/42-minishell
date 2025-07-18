@@ -31,15 +31,18 @@ LIBS		=	-lreadline -lncurses
 
 # Fontes principais (minishell)
 SRCS		= \
-		$(INPUT_DIR)/main.c \
+	$(INPUT_DIR)/main.c \
 	$(INPUT_DIR)/loop.c \
 	$(INIT_DIR)/init.c \
 	$(GC_DIR)/garbage_collector.c \
 	$(GC_DIR)/gc_utils.c \
+	$(GC_DIR)/gc_utils_itoa.c \
 	$(TOKEN_DIR)/token.c \
 	$(TOKEN_DIR)/token_utils.c \
+	$(TOKEN_DIR)/token_trim_quotes.c \
 	$(VALID_DIR)/validate_syntax.c \
 	$(VALID_DIR)/validate_utils.c \
+	$(VALID_DIR)/validate_check.c \
 	$(EXPAND_DIR)/expand.c \
 	$(UTILS_DIR)/utils.c \
 	$(ERR_DIR)/handle_errors.c \
@@ -48,8 +51,8 @@ SRCS		= \
 	$(PARSE_DIR)/build_ast.c \
 	$(PARSE_DIR)/parser.c \
 	$(PARSE_DIR)/parser_search.c \
+	$(PARSE_DIR)/parser_redir.c \
 	$(PARSE_DIR)/parser_utils.c \
-	$(PARSE_DIR)/debug_util.c \
 	$(PARSE_DIR)/parser_heredoc.c \
 	$(BUILT_DIR)/exec_builtin.c \
 	$(BUILT_DIR)/echo.c \
@@ -58,11 +61,14 @@ SRCS		= \
 	$(BUILT_DIR)/env.c \
 	$(BUILT_DIR)/exit.c \
 	$(BUILT_DIR)/export.c \
+	$(BUILT_DIR)/export_utils.c \
 	$(BUILT_DIR)/unset.c \
 	$(EXEC_DIR)/exec_ast.c \
 	$(EXEC_DIR)/exec_operators.c \
 	$(EXEC_DIR)/exec_redir.c \
-	$(EXEC_DIR)/exec_external.c
+	$(EXEC_DIR)/exec_redir_utils.c \
+	$(EXEC_DIR)/exec_external.c \
+	$(EXEC_DIR)/exec_external_utils.c
 
 OBJS		=	$(foreach src,$(SRCS),$(OBJ_DIR)/$(patsubst $(SRC_DIR)/%,%,$(basename $(src))).o)
 

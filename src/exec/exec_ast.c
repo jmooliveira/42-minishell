@@ -1,8 +1,18 @@
-/*exec_ast.c*/
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   exec_ast.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ancarol9 <ancarol9@student.42sp.org.br>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/18 01:41:05 by ancarol9          #+#    #+#             */
+/*   Updated: 2025/07/18 01:46:46 by ancarol9         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int		exec_cmd(t_ast *node, t_data *data)
+int	exec_cmd(t_ast *node, t_data *data)
 {
 	if (!node || !node->args || !node->args[0] || node->args[0][0] == '\0')
 	{
