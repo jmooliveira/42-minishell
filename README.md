@@ -9,11 +9,11 @@ Este projeto é parte do currículo da 42 São Paulo, onde desenvolvemos um inte
 
 ## Estrutura de Branches
 
-- `main`: branch de produção. Apenas merges vindos de `devops` ou `hotfix`.
-- `devops`: branch de desenvolvimento ativo. Origem para `feature` e `release`.
+- `master`: branch de produção. Apenas merges vindos de `devops` ou `hotfix`.
+- `develop`: branch de desenvolvimento ativo. Origem para `feature` e `release`.
 - `feature/*`: desenvolvimento de novas funcionalidades.
 - `release/*`: preparação de entregas finais.
-- `hotfix/*`: correções urgentes a partir da `main`.
+- `fix/*`: correções urgentes a partir da `main`.
 
 ## Build
 
